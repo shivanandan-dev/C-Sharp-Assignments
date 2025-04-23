@@ -1,6 +1,6 @@
 ﻿namespace ContactManager {
     internal class ContactManager {
-        List<Contact> Contacts = new List<Contact>();
+        static List<Contact> Contacts = new List<Contact>();
         Validator validator = new Validator();
 
         /// <summary>
@@ -65,7 +65,7 @@
         /// Collects information for a new contact, validates the input, and adds the contact to the contact list.
         /// </summary>
         void AddNewContact() {
-            Console.Write("\n");
+            Console.WriteLine("========== Add new contact ==========\n");
             string name = GetInformation("Name");
             string phoneNumber = GetInformation("Phone Number");
             string email = GetInformation("Email");
@@ -76,11 +76,43 @@
         }
 
         /// <summary>
+        /// Displays all the contacts in a formatted table with columns for Name, Phone Number, Email, 
+        /// and Additional Information.
+        /// </summary>
+        void ViewContacts() {
+            Console.WriteLine("========== Contacts ==========\n");
+
+            if (Contacts.Count == 0) {
+                Console.WriteLine("[Error] Contact list is empty.");
+                return;
+            }
+
+            Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}", "Name", "Phone Number", "Email", "Additional Information");
+            Console.WriteLine(new string('-', 100));
+            foreach (Contact ContactInformation in Contacts) {
+                Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}",
+                    ContactInformation.Name,
+                    ContactInformation.PhoneNumber,
+                    ContactInformation.Email,
+                    ContactInformation.AdditionalInformation
+                );
+            }
+        }
+
+        /// <summary>
         /// The entry point of the program. Displays a menu and allows the user to interact with the contact manager.
         /// </summary>
         /// <param name="args">Command-line arguments (not used in this program).</param>
         public static void Main(string[] args) {
             ContactManager manager = new ContactManager();
+
+            // NOTE: The following default data is added for testing and debugging purposes only.
+            // These entries should be removed or commented out before deploying the application to production.
+            Contacts.Add(new Contact("John Doe", "+11234567890", "john.doe@example.com", "Friend from college"));
+            Contacts.Add(new Contact("Jane Smith", "+441234567890", "jane.smith@example.co.uk", "Colleague"));
+            Contacts.Add(new Contact("Alice Johnson", "+918765432109", "alice.johnson@example.in", "Family friend"));
+            Contacts.Add(new Contact("Bob Brown", "+61234567890", "bob.brown@example.au", "Neighbor"));
+
             do {
                 Console.WriteLine("========== Contact Manager ==========\n");
                 Console.WriteLine("1. Add a New Contact");
@@ -93,17 +125,19 @@
 
                 string input = Console.ReadLine();
                 bool isString = int.TryParse(input, out int choice);
-
+                Console.Clear();
                 switch (choice) {
                     case 1:
                         manager.AddNewContact();
                         break;
-
+                    case 2:
+                        manager.ViewContacts();
+                        break;
                     default:
                         Console.WriteLine("[Error] Invalid choice!");
                         break;
                 }
-                Console.WriteLine("Press any key to continue...");
+                Console.WriteLine("\nPress any key to continue...");
                 Console.ReadKey();
                 Console.Clear();
             } while (true);

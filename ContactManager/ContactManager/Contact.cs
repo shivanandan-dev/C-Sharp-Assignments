@@ -8,6 +8,7 @@
         public string Name { get => _name; set => _name = value; }
         public string PhoneNumber { get => _phoneNumber; set => _phoneNumber = value; }
         public string Email { get => _email; set => _email = value; }
+        public string AdditionalInformation { get => _additionalInformation; set => _additionalInformation = value; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Contact"/> class with the specified details.
