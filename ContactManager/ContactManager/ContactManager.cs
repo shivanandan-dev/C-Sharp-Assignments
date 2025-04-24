@@ -2,6 +2,7 @@
     internal class ContactManager {
         static List<Contact> contacts = new List<Contact>();
         Validator validator = new Validator();
+        bool IsEditSuccessful = true;
 
         /// <summary>
         /// Checks if a contact with the given value (name, email, or phone number) already exists in the contact list.
@@ -42,7 +43,7 @@
         }
 
         /// <summary>
-        /// Validates the input based on the type of information requested.
+        /// Validates input based on the specified type of information.
         /// </summary>
         /// <param name="informationType">The type of information being validated (e.g., "Name", "Phone Number", "Email").</param>
         /// <param name="input">The user-provided input to validate.</param>
@@ -63,12 +64,11 @@
         }
 
         /// <summary>
-        /// Prompts the user to input information of a specific type (e.g., Name, Phone Number, Email).
-        /// Validates the input and ensures it meets the required conditions.
+        /// Requests user input for a specific type of information, validates it, and checks for duplicates if required.
         /// </summary>
-        /// <param name="informationType">The type of information being requested (e.g., "Name", "Phone Number").</param>
+        /// <param name="informationType">The type of information being requested (e.g., "Name", "Phone Number", "Email").</param>
         /// <param name="checkForDuplicate">Indicates whether to check for duplicate entries in the contact list.</param>
-        /// <returns>Returns a validated string input provided by the user.</returns>
+        /// <returns>Validated string input provided by the user.</returns>
         string GetInformation(string informationType, bool checkForDuplicate = false) {
             string input;
             do {
@@ -90,7 +90,7 @@
         }
 
         /// <summary>
-        /// Displays a prompt asking the user to press any key to continue and pauses execution until a key is pressed.
+        /// Displays a prompt asking the user to press any key to continue and waits until a key is pressed.
         /// </summary>
         void PromptForContinuation() {
             Console.WriteLine("\nPress any key to continue...");
@@ -98,7 +98,7 @@
         }
 
         /// <summary>
-        /// Prompts the user to input details for a new contact and adds it to the contact list after validation.
+        /// Collects information for a new contact, validates the inputs, and adds the contact to the contact list.
         /// </summary>
         void AddNewContact() {
             Console.WriteLine("========== Add new contact ==========\n");
@@ -135,7 +135,7 @@
         }
 
         /// <summary>
-        /// Displays detailed information about a specific contact.
+        /// Displays the detailed information of a specific contact.
         /// </summary>
         /// <param name="contactInfo">The contact whose details are to be displayed.</param>
         void DisplayDetails(Contact contactInfo) {
@@ -147,7 +147,7 @@
         }
 
         /// <summary>
-        /// Finds a contact in the contact list based on a specific attribute (e.g., Name, Phone Number, Email).
+        /// Searches for a contact in the contact list based on a specified attribute (e.g., Name, Phone Number, Email).
         /// </summary>
         /// <param name="attribute">The attribute to search by (e.g., "Name", "Phone Number", "Email").</param>
         /// <param name="value">The value of the attribute to search for.</param>
@@ -164,7 +164,7 @@
         }
 
         /// <summary>
-        /// Displays the search contact menu options to the user.
+        /// Displays the menu options for searching contacts.
         /// </summary>
         void SearchContactMenu() {
             Console.WriteLine("\n========== Search Contact ==========\n");
@@ -175,7 +175,7 @@
         }
 
         /// <summary>
-        /// Displays the main menu options to the user.
+        /// Displays the main menu options to allow the user to interact with the contact manager.
         /// </summary>
         void MainMenu() {
             Console.WriteLine("========== Contact Manager ==========\n");
@@ -188,7 +188,7 @@
         }
 
         /// <summary>
-        /// Searches for a contact based on a specific type of information (e.g., Name, Phone Number, Email).
+        /// Searches for a contact based on a specific information type (e.g., Name, Phone Number, Email).
         /// </summary>
         /// <param name="informationType">The type of information to search by (e.g., "Name", "Phone Number").</param>
         void SearchContactBy(string informationType) {
@@ -202,7 +202,7 @@
         }
 
         /// <summary>
-        /// Handles the search contact workflow by displaying a menu and executing the corresponding actions.
+        /// Handles the workflow for searching contacts by displaying a menu and executing the corresponding actions.
         /// </summary>
         void SearchContact() {
             var actions = new Dictionary<int, Action> {
@@ -232,7 +232,128 @@
         }
 
         /// <summary>
-        /// The entry point of the program. Displays a menu and allows the user to interact with the contact manager.
+        /// Displays the menu options for editing specific fields of a contact.
+        /// </summary>
+        void DisplayEditByMenu() {
+            Console.WriteLine("\n========== Edit ==========\n");
+            Console.WriteLine("1. Edit Name");
+            Console.WriteLine("2. Edit Phone Number");
+            Console.WriteLine("3. Edit Email");
+            Console.WriteLine("4. Edit Additional Information");
+            Console.WriteLine("5. Edit Menu");
+        }
+
+        /// <summary>
+        /// Displays the menu options for finding a contact to edit.
+        /// </summary>
+        void DisplayContactByMenu() {
+            Console.WriteLine("\n========== Edit Contact ==========\n");
+            Console.WriteLine("1. Find Contact by Name");
+            Console.WriteLine("2. Find Contact by Phone number");
+            Console.WriteLine("3. Find Contact by Email");
+            Console.WriteLine("4. Main Menu");
+        }
+
+        /// <summary>
+        /// Updates a specific field of a contact with a new value.
+        /// </summary>
+        /// <param name="fieldName">The name of the field to update (e.g., "Name", "Phone Number").</param>
+        /// <param name="checkForDuplicate">Indicates whether to check for duplicate entries when updating the field.</param>
+        /// <param name="updateAction">The action to perform for updating the field.</param>
+        void UpdateContactField(string fieldName, bool checkForDuplicate, Action<string> updateAction) {
+            string updatedValue = GetInformation(fieldName, checkForDuplicate);
+            updateAction(updatedValue);
+            Console.WriteLine($"[Success] {fieldName} updated successfully!");
+            IsEditSuccessful = false;
+        }
+
+        /// <summary>
+        /// Handles the field-specific editing of a contact by displaying a submenu and executing actions.
+        /// </summary>
+        /// <param name="ContactToEdit">The contact to be edited.</param>
+        void EditBy(Contact ContactToEdit) {
+            var actions = new Dictionary<int, Action> {
+                { 1, () => UpdateContactField("Name", true, value => ContactToEdit.Name = value)},
+                { 2, () => UpdateContactField("Phone Number", true, value => ContactToEdit.PhoneNumber = value)},
+                { 3, () => UpdateContactField("Email", true, value => ContactToEdit.Email = value)},
+                { 4, () => UpdateContactField("Additional Information", false, value => ContactToEdit.AdditionalInformation = value)}
+            };
+
+            bool isValidChoice = false;
+            Console.Clear();
+            DisplayDetails(ContactToEdit);
+            DisplayEditByMenu();
+
+            do {
+                Console.Write("\n[Menu] Enter your choice: ");
+                string input = Console.ReadLine();
+                isValidChoice = int.TryParse(input, out int choice);
+
+                if (!isValidChoice) {
+                    Console.WriteLine("[Error] Invalid input. Please enter a number.");
+                    continue;
+                }
+
+                if (isValidChoice && actions.ContainsKey(choice)) {
+                    actions[choice].Invoke();
+                } else if (isValidChoice && choice == 5) {
+                    return;
+                } else {
+                    Console.WriteLine("[Error] Invalid choice. Please select a valid option.");
+                }
+            } while (IsEditSuccessful);
+        }
+
+        /// <summary>
+        /// Finds a contact by a specific attribute and initiates the editing process.
+        /// </summary>
+        /// <param name="ContactBy">The attribute to find the contact by (e.g., "Name", "Phone Number").</param>
+        void EditContactBy(string ContactBy) {
+            do {
+                string Input = GetInformation(ContactBy);
+                Contact ContactToEdit = FindContactByAttribute(ContactBy, Input);
+
+                if (ContactToEdit == null) {
+                    Console.WriteLine("[Error] No Contact Found");
+                    PromptForContinuation();
+                    return;
+                } else {
+                    EditBy(ContactToEdit);
+                }
+            } while (IsEditSuccessful);
+        }
+
+        /// <summary>
+        /// Handles the workflow for editing a contact by displaying a menu and executing the corresponding actions.
+        /// </summary>
+        void EditContact() {
+            var actions = new Dictionary<int, Action> {
+                { 1, () => EditContactBy("Name")},
+                { 2, () => EditContactBy("Phone Number")},
+                { 3, () => EditContactBy("Email")}
+            };
+
+            do {
+                Console.Clear();
+                DisplayContactByMenu();
+                Console.WriteLine("");
+                Console.Write("[Menu] Enter your choice: ");
+                string input = Console.ReadLine();
+                bool isNumber = int.TryParse(input, out int choice);
+
+                if (isNumber && actions.ContainsKey(choice)) {
+                    actions[choice].Invoke();
+                } else if (isNumber && choice == 4) {
+                    return;
+                } else {
+                    Console.WriteLine("[Error] Invalid choice!");
+                }
+
+            } while (IsEditSuccessful);
+        }
+
+        /// <summary>
+        /// The entry point of the program. Displays the main menu and handles user interactions with the contact manager.
         /// </summary>
         /// <param name="args">Command-line arguments (not used in this program).</param>
         public static void Main(string[] args) {
@@ -248,24 +369,27 @@
             var actions = new Dictionary<int, Action> {
                 { 1, () => manager.AddNewContact() },
                 { 2, () => manager.ViewContacts() },
-                { 3, ()=> manager.SearchContact() },
+                { 3, () => manager.SearchContact() },
+                { 4, () => manager.EditContact() },
             };
 
-
             do {
+                Console.Clear();
                 manager.MainMenu();
                 Console.Write("\n[Menu] Enter your choice: ");
 
                 string input = Console.ReadLine();
                 bool isNumber = int.TryParse(input, out int choice);
 
-                Console.Clear();
+
                 if (isNumber && actions.ContainsKey(choice)) {
+                    Console.Clear();
                     actions[choice].Invoke();
                 } else {
                     Console.WriteLine("[Error] Invalid choice!");
                 }
 
+                manager.IsEditSuccessful = true;
                 manager.PromptForContinuation();
                 Console.Clear();
             } while (true);
