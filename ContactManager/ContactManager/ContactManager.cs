@@ -113,25 +113,77 @@
         }
 
         /// <summary>
-        /// Displays all contacts in the contact list in a formatted table.
+        /// Displays the list of contacts in a formatted table.
         /// </summary>
-        void ViewContacts() {
-            Console.WriteLine("========== Contacts ==========\n");
-
-            if (contacts.Count == 0) {
-                Console.WriteLine("[Error] Contact list is empty.");
-                return;
-            }
-
+        /// <param name="contactList">List of contacts to display.</param>
+        void DisplayContacts(List<Contact> contactList) {
             Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}", "Name", "Phone Number", "Email", "Additional Information");
             Console.WriteLine(new string('-', 100));
-            foreach (Contact contactInfo in contacts) {
+
+            foreach (Contact contactInfo in contactList) {
                 Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}",
                     contactInfo.Name,
                     contactInfo.PhoneNumber,
                     contactInfo.Email,
                     contactInfo.AdditionalInformation
                 );
+            }
+
+            Console.WriteLine("\n========== Sort By ==========\n");
+            Console.WriteLine("1. Name");
+            Console.WriteLine("2. Phone Number");
+            Console.WriteLine("3. Email");
+            Console.WriteLine("4. Exit");
+        }
+
+
+        /// <summary>
+        /// Sorts the list of contacts based on the selected sorting option.
+        /// </summary>
+        /// <param name="contactList">The list of contacts to sort.</param>
+        /// <param name="input">The sorting option entered by the user.</param>
+        /// <returns>A sorted list of contacts.</returns>
+        List<Contact> SortContacts(List<Contact> contactList, ConsoleKey input) {
+            // Dictionary of sorting actions
+            var sortingActions = new Dictionary<ConsoleKey, Func<List<Contact>, List<Contact>>>
+            {
+                { ConsoleKey.D1, contacts => contacts.OrderBy(contact => contact.Name).ToList() },
+                { ConsoleKey.NumPad1, contacts => contacts.OrderBy(contact => contact.Name).ToList() },
+                { ConsoleKey.D2, contacts => contacts.OrderBy(contact => contact.PhoneNumber).ToList() },
+                { ConsoleKey.NumPad2, contacts => contacts.OrderBy(contact => contact.PhoneNumber).ToList() },
+                { ConsoleKey.D3, contacts => contacts.OrderBy(contact => contact.Email).ToList() },
+                { ConsoleKey.NumPad3, contacts => contacts.OrderBy(contact => contact.Email).ToList() },
+            };
+
+            if (sortingActions.ContainsKey(input)) {
+                return sortingActions[input](contactList);
+            }
+
+            return contactList;
+        }
+
+        /// <summary>
+        /// Displays all contacts in the contact list in a formatted table.
+        /// </summary>
+        void ViewContacts(List<Contact> contactList) {
+            while (true) {
+                Console.Clear();
+                Console.WriteLine("========== Contacts ==========\n");
+
+                if (contactList.Count == 0) {
+                    Console.WriteLine("[Error] Contact list is empty.");
+                    return;
+                }
+
+                DisplayContacts(contactList);
+                Console.WriteLine("\nPress (1-3) to Sort, (4) to Exit:");
+                ConsoleKey input = Console.ReadKey().Key;
+
+                if (input == ConsoleKey.D4 || input == ConsoleKey.NumPad4) {
+                    return;
+                }
+
+                contactList = SortContacts(contactList, input);
             }
         }
 
@@ -440,7 +492,7 @@
 
             var actions = new Dictionary<int, Action> {
                 { 1, () => manager.AddNewContact() },
-                { 2, () => manager.ViewContacts() },
+                { 2, () => manager.ViewContacts(contacts) },
                 { 3, () => manager.SearchContact() },
                 { 4, () => manager.EditContact() },
                 { 5, () => manager.DeleteContact() },
