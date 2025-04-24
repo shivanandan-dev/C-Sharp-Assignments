@@ -3,6 +3,7 @@
         static List<Contact> contacts = new List<Contact>();
         Validator validator = new Validator();
         bool IsEditSuccessful = true;
+        bool IsDeleteSuccessful = true;
 
         /// <summary>
         /// Checks if a contact with the given value (name, email, or phone number) already exists in the contact list.
@@ -268,6 +269,54 @@
         }
 
         /// <summary>
+        /// Handles workflows for menu-driven operations like editing or deleting contacts.
+        /// </summary>
+        /// <param name="menuDisplayAction">The action to display the menu options.</param>
+        /// <param name="actions">A dictionary mapping menu choices to their corresponding actions.</param>
+        /// <param name="isOperationSuccessful">A reference to the success flag for the operation (e.g., IsEditSuccessful, IsDeleteSuccessful).</param>
+        void HandleEditOrDeleteOperation(Action menuDisplayAction, Dictionary<int, Action> actions, ref bool isOperationSuccessful) {
+            do {
+                Console.Clear();
+                menuDisplayAction(); // Display the menu
+                Console.WriteLine("");
+                Console.Write("[Menu] Enter your choice: ");
+                string input = Console.ReadLine();
+                bool isNumber = int.TryParse(input, out int choice);
+
+                if (isNumber && actions.ContainsKey(choice)) {
+                    actions[choice].Invoke(); // Execute the selected action
+                } else if (isNumber && choice == 4) { // Exit option
+                    return;
+                } else {
+                    Console.WriteLine("[Error] Invalid choice!");
+                    PromptForContinuation();
+                }
+
+            } while (isOperationSuccessful);
+        }
+
+        /// <summary>
+        /// Handles the workflow for finding a contact by an attribute and performing an action on it.
+        /// </summary>
+        /// <param name="ContactBy">The attribute to find the contact by (e.g., "Name", "Phone Number", "Email").</param>
+        /// <param name="action">The action to perform on the found contact (e.g., Edit, Delete).</param>
+        /// <param name="isOperationSuccessful">A reference to the success flag for the operation (e.g., IsEditSuccessful, IsDeleteSuccessful).</param>
+        void HandleEditOrDeleteContactBy(string ContactBy, Action<Contact> action, ref bool isOperationSuccessful) {
+            do {
+                string input = GetInformation(ContactBy);
+                Contact contact = FindContactByAttribute(ContactBy, input);
+
+                if (contact == null) {
+                    Console.WriteLine("[Error] No Contact Found");
+                    PromptForContinuation();
+                    return;
+                } else {
+                    action(contact);
+                }
+            } while (isOperationSuccessful);
+        }
+
+        /// <summary>
         /// Handles the field-specific editing of a contact by displaying a submenu and executing actions.
         /// </summary>
         /// <param name="ContactToEdit">The contact to be edited.</param>
@@ -305,51 +354,74 @@
         }
 
         /// <summary>
-        /// Finds a contact by a specific attribute and initiates the editing process.
+        /// Edits a contact by searching for it based on an attribute.
         /// </summary>
-        /// <param name="ContactBy">The attribute to find the contact by (e.g., "Name", "Phone Number").</param>
+        /// <param name="ContactBy">The attribute to find the contact by (e.g., "Name", "Phone Number", "Email").</param>
         void EditContactBy(string ContactBy) {
-            do {
-                string Input = GetInformation(ContactBy);
-                Contact ContactToEdit = FindContactByAttribute(ContactBy, Input);
-
-                if (ContactToEdit == null) {
-                    Console.WriteLine("[Error] No Contact Found");
-                    PromptForContinuation();
-                    return;
-                } else {
-                    EditBy(ContactToEdit);
-                }
-            } while (IsEditSuccessful);
+            HandleEditOrDeleteContactBy(ContactBy, EditBy, ref IsEditSuccessful);
         }
-
         /// <summary>
-        /// Handles the workflow for editing a contact by displaying a menu and executing the corresponding actions.
+        /// Handles the editing of contacts based on user input.
         /// </summary>
         void EditContact() {
             var actions = new Dictionary<int, Action> {
-                { 1, () => EditContactBy("Name")},
-                { 2, () => EditContactBy("Phone Number")},
-                { 3, () => EditContactBy("Email")}
+                { 1, () => EditContactBy("Name") },
+                { 2, () => EditContactBy("Phone Number") },
+                { 3, () => EditContactBy("Email") }
             };
 
-            do {
-                Console.Clear();
-                DisplayContactByMenu();
-                Console.WriteLine("");
-                Console.Write("[Menu] Enter your choice: ");
-                string input = Console.ReadLine();
-                bool isNumber = int.TryParse(input, out int choice);
+            HandleEditOrDeleteOperation(DisplayContactByMenu, actions, ref IsEditSuccessful);
+        }
 
-                if (isNumber && actions.ContainsKey(choice)) {
-                    actions[choice].Invoke();
-                } else if (isNumber && choice == 4) {
-                    return;
-                } else {
-                    Console.WriteLine("[Error] Invalid choice!");
-                }
+        /// <summary>
+        /// Displays the menu options for deleting contacts.
+        /// </summary>
+        void DeleteContactMenu() {
+            Console.WriteLine("\n========== Delete Contact ==========\n");
+            Console.WriteLine("1. Delete Contact by Name");
+            Console.WriteLine("2. Delete Contact by Phone number");
+            Console.WriteLine("3. Delete Contact by Email");
+            Console.WriteLine("4. Main Menu");
+        }
 
-            } while (IsEditSuccessful);
+        /// <summary>
+        /// Deletes a contact from the contact list and updates the deletion state.
+        /// </summary>
+        /// <param name="ContactToDelete">The contact to be deleted.</param>
+        void Delete(Contact ContactToDelete) {
+            contacts.Remove(ContactToDelete);
+            Console.WriteLine("[Success] Contact Deleted Successfully");
+            IsDeleteSuccessful = false;
+        }
+
+        /// <summary>
+        /// Deletes a contact by searching for it based on an attribute.
+        /// </summary>
+        /// <param name="ContactBy">The attribute to find the contact by (e.g., "Name", "Phone Number", "Email").</param>
+        void DeleteContactBy(string ContactBy) {
+            HandleEditOrDeleteContactBy(ContactBy, Delete, ref IsDeleteSuccessful);
+        }
+
+        /// <summary>
+        /// Handles the deletion of contacts based on user input.
+        /// </summary>
+        void DeleteContact() {
+            var actions = new Dictionary<int, Action> {
+                { 1, () => DeleteContactBy("Name") },
+                { 2, () => DeleteContactBy("Phone Number") },
+                { 3, () => DeleteContactBy("Email") }
+            };
+
+            HandleEditOrDeleteOperation(DeleteContactMenu, actions, ref IsDeleteSuccessful);
+        }
+
+        /// <summary>
+        /// Exits the application after displaying a farewell message.
+        /// </summary>
+        void ExitEnvironment() {
+            Console.WriteLine("\nBye Bye...");
+            Console.ReadKey();
+            Environment.Exit(0);
         }
 
         /// <summary>
@@ -371,6 +443,8 @@
                 { 2, () => manager.ViewContacts() },
                 { 3, () => manager.SearchContact() },
                 { 4, () => manager.EditContact() },
+                { 5, () => manager.DeleteContact() },
+                { 6, () => manager.ExitEnvironment()}
             };
 
             do {
@@ -389,6 +463,7 @@
                     Console.WriteLine("[Error] Invalid choice!");
                 }
 
+                manager.IsDeleteSuccessful = true;
                 manager.IsEditSuccessful = true;
                 manager.PromptForContinuation();
                 Console.Clear();
