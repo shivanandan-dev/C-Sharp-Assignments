@@ -80,7 +80,6 @@
                 }
 
                 string invalidMessage = ValidateInput(informationType, input);
-
                 if (invalidMessage == "")
                     break;
 
@@ -176,6 +175,19 @@
         }
 
         /// <summary>
+        /// Displays the main menu options to the user.
+        /// </summary>
+        void MainMenu() {
+            Console.WriteLine("========== Contact Manager ==========\n");
+            Console.WriteLine("1. Add a New Contact");
+            Console.WriteLine("2. View Contacts");
+            Console.WriteLine("3. Search a Contact");
+            Console.WriteLine("4. Edit a Contact");
+            Console.WriteLine("5. Delete a Contact");
+            Console.WriteLine("6. Exit");
+        }
+
+        /// <summary>
         /// Searches for a contact based on a specific type of information (e.g., Name, Phone Number, Email).
         /// </summary>
         /// <param name="informationType">The type of information to search by (e.g., "Name", "Phone Number").</param>
@@ -233,33 +245,27 @@
             contacts.Add(new Contact("Alice Johnson", "+918765432109", "alice.johnson@example.in", "Family friend"));
             contacts.Add(new Contact("Bob Brown", "+61234567890", "bob.brown@example.au", "Neighbor"));
 
+            var actions = new Dictionary<int, Action> {
+                { 1, () => manager.AddNewContact() },
+                { 2, () => manager.ViewContacts() },
+                { 3, ()=> manager.SearchContact() },
+            };
+
+
             do {
-                Console.WriteLine("========== Contact Manager ==========\n");
-                Console.WriteLine("1. Add a New Contact");
-                Console.WriteLine("2. View Contacts");
-                Console.WriteLine("3. Search a Contact");
-                Console.WriteLine("4. Edit a Contact");
-                Console.WriteLine("5. Delete a Contact");
-                Console.WriteLine("6. Exit");
+                manager.MainMenu();
                 Console.Write("\n[Menu] Enter your choice: ");
 
                 string input = Console.ReadLine();
                 bool isNumber = int.TryParse(input, out int choice);
+
                 Console.Clear();
-                switch (choice) {
-                    case 1:
-                        manager.AddNewContact();
-                        break;
-                    case 2:
-                        manager.ViewContacts();
-                        break;
-                    case 3:
-                        manager.SearchContact();
-                        break;
-                    default:
-                        Console.WriteLine("[Error] Invalid choice!");
-                        break;
+                if (isNumber && actions.ContainsKey(choice)) {
+                    actions[choice].Invoke();
+                } else {
+                    Console.WriteLine("[Error] Invalid choice!");
                 }
+
                 manager.PromptForContinuation();
                 Console.Clear();
             } while (true);
