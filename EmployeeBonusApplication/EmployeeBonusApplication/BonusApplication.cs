@@ -36,9 +36,11 @@
                 Console.Write("[Error] Invalid salary. \nEnter again: ");
             }
 
-            var employeeDetail = new Manager(name, salary); // Replace with proper type switch if you add Developer
+            if (type == "Manager")
+                employees.Add(new Manager(name, salary));
+            else 
+                employees.Add(new Developer(name, salary)); // Replace with proper type switch if you add Developer
 
-            employees.Add(employeeDetail);
             Console.WriteLine("[Success] Employee added.");
         }
 
@@ -64,6 +66,7 @@
         static void Main() {
             Dictionary<int, Action> action = new Dictionary<int, Action>() {
                 { 1, () => CreateEmployee("Manager") },
+                { 2, () => CreateEmployee("Developer") },
                 { 3, DisplayEmployee },
                 { 4, () => Environment.Exit(0) }
             };
