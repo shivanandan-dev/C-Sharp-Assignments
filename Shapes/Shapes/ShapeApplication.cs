@@ -57,6 +57,21 @@
         }
 
         /// <summary>
+        /// Handles the process of creating a circle by taking user input and displaying details.
+        /// </summary>
+        void CreateCircle() {
+            Console.Write("Enter the color of the rectangle: ");
+            string color = Console.ReadLine();
+
+            double radius = GetValidatedDouble("Enter length: ");
+            if (radius < 0) return;
+
+            CircleShape rectangle = new CircleShape(color, radius);
+            Console.Write("[Info] ");
+            rectangle.PrintDetails();
+        }
+
+        /// <summary>
         /// Entry point of the program. Displays menu and handles user interaction in a loop.
         /// </summary>
         /// <param name="args">Command-line arguments.</param>
@@ -65,6 +80,7 @@
 
             Dictionary<int, Action> action = new Dictionary<int, Action>() {
                 { 1, shape.CreateRectangle },
+                { 2, shape.CreateCircle },
                 { 3, () => Environment.Exit(0) }
             };
 
