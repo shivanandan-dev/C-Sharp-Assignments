@@ -123,6 +123,8 @@
 
             if (choice == 1) {
                 account = new SavingsAccount(accountNumber, balance);
+            } else if (choice == 2) {
+                account = new CheckingAccount(accountNumber, balance);
             }
 
             HandleAccountOperations(account);
