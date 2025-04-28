@@ -2,6 +2,8 @@
     internal class InventoryManager {
         static List<Product> products = new List<Product>();
         Validator validator = new Validator();
+        bool IsEditSuccessful = true;
+        bool IsDeleteSuccessful = true;
 
         /// <summary>
         /// Checks if a product with the given name or ID already exists in the list.
@@ -291,6 +293,186 @@
         }
 
         /// <summary>
+        /// Displays the menu options for editing fields of a product.
+        /// </summary>
+        void DisplayEditByMenu() {
+            Console.WriteLine("\n========== Edit ==========\n");
+            Console.WriteLine("1. Edit Id");
+            Console.WriteLine("2. Edit Name");
+            Console.WriteLine("3. Edit Price");
+            Console.WriteLine("4. Edit Quantity");
+            Console.WriteLine("5. Edit Menu");
+        }
+
+        /// <summary>
+        /// Displays the menu options for finding a product by specific attributes for editing.
+        /// </summary>
+        void DisplayProductByMenu() {
+            Console.WriteLine("\n========== Edit Product ==========\n");
+            Console.WriteLine("1. Find Product by Id");
+            Console.WriteLine("2. Find Product by Name");
+            Console.WriteLine("3. Main Menu");
+        }
+
+        /// <summary>
+        /// Updates a specific field of the product and validates for duplicates if required.
+        /// </summary>
+        /// <param name="fieldName">The name of the field to update (e.g., "Id", "Name").</param>
+        /// <param name="checkForDuplicate">Indicates whether to check for duplicate values.</param>
+        /// <param name="updateAction">The action to update the specified field.</param>
+        void UpdateProductField(string fieldName, bool checkForDuplicate, Action<string> updateAction) {
+            string updatedValue = GetInformation(fieldName, checkForDuplicate);
+            updateAction(updatedValue);
+            Console.WriteLine($"[Success] {fieldName} updated successfully!");
+            IsEditSuccessful = false;
+        }
+
+        /// <summary>
+        /// Handles the edit or delete operation by displaying a menu and executing the selected action.
+        /// </summary>
+        /// <param name="menuDisplayAction">The action to display the appropriate menu.</param>
+        /// <param name="actions">A dictionary of actions corresponding to menu choices.</param>
+        /// <param name="isOperationSuccessful">A reference to the flag indicating whether the operation was successful.</param>
+        void HandleEditOrDeleteOperation(Action menuDisplayAction, Dictionary<int, Action> actions, ref bool isOperationSuccessful) {
+            do {
+                Console.Clear();
+                menuDisplayAction(); // Display the menu
+                Console.WriteLine("");
+                Console.Write("[Menu] Enter your choice: ");
+                string input = Console.ReadLine();
+                bool isNumber = int.TryParse(input, out int choice);
+
+                if (isNumber && actions.ContainsKey(choice)) {
+                    actions[choice].Invoke(); // Execute the selected action
+                } else if (isNumber && choice == 3) { // Exit option
+                    return;
+                } else {
+                    Console.WriteLine("[Error] Invalid choice!");
+                    PromptForContinuation();
+                }
+
+            } while (isOperationSuccessful);
+        }
+
+        /// <summary>
+        /// Handles the edit or delete operation for a specific product by finding it using a given attribute.
+        /// </summary>
+        /// <param name="ProductBy">The attribute to find the product by (e.g., "Id", "Name").</param>
+        /// <param name="action">The action to perform on the found product.</param>
+        /// <param name="isOperationSuccessful">A reference to the flag indicating whether the operation was successful.</param>
+        void HandleEditOrDeleteProductBy(string ProductBy, Action<Product> action, ref bool isOperationSuccessful) {
+            do {
+                string input = GetInformation(ProductBy);
+                Product product = FindProductByAttribute(ProductBy, input);
+
+                if (product == null) {
+                    Console.WriteLine("[Error] No Product Found");
+                    PromptForContinuation();
+                    return;
+                } else {
+                    action(product);
+                }
+            } while (isOperationSuccessful);
+        }
+
+        /// <summary>
+        /// Edits a specific product by allowing the user to update its fields.
+        /// </summary>
+        /// <param name="ProductToEdit">The product to edit.</param>
+        void EditBy(Product ProductToEdit) {
+            var actions = new Dictionary<int, Action> {
+                { 1, () => UpdateProductField("Id", true, value => ProductToEdit.Id = value)},
+                { 2, () => UpdateProductField("Name", true, value => ProductToEdit.Name = value)},
+                { 3, () => UpdateProductField("Price", false, value => ProductToEdit.Price = decimal.Parse(value))},
+                { 4, () => UpdateProductField("Quantity", false, value => ProductToEdit.Quantity = int.Parse(value))},
+            };
+
+            bool isValidChoice = false;
+            Console.Clear();
+            DisplayDetails(ProductToEdit);
+            DisplayEditByMenu();
+
+            do {
+                Console.Write("\n[Menu] Enter your choice: ");
+                string input = Console.ReadLine();
+                isValidChoice = int.TryParse(input, out int choice);
+
+                if (!isValidChoice) {
+                    Console.WriteLine("[Error] Invalid input. Please enter a number.");
+                    continue;
+                }
+
+                if (isValidChoice && actions.ContainsKey(choice)) {
+                    actions[choice].Invoke();
+                } else if (isValidChoice && choice == 5) {
+                    return;
+                } else {
+                    Console.WriteLine("[Error] Invalid choice. Please select a valid option.");
+                }
+            } while (IsEditSuccessful);
+        }
+
+        /// <summary>
+        /// Edits a product by finding it using a specified attribute.
+        /// </summary>
+        /// <param name="ProductBy">The attribute to find the product by (e.g., "Id", "Name").</param>
+        void EditProductBy(string ProductBy) {
+            HandleEditOrDeleteProductBy(ProductBy, EditBy, ref IsEditSuccessful);
+        }
+
+        /// <summary>
+        /// Facilitates the product editing process by displaying a menu and handling user input.
+        /// </summary>
+        void EditProduct() {
+            var actions = new Dictionary<int, Action> {
+                { 1, () => EditProductBy("Id") },
+                { 2, () => EditProductBy("Name") },
+            };
+
+            HandleEditOrDeleteOperation(DisplayProductByMenu, actions, ref IsEditSuccessful);
+        }
+
+        /// <summary>
+        /// Displays the menu options for deleting a product.
+        /// </summary>
+        void DeleteProductMenu() {
+            Console.WriteLine("\n========== Delete Product ==========\n");
+            Console.WriteLine("1. Delete Product by Id");
+            Console.WriteLine("2. Delete Product by Name");
+            Console.WriteLine("3. Main Menu");
+        }
+
+        /// <summary>
+        /// Deletes a specific product from the product list.
+        /// </summary>
+        /// <param name="ProductToDelete">The product to delete.</param>
+        void Delete(Product ProductToDelete) {
+            products.Remove(ProductToDelete);
+            Console.WriteLine("[Success] Product Deleted Successfully");
+            IsDeleteSuccessful = false;
+        }
+
+        /// <summary>
+        /// Deletes a product by finding it using a specified attribute.
+        /// </summary>
+        /// <param name="ProductBy">The attribute to find the product by (e.g., "Id", "Name").</param>
+        void DeleteProductBy(string ProductBy) {
+            HandleEditOrDeleteProductBy(ProductBy, Delete, ref IsDeleteSuccessful);
+        }
+
+        /// <summary>
+        /// Facilitates the product deletion process by displaying a menu and handling user input.
+        /// </summary>
+        void DeleteProduct() {
+            var actions = new Dictionary<int, Action> {
+                { 1, () => DeleteProductBy("Id") },
+                { 2, () => DeleteProductBy("Name") },
+            };
+
+            HandleEditOrDeleteOperation(DeleteProductMenu, actions, ref IsDeleteSuccessful);
+        }
+
+        /// <summary>
         /// The main entry point of the application. Handles menu navigation and user input for managing products.
         /// </summary>
         /// <param name="args">Command-line arguments (not used).</param>
@@ -308,6 +490,8 @@
                 { 1, () => manager.AddNewProduct() },
                 { 2, () => manager.ViewProducts(products) },
                 { 3, () => manager.SearchProduct() },
+                { 4, () => manager.EditProduct() },
+                { 5, () => manager.DeleteProduct() },
                 { 6, () => manager.ExitEnvironment()}
             };
 
@@ -327,6 +511,8 @@
                     Console.WriteLine("[Error] Invalid choice!");
                 }
 
+                manager.IsDeleteSuccessful = true;
+                manager.IsEditSuccessful = true;
                 manager.PromptForContinuation();
                 Console.Clear();
             } while (true);
