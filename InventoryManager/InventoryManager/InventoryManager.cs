@@ -211,6 +211,86 @@
         }
 
         /// <summary>
+        /// Finds a product by a specific attribute and value.
+        /// </summary>
+        /// <param name="attribute">The attribute to search by (e.g., "Id" or "Name").</param>
+        /// <param name="value">The value of the attribute to match.</param>
+        /// <returns>The Product object if found; otherwise, null.</returns>
+        Product FindProductByAttribute(string attribute, string value) {
+            return products.Find(product =>
+                (attribute.Equals("Id", StringComparison.OrdinalIgnoreCase) &&
+                product.Id.Equals(value, StringComparison.OrdinalIgnoreCase)) ||
+                (attribute.Equals("Name", StringComparison.OrdinalIgnoreCase) &&
+                product.Name.Equals(value, StringComparison.OrdinalIgnoreCase))
+            );
+        }
+
+        /// <summary>
+        /// Displays the search menu for the product search feature.
+        /// </summary>
+        void SearchProductMenu() {
+            Console.WriteLine("\n========== Search Product ==========\n");
+            Console.WriteLine("1. Search by Id");
+            Console.WriteLine("2. Search by Name");
+            Console.WriteLine("3. Main Menu");
+        }
+
+        /// <summary>
+        /// Displays the details of a product in a formatted manner.
+        /// </summary>
+        /// <param name="productInfo">The Product object containing the details to display.</param>
+        void DisplayDetails(Product productInfo) {
+            Console.WriteLine("\n========== Details ==========\n");
+            Console.WriteLine("{0,-9}: {1}", "Id", productInfo.Id);
+            Console.WriteLine("{0,-9}: {1}", "Name", productInfo.Name);
+            Console.WriteLine("{0,-9}: {1}", "Price", productInfo.Price);
+            Console.WriteLine("{0,-9}: {1}", "Quantity", productInfo.Quantity);
+        }
+
+        /// <summary>
+        /// Searches for a product based on the specified attribute and displays the result.
+        /// </summary>
+        /// <param name="informationType">The type of information to search by (e.g., "Id" or "Name").</param>
+        void SearchProductBy(string informationType) {
+            string input = GetInformation(informationType);
+            Product productInfo = FindProductByAttribute(informationType, input);
+            if (productInfo == null) {
+                Console.WriteLine("[Error] No Product Found");
+            } else {
+                DisplayDetails(productInfo);
+            }
+        }
+
+        /// <summary>
+        /// Facilitates the product search process by displaying a menu and handling user input.
+        /// </summary>
+        void SearchProduct() {
+            var actions = new Dictionary<int, Action> {
+                { 1, () => SearchProductBy("Id")},
+                { 2, () => SearchProductBy("Name")},
+            };
+
+            do {
+                Console.Clear();
+                SearchProductMenu();
+                Console.Write("\n[Menu] Enter your choice: ");
+
+                string input = Console.ReadLine();
+                bool isNumber = int.TryParse(input, out int choice);
+
+                if (isNumber && actions.ContainsKey(choice)) {
+                    actions[choice].Invoke();
+                } else if (choice == 3) {
+                    return;
+                } else {
+                    Console.WriteLine("[Error] Invalid choice!");
+                }
+
+                PromptForContinuation();
+            } while (true);
+        }
+
+        /// <summary>
         /// The main entry point of the application. Handles menu navigation and user input for managing products.
         /// </summary>
         /// <param name="args">Command-line arguments (not used).</param>
@@ -227,6 +307,7 @@
             var actions = new Dictionary<int, Action> {
                 { 1, () => manager.AddNewProduct() },
                 { 2, () => manager.ViewProducts(products) },
+                { 3, () => manager.SearchProduct() },
                 { 6, () => manager.ExitEnvironment()}
             };
 
