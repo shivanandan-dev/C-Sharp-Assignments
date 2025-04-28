@@ -135,6 +135,82 @@
         }
 
         /// <summary>
+        /// Displays a formatted list of products and provides sorting options to the user.
+        /// </summary>
+        /// <param name="productList">A list of Product objects to be displayed.</param>
+        void DisplayProducts(List<Product> productList) {
+            Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}", "Id", "Name", "Price", "Quantity");
+            Console.WriteLine(new string('-', 100));
+
+            foreach (Product productInfo in productList) {
+                Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}",
+                    productInfo.Id,
+                    productInfo.Name,
+                    productInfo.Price,
+                    productInfo.Quantity
+                );
+            }
+
+            Console.WriteLine("\n\n========== Sort By ==========\n");
+            Console.WriteLine("1. Id");
+            Console.WriteLine("2. Name");
+            Console.WriteLine("3. Price");
+            Console.WriteLine("4. Quantity");
+            Console.WriteLine("5. Exit");
+        }
+
+        /// <summary>
+        /// Sorts the product list based on the user's input.
+        /// </summary>
+        /// <param name="productList">A list of Product objects to be sorted.</param>
+        /// <param name="input">The user's console key input indicating the sorting criterion.</param>
+        /// <returns>A sorted list of Product objects.</returns>
+        List<Product> SortProducts(List<Product> productList, ConsoleKey input) {
+            // Dictionary of sorting actions
+            var sortingActions = new Dictionary<ConsoleKey, Func<List<Product>, List<Product>>>
+            {
+                { ConsoleKey.D1, products => products.OrderBy(product => product.Id).ToList() },
+                { ConsoleKey.NumPad1, products => products.OrderBy(product => product.Id).ToList() },
+                { ConsoleKey.D2, products => products.OrderBy(product => product.Name).ToList() },
+                { ConsoleKey.NumPad2, products => products.OrderBy(product => product.Name).ToList() },
+                { ConsoleKey.D3, products => products.OrderBy(product => product.Price).ToList() },
+                { ConsoleKey.NumPad3, products => products.OrderBy(product => product.Price).ToList() },
+                { ConsoleKey.D4, products => products.OrderBy(product => product.Quantity).ToList() },
+                { ConsoleKey.NumPad4, products => products.OrderBy(product => product.Quantity).ToList() },
+            };
+
+            if (sortingActions.ContainsKey(input)) {
+                return sortingActions[input](productList);
+            }
+
+            return productList;
+        }
+
+        /// <summary>
+        /// Provides a user interface for viewing and sorting a list of products.
+        /// </summary>
+        /// <param name="productList">A list of Product objects to be displayed and sorted.</param>
+        void ViewProducts(List<Product> productList) {
+            while (true) {
+                Console.Clear();
+                if (productList.Count == 0) {
+                    Console.WriteLine("[Error] Product list is empty.");
+                    return;
+                }
+                Console.WriteLine("========== Products ==========\n");
+                DisplayProducts(productList);
+                Console.WriteLine("\nPress (1-4) to Sort, (5) to Exit:");
+                ConsoleKey input = Console.ReadKey().Key;
+
+                if (input == ConsoleKey.D5 || input == ConsoleKey.NumPad5) {
+                    return;
+                }
+
+                productList = SortProducts(productList, input);
+            }
+        }
+
+        /// <summary>
         /// The main entry point of the application. Handles menu navigation and user input for managing products.
         /// </summary>
         /// <param name="args">Command-line arguments (not used).</param>
@@ -150,6 +226,7 @@
 
             var actions = new Dictionary<int, Action> {
                 { 1, () => manager.AddNewProduct() },
+                { 2, () => manager.ViewProducts(products) },
                 { 6, () => manager.ExitEnvironment()}
             };
 

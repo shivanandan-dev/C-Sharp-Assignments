@@ -7,8 +7,8 @@
 
         public string Id { get => _id; set => _id = value; }
         public string Name { get => _name; set => _name = value; }
-        public decimal price { get => _price; set => _price = value; }
-        public int quantity { get => _quantity; set => _quantity = value; }
+        public decimal Price { get => _price; set => _price = value; }
+        public int Quantity { get => _quantity; set => _quantity = value; }
 
         /// <summary>
         /// Initializes a new instance of the Product class with the specified details.
