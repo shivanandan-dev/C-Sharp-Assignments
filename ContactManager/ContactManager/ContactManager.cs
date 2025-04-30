@@ -1,9 +1,159 @@
 ﻿namespace ContactManager {
     internal class ContactManager {
-        static List<Contact> contacts = new List<Contact>();
+        public static List<Contact> contacts = new List<Contact>();
+        public static bool IsEditSuccessful = true;
+        public static bool IsDeleteSuccessful = true;
+
         Validator validator = new Validator();
-        bool IsEditSuccessful = true;
-        bool IsDeleteSuccessful = true;
+
+        /// <summary>
+        /// Displays a prompt asking the user to press any key to continue and waits until a key is pressed.
+        /// </summary>
+        public static void PromptForContinuation() {
+            Console.WriteLine("\nPress any key to continue...");
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Collects information for a new contact, validates the inputs, and adds the contact to the contact list.
+        /// </summary>
+        public void AddNewContact() {
+            Console.WriteLine("========== Add new contact ==========\n");
+            string name = GetInformation("Name", true);
+            string phoneNumber = GetInformation("Phone Number", true);
+            string email = GetInformation("Email", true);
+            string additionalInformation = GetInformation("Additional Information", true);
+
+            contacts.Add(new Contact(name, phoneNumber, email, additionalInformation));
+            Console.WriteLine("[Success] New contact is created successfully!");
+        }
+
+        /// <summary>
+        /// Displays the list of contacts in a formatted table.
+        /// </summary>
+        /// <param name="contactList">List of contacts to display.</param>
+        public void DisplayContacts(List<Contact> contactList) {
+            Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}", "Name", "Phone Number", "Email", "Additional Information");
+            Console.WriteLine(new string('-', 100));
+
+            foreach (Contact contactInfo in contactList) {
+                Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}",
+                    contactInfo.Name,
+                    contactInfo.PhoneNumber,
+                    contactInfo.Email,
+                    contactInfo.AdditionalInformation
+                );
+            }
+
+            Console.WriteLine("\n========== Sort By ==========\n");
+            Console.WriteLine("1. Name");
+            Console.WriteLine("2. Phone Number");
+            Console.WriteLine("3. Email");
+            Console.WriteLine("4. Exit");
+        }
+
+        /// <summary>
+        /// Displays all contacts in the contact list in a formatted table.
+        /// </summary>
+        public void ViewContacts(List<Contact> contactList) {
+            while (true) {
+                Console.Clear();
+                Console.WriteLine("========== Contacts ==========\n");
+
+                if (contactList.Count == 0) {
+                    Console.WriteLine("[Error] Contact list is empty.");
+                    return;
+                }
+
+                DisplayContacts(contactList);
+                Console.WriteLine("\nPress (1-3) to Sort, (4) to Exit:");
+                ConsoleKey input = Console.ReadKey().Key;
+
+                if (input == ConsoleKey.D4 || input == ConsoleKey.NumPad4) {
+                    return;
+                }
+
+                contactList = SortContacts(contactList, input);
+            }
+        }
+
+        /// <summary>
+        /// Displays the main menu options to allow the user to interact with the contact manager.
+        /// </summary>
+        public static void MainMenu() {
+            Console.WriteLine("========== Contact Manager ==========\n");
+            Console.WriteLine("1. Add a New Contact");
+            Console.WriteLine("2. View Contacts");
+            Console.WriteLine("3. Search a Contact");
+            Console.WriteLine("4. Edit a Contact");
+            Console.WriteLine("5. Delete a Contact");
+            Console.WriteLine("6. Exit");
+        }
+
+        /// <summary>
+        /// Handles the workflow for searching contacts by displaying a menu and executing the corresponding actions.
+        /// </summary>
+        public void SearchContact() {
+            var actions = new Dictionary<int, Action> {
+                { 1, () => SearchContactBy("Name")},
+                { 2, () => SearchContactBy("Phone Number")},
+                { 3, () => SearchContactBy("Email")},
+            };
+
+            do {
+                Console.Clear();
+                SearchContactMenu();
+                Console.Write("\n[Menu] Enter your choice: ");
+
+                string input = Console.ReadLine();
+                bool isNumber = int.TryParse(input, out int choice);
+
+                if (isNumber && actions.ContainsKey(choice)) {
+                    actions[choice].Invoke();
+                } else if (choice == 4) {
+                    return;
+                } else {
+                    Console.WriteLine("[Error] Invalid choice!");
+                }
+
+                PromptForContinuation();
+            } while (true);
+        }
+
+        /// <summary>
+        /// Handles the deletion of contacts based on user input.
+        /// </summary>
+        public void DeleteContact() {
+            var actions = new Dictionary<int, Action> {
+                { 1, () => DeleteContactBy("Name") },
+                { 2, () => DeleteContactBy("Phone Number") },
+                { 3, () => DeleteContactBy("Email") }
+            };
+
+            HandleEditOrDeleteOperation(DeleteContactMenu, actions, ref IsDeleteSuccessful);
+        }
+
+        /// <summary>
+        /// Exits the application after displaying a farewell message.
+        /// </summary>
+        public void ExitEnvironment() {
+            Console.WriteLine("\nBye Bye...");
+            Console.ReadKey();
+            Environment.Exit(0);
+        }
+
+        /// <summary>
+        /// Handles the editing of contacts based on user input.
+        /// </summary>
+        public void EditContact() {
+            var actions = new Dictionary<int, Action> {
+                { 1, () => EditContactBy("Name") },
+                { 2, () => EditContactBy("Phone Number") },
+                { 3, () => EditContactBy("Email") }
+            };
+
+            HandleEditOrDeleteOperation(DisplayContactByMenu, actions, ref IsEditSuccessful);
+        }
 
         /// <summary>
         /// Checks if a contact with the given value (name, email, or phone number) already exists in the contact list.
@@ -91,53 +241,6 @@
         }
 
         /// <summary>
-        /// Displays a prompt asking the user to press any key to continue and waits until a key is pressed.
-        /// </summary>
-        void PromptForContinuation() {
-            Console.WriteLine("\nPress any key to continue...");
-            Console.ReadKey();
-        }
-
-        /// <summary>
-        /// Collects information for a new contact, validates the inputs, and adds the contact to the contact list.
-        /// </summary>
-        void AddNewContact() {
-            Console.WriteLine("========== Add new contact ==========\n");
-            string name = GetInformation("Name", true);
-            string phoneNumber = GetInformation("Phone Number", true);
-            string email = GetInformation("Email", true);
-            string additionalInformation = GetInformation("Additional Information", true);
-
-            contacts.Add(new Contact(name, phoneNumber, email, additionalInformation));
-            Console.WriteLine("[Success] New contact is created successfully!");
-        }
-
-        /// <summary>
-        /// Displays the list of contacts in a formatted table.
-        /// </summary>
-        /// <param name="contactList">List of contacts to display.</param>
-        void DisplayContacts(List<Contact> contactList) {
-            Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}", "Name", "Phone Number", "Email", "Additional Information");
-            Console.WriteLine(new string('-', 100));
-
-            foreach (Contact contactInfo in contactList) {
-                Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}",
-                    contactInfo.Name,
-                    contactInfo.PhoneNumber,
-                    contactInfo.Email,
-                    contactInfo.AdditionalInformation
-                );
-            }
-
-            Console.WriteLine("\n========== Sort By ==========\n");
-            Console.WriteLine("1. Name");
-            Console.WriteLine("2. Phone Number");
-            Console.WriteLine("3. Email");
-            Console.WriteLine("4. Exit");
-        }
-
-
-        /// <summary>
         /// Sorts the list of contacts based on the selected sorting option.
         /// </summary>
         /// <param name="contactList">The list of contacts to sort.</param>
@@ -160,31 +263,6 @@
             }
 
             return contactList;
-        }
-
-        /// <summary>
-        /// Displays all contacts in the contact list in a formatted table.
-        /// </summary>
-        void ViewContacts(List<Contact> contactList) {
-            while (true) {
-                Console.Clear();
-                Console.WriteLine("========== Contacts ==========\n");
-
-                if (contactList.Count == 0) {
-                    Console.WriteLine("[Error] Contact list is empty.");
-                    return;
-                }
-
-                DisplayContacts(contactList);
-                Console.WriteLine("\nPress (1-3) to Sort, (4) to Exit:");
-                ConsoleKey input = Console.ReadKey().Key;
-
-                if (input == ConsoleKey.D4 || input == ConsoleKey.NumPad4) {
-                    return;
-                }
-
-                contactList = SortContacts(contactList, input);
-            }
         }
 
         /// <summary>
@@ -228,19 +306,6 @@
         }
 
         /// <summary>
-        /// Displays the main menu options to allow the user to interact with the contact manager.
-        /// </summary>
-        void MainMenu() {
-            Console.WriteLine("========== Contact Manager ==========\n");
-            Console.WriteLine("1. Add a New Contact");
-            Console.WriteLine("2. View Contacts");
-            Console.WriteLine("3. Search a Contact");
-            Console.WriteLine("4. Edit a Contact");
-            Console.WriteLine("5. Delete a Contact");
-            Console.WriteLine("6. Exit");
-        }
-
-        /// <summary>
         /// Searches for a contact based on a specific information type (e.g., Name, Phone Number, Email).
         /// </summary>
         /// <param name="informationType">The type of information to search by (e.g., "Name", "Phone Number").</param>
@@ -252,36 +317,6 @@
             } else {
                 DisplayDetails(contactInfo);
             }
-        }
-
-        /// <summary>
-        /// Handles the workflow for searching contacts by displaying a menu and executing the corresponding actions.
-        /// </summary>
-        void SearchContact() {
-            var actions = new Dictionary<int, Action> {
-                { 1, () => SearchContactBy("Name")},
-                { 2, () => SearchContactBy("Phone Number")},
-                { 3, () => SearchContactBy("Email")},
-            };
-
-            do {
-                Console.Clear();
-                SearchContactMenu();
-                Console.Write("\n[Menu] Enter your choice: ");
-
-                string input = Console.ReadLine();
-                bool isNumber = int.TryParse(input, out int choice);
-
-                if (isNumber && actions.ContainsKey(choice)) {
-                    actions[choice].Invoke();
-                } else if (choice == 4) {
-                    return;
-                } else {
-                    Console.WriteLine("[Error] Invalid choice!");
-                }
-
-                PromptForContinuation();
-            } while (true);
         }
 
         /// <summary>
@@ -412,18 +447,6 @@
         void EditContactBy(string ContactBy) {
             HandleEditOrDeleteContactBy(ContactBy, EditBy, ref IsEditSuccessful);
         }
-        /// <summary>
-        /// Handles the editing of contacts based on user input.
-        /// </summary>
-        void EditContact() {
-            var actions = new Dictionary<int, Action> {
-                { 1, () => EditContactBy("Name") },
-                { 2, () => EditContactBy("Phone Number") },
-                { 3, () => EditContactBy("Email") }
-            };
-
-            HandleEditOrDeleteOperation(DisplayContactByMenu, actions, ref IsEditSuccessful);
-        }
 
         /// <summary>
         /// Displays the menu options for deleting contacts.
@@ -452,74 +475,6 @@
         /// <param name="ContactBy">The attribute to find the contact by (e.g., "Name", "Phone Number", "Email").</param>
         void DeleteContactBy(string ContactBy) {
             HandleEditOrDeleteContactBy(ContactBy, Delete, ref IsDeleteSuccessful);
-        }
-
-        /// <summary>
-        /// Handles the deletion of contacts based on user input.
-        /// </summary>
-        void DeleteContact() {
-            var actions = new Dictionary<int, Action> {
-                { 1, () => DeleteContactBy("Name") },
-                { 2, () => DeleteContactBy("Phone Number") },
-                { 3, () => DeleteContactBy("Email") }
-            };
-
-            HandleEditOrDeleteOperation(DeleteContactMenu, actions, ref IsDeleteSuccessful);
-        }
-
-        /// <summary>
-        /// Exits the application after displaying a farewell message.
-        /// </summary>
-        void ExitEnvironment() {
-            Console.WriteLine("\nBye Bye...");
-            Console.ReadKey();
-            Environment.Exit(0);
-        }
-
-        /// <summary>
-        /// The entry point of the program. Displays the main menu and handles user interactions with the contact manager.
-        /// </summary>
-        /// <param name="args">Command-line arguments (not used in this program).</param>
-        public static void Main(string[] args) {
-            ContactManager manager = new ContactManager();
-
-            // NOTE: The following default data is added for testing and debugging purposes only.
-            // These entries should be removed or commented out before deploying the application to production.
-            contacts.Add(new Contact("John Doe", "+11234567890", "john.doe@example.com", "Friend from college"));
-            contacts.Add(new Contact("Jane Smith", "+441234567890", "jane.smith@example.co.uk", "Colleague"));
-            contacts.Add(new Contact("Alice Johnson", "+918765432109", "alice.johnson@example.in", "Family friend"));
-            contacts.Add(new Contact("Bob Brown", "+61234567890", "bob.brown@example.au", "Neighbor"));
-
-            var actions = new Dictionary<int, Action> {
-                { 1, () => manager.AddNewContact() },
-                { 2, () => manager.ViewContacts(contacts) },
-                { 3, () => manager.SearchContact() },
-                { 4, () => manager.EditContact() },
-                { 5, () => manager.DeleteContact() },
-                { 6, () => manager.ExitEnvironment()}
-            };
-
-            do {
-                Console.Clear();
-                manager.MainMenu();
-                Console.Write("\n[Menu] Enter your choice: ");
-
-                string input = Console.ReadLine();
-                bool isNumber = int.TryParse(input, out int choice);
-
-
-                if (isNumber && actions.ContainsKey(choice)) {
-                    Console.Clear();
-                    actions[choice].Invoke();
-                } else {
-                    Console.WriteLine("[Error] Invalid choice!");
-                }
-
-                manager.IsDeleteSuccessful = true;
-                manager.IsEditSuccessful = true;
-                manager.PromptForContinuation();
-                Console.Clear();
-            } while (true);
         }
     }
 }
