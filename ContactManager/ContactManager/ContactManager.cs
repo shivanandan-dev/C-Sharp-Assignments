@@ -4,8 +4,6 @@
         public static bool IsEditSuccessful = true;
         public static bool IsDeleteSuccessful = true;
 
-        Validator validator = new Validator();
-
         /// <summary>
         /// Displays a prompt asking the user to press any key to continue and waits until a key is pressed.
         /// </summary>
@@ -201,13 +199,13 @@
         /// <returns>An error message if the input is invalid; otherwise, an empty string.</returns>
         string ValidateInput(string informationType, string input) {
             return informationType switch {
-                "Name" => validator.IsNameValid(input)
+                "Name" => Validator.IsNameValid(input)
                     ? string.Empty
                     : "Name must contain only letters and spaces.",
-                "Phone Number" => validator.IsNumberValid(input)
+                "Phone Number" => Validator.IsNumberValid(input)
                     ? string.Empty
                     : "Phone Number must be exactly 10 digits or include a country code with '+'.",
-                "Email" => validator.IsEmailValid(input)
+                "Email" => Validator.IsEmailValid(input)
                     ? string.Empty
                     : "Invalid email format.",
                 _ => string.Empty

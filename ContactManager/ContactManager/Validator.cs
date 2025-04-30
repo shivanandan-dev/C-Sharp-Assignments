@@ -2,7 +2,7 @@
     /// <summary>
     /// Provides methods to validate user input such as names, phone numbers, and email addresses.
     /// </summary>
-    internal class Validator {
+    internal static class Validator {
         /// <summary>
         /// Validates a person's name to ensure it contains only alphabets and spaces.
         /// </summary>
@@ -11,7 +11,7 @@
         /// An empty string if the name is valid, otherwise an error message indicating 
         /// that the name must contain only letters and spaces.
         /// </returns>
-        public bool IsNameValid(string name) {
+        public static bool IsNameValid(string name) {
             return System.Text.RegularExpressions.Regex.IsMatch(name, @"^[a-zA-Z\s]+$");
         }
 
@@ -25,7 +25,7 @@
         /// An empty string if the phone number is valid, otherwise an error message indicating 
         /// that the phone number must meet the specified format.
         /// </returns>
-        public bool IsNumberValid(string number) {
+        public static bool IsNumberValid(string number) {
             return System.Text.RegularExpressions.Regex.IsMatch(number, @"^(\d{10}|\+\d+)$");
         }
 
@@ -37,7 +37,7 @@
         /// An empty string if the email address is valid, otherwise an error message indicating 
         /// that the email format is invalid.
         /// </returns>
-        public bool IsEmailValid(string email) {
+        public static bool IsEmailValid(string email) {
             return System.Text.RegularExpressions.Regex.IsMatch(email, @"^[^\s@]+@[^\s@]+\.[^\s@]+$");
         }
     }
