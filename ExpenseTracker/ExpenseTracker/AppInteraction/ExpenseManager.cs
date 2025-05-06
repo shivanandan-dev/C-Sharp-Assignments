@@ -84,7 +84,7 @@ namespace ExpenseTracker.AppInteraction {
                     { 3, ("Main Menu", () => { })}
                 };
 
-                OutputManager.DisplayMenu("View Transactions", menuActions);
+                OutputManager.DisplayMenu("Delete Transaction", menuActions);
                 int choice = InputManager.GetMenuChoice(menuActions);
                 if (choice == 3) {
                     return;
@@ -106,6 +106,76 @@ namespace ExpenseTracker.AppInteraction {
                 ExpenseDetails.RemoveAt(expenseId - 1);
                 OutputManager.DisplaySuccessMessage("Expense deleted");
             }
+        }
+
+        public static void EditTransaction() {
+            do {
+                Console.Clear();
+                Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>() {
+                    { 1, ("Edit Expense", ExpenseManager.EditExpense )},
+                    { 2, ("Edit Income", () => { })},
+                    { 3, ("Main Menu", () => { })}
+                };
+
+                OutputManager.DisplayMenu("Edit Transaction", menuActions);
+                int choice = InputManager.GetMenuChoice(menuActions);
+                if (choice == 3) {
+                    return;
+                }
+                menuActions[choice].action.Invoke();
+
+                InputManager.PromptForContinuation();
+            } while (true);
+        }
+
+        static void EditExpense() {
+            Console.Clear();
+            ViewExpenses();
+            if (ExpenseDetails.Count == 0)
+                return;
+            int expenseId = InputManager.GetExpenseId(ExpenseDetails);
+
+            if (expenseId > 0) {
+                EditExpenseAt(expenseId - 1);
+            }
+        }
+
+        static void UpdateExpenseAmount(int expenseId, Func<decimal> action) {
+            decimal updatedValue = action.Invoke();
+            ExpenseDetails[expenseId].Amount = updatedValue;
+            OutputManager.DisplaySuccessMessage("Amount updated.");
+        }
+
+        static void UpdateExpenseDate(int expenseId, Func<DateTime> action) {
+            DateTime updatedValue = action.Invoke();
+            ExpenseDetails[expenseId].Date = updatedValue;
+            OutputManager.DisplaySuccessMessage("Date updated.");
+        }
+
+        static void UpdateExpenseCategory(int expenseId, Func<string, string> action) {
+            string updatedValue = action.Invoke("Category");
+            ExpenseDetails[expenseId].Category = updatedValue;
+            OutputManager.DisplaySuccessMessage("Category updated.");
+        }
+
+
+        static void EditExpenseAt(int expenseId) {
+            Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>()
+            {
+                { 1, ("Edit Amount", () => UpdateExpenseAmount(expenseId, InputManager.GetAmount))},
+                { 2, ("Edit Date", () => UpdateExpenseDate(expenseId, InputManager.GetDate))},
+                { 3, ("Edit Category", () => UpdateExpenseCategory(expenseId, InputManager.GetCategoryOrSource))},
+                { 4, ("Menu", () => { }) }
+            };
+
+            Console.WriteLine();
+            OutputManager.DisplayMenu("Edit Expense", menuActions);
+
+            int choice = InputManager.GetMenuChoice(menuActions);
+            if (choice == 4) {
+                return;
+            }
+            menuActions[choice].action.Invoke();
         }
     }
 }

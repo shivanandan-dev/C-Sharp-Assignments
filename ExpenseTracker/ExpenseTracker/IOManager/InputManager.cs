@@ -54,7 +54,7 @@ namespace ExpenseTracker.IOManager {
 
         public static int GetExpenseId(List<ExpenseDetail> expenseDetails) {
 
-            Console.Write("Enter Id: ");
+            Console.Write("\nEnter ID: ");
             string input = Console.ReadLine();
             bool isNumber = int.TryParse(input, out int id);
 
