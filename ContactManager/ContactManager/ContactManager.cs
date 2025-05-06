@@ -144,6 +144,18 @@
         }
 
         /// <summary>
+        /// Display the menu options.
+        /// </summary>
+        /// <param name="menuTitle">Title of the menu</param>
+        /// <param name="menuActions">A dictionary mapping menu choices to their corresponding actions.</param>
+        public void DisplayMenu(string menuTitle, Dictionary<int, (string description, Action)> menuActions) {
+            Console.WriteLine($"\n========== {menuTitle} ==========\n");
+            foreach (var menuAction in menuActions) {
+                Console.WriteLine($"{menuAction.Key}. {menuAction.Value.description}");
+            }
+        }
+
+        /// <summary>
         /// Checks if a contact with the given value (name, email, or phone number) already exists in the contact list.
         /// </summary>
         /// <param name="value">The value to check (name, email, or phone number).</param>
@@ -280,18 +292,6 @@
                 (attribute.Equals("Email", StringComparison.OrdinalIgnoreCase) &&
                 contact.Email.Equals(value, StringComparison.OrdinalIgnoreCase))
             );
-        }
-
-        /// <summary>
-        /// Display the menu options.
-        /// </summary>
-        /// <param name="menuTitle">Title of the menu</param>
-        /// <param name="menuActions">A dictionary mapping menu choices to their corresponding actions.</param>
-        public void DisplayMenu(string menuTitle, Dictionary<int, (string description, Action)> menuActions) {
-            Console.WriteLine($"\n========== {menuTitle} ==========\n");
-            foreach (var menuAction in menuActions) {
-                Console.WriteLine($"{menuAction.Key}. {menuAction.Value.description}");
-            }
         }
 
         /// <summary>
