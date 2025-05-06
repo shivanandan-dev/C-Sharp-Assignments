@@ -76,38 +76,26 @@
         }
 
         /// <summary>
-        /// Displays the main menu options to allow the user to interact with the contact manager.
-        /// </summary>
-        public static void MainMenu() {
-            Console.WriteLine("========== Contact Manager ==========\n");
-            Console.WriteLine("1. Add a New Contact");
-            Console.WriteLine("2. View Contacts");
-            Console.WriteLine("3. Search a Contact");
-            Console.WriteLine("4. Edit a Contact");
-            Console.WriteLine("5. Delete a Contact");
-            Console.WriteLine("6. Exit");
-        }
-
-        /// <summary>
         /// Handles the workflow for searching contacts by displaying a menu and executing the corresponding actions.
         /// </summary>
         public void SearchContact() {
-            var searchMenuActions = new Dictionary<int, Action> {
-                { 1, () => SearchContactBy("Name")},
-                { 2, () => SearchContactBy("Phone Number")},
-                { 3, () => SearchContactBy("Email")},
+            var searchMenuActions = new Dictionary<int, (string, Action action)> {
+                { 1, ("Search by Name", () => SearchContactBy("Name"))},
+                { 2, ("Search by Phone Number", () => SearchContactBy("Phone Number"))},
+                { 3, ("Search by Email", () => SearchContactBy("Email"))},
+                { 4, ("Main Menu", () => { })}
             };
 
             do {
                 Console.Clear();
-                SearchContactMenu();
+                DisplayMenu("Search", searchMenuActions);
                 Console.Write("\n[Menu] Enter your choice: ");
 
                 string input = Console.ReadLine();
                 bool isNumber = int.TryParse(input, out int choice);
 
-                if (isNumber && searchMenuActions.ContainsKey(choice)) {
-                    searchMenuActions[choice].Invoke();
+                if (isNumber && searchMenuActions.ContainsKey(choice) && choice != 4) {
+                    searchMenuActions[choice].action.Invoke();
                 } else if (choice == 4) {
                     return;
                 } else {
@@ -122,13 +110,14 @@
         /// Handles the deletion of contacts based on user input.
         /// </summary>
         public void DeleteContact() {
-            var deleteMenuActions = new Dictionary<int, Action> {
-                { 1, () => DeleteContactBy("Name") },
-                { 2, () => DeleteContactBy("Phone Number") },
-                { 3, () => DeleteContactBy("Email") }
+            var deleteMenuActions = new Dictionary<int, (string, Action)> {
+                { 1, ("Delete Contact by Name", () => DeleteContactBy("Name")) },
+                { 2, ("Delete Contact by Phone Number", () => DeleteContactBy("Phone Number")) },
+                { 3, ("Delete Contact by Email", () => DeleteContactBy("Email")) },
+                { 4, ("Main Menu", () => { }) }
             };
 
-            HandleEditOrDeleteOperation(DeleteContactMenu, deleteMenuActions, ref IsDeleteSuccessful);
+            HandleEditOrDeleteOperation("Delete", deleteMenuActions, ref IsDeleteSuccessful);
         }
 
         /// <summary>
@@ -144,13 +133,14 @@
         /// Handles the editing of contacts based on user input.
         /// </summary>
         public void EditContact() {
-            var editMenuActions = new Dictionary<int, Action> {
-                { 1, () => EditContactBy("Name") },
-                { 2, () => EditContactBy("Phone Number") },
-                { 3, () => EditContactBy("Email") }
+            var editMenuActions = new Dictionary<int, (string, Action)> {
+                { 1, ("Find Contact by Name", () => EditContactBy("Name"))},
+                { 2, ("Find Contact by Phone Number", () => EditContactBy("Phone Number"))},
+                { 3, ("Find Contact by Email", () => EditContactBy("Email"))},
+                { 4, ("Main Menu", () => { })}
             };
 
-            HandleEditOrDeleteOperation(DisplayContactByMenu, editMenuActions, ref IsEditSuccessful);
+            HandleEditOrDeleteOperation("Edit by", editMenuActions, ref IsEditSuccessful);
         }
 
         /// <summary>
@@ -293,14 +283,15 @@
         }
 
         /// <summary>
-        /// Displays the menu options for searching contacts.
+        /// Display the menu options.
         /// </summary>
-        void SearchContactMenu() {
-            Console.WriteLine("\n========== Search Contact ==========\n");
-            Console.WriteLine("1. Search by Name");
-            Console.WriteLine("2. Search by Phone Number");
-            Console.WriteLine("3. Search by Email");
-            Console.WriteLine("4. Main Menu");
+        /// <param name="menuTitle">Title of the menu</param>
+        /// <param name="menuActions">A dictionary mapping menu choices to their corresponding actions.</param>
+        public void DisplayMenu(string menuTitle, Dictionary<int, (string description, Action)> menuActions) {
+            Console.WriteLine($"\n========== {menuTitle} ==========\n");
+            foreach (var menuAction in menuActions) {
+                Console.WriteLine($"{menuAction.Key}. {menuAction.Value.description}");
+            }
         }
 
         /// <summary>
@@ -317,28 +308,6 @@
             }
         }
 
-        /// <summary>
-        /// Displays the menu options for editing specific fields of a contact.
-        /// </summary>
-        void DisplayEditByMenu() {
-            Console.WriteLine("\n========== Edit ==========\n");
-            Console.WriteLine("1. Edit Name");
-            Console.WriteLine("2. Edit Phone Number");
-            Console.WriteLine("3. Edit Email");
-            Console.WriteLine("4. Edit Additional Information");
-            Console.WriteLine("5. Edit Menu");
-        }
-
-        /// <summary>
-        /// Displays the menu options for finding a contact to edit.
-        /// </summary>
-        void DisplayContactByMenu() {
-            Console.WriteLine("\n========== Edit Contact ==========\n");
-            Console.WriteLine("1. Find Contact by Name");
-            Console.WriteLine("2. Find Contact by Phone number");
-            Console.WriteLine("3. Find Contact by Email");
-            Console.WriteLine("4. Main Menu");
-        }
 
         /// <summary>
         /// Updates a specific field of a contact with a new value.
@@ -356,20 +325,21 @@
         /// <summary>
         /// Handles workflows for menu-driven operations like editing or deleting contacts.
         /// </summary>
-        /// <param name="menuDisplayAction">The action to display the menu options.</param>
+        /// <param name="menuTitle">Title of the Menu.</param>
         /// <param name="menuActions">A dictionary mapping menu choices to their corresponding actions.</param>
         /// <param name="isOperationSuccessful">A reference to the success flag for the operation (e.g., IsEditSuccessful, IsDeleteSuccessful).</param>
-        void HandleEditOrDeleteOperation(Action menuDisplayAction, Dictionary<int, Action> menuActions, ref bool isOperationSuccessful) {
+        /// 
+        void HandleEditOrDeleteOperation(string menuTitle, Dictionary<int, (string, Action action)> menuActions, ref bool isOperationSuccessful) {
             do {
                 Console.Clear();
-                menuDisplayAction(); // Display the menu
+                DisplayMenu(menuTitle, menuActions); // Display the menu
                 Console.WriteLine("");
                 Console.Write("[Menu] Enter your choice: ");
                 string input = Console.ReadLine();
                 bool isNumber = int.TryParse(input, out int choice);
 
-                if (isNumber && menuActions.ContainsKey(choice)) {
-                    menuActions[choice].Invoke(); // Execute the selected action
+                if (isNumber && menuActions.ContainsKey(choice) && choice != 4) {
+                    menuActions[choice].action.Invoke(); // Execute the selected action
                 } else if (isNumber && choice == 4) { // Exit option
                     return;
                 } else {
@@ -406,17 +376,18 @@
         /// </summary>
         /// <param name="ContactToEdit">The contact to be edited.</param>
         void EditBy(Contact ContactToEdit) {
-            var EdiByMenuActions = new Dictionary<int, Action> {
-                { 1, () => UpdateContactField("Name", true, value => ContactToEdit.Name = value)},
-                { 2, () => UpdateContactField("Phone Number", true, value => ContactToEdit.PhoneNumber = value)},
-                { 3, () => UpdateContactField("Email", true, value => ContactToEdit.Email = value)},
-                { 4, () => UpdateContactField("Additional Information", false, value => ContactToEdit.AdditionalInformation = value)}
+            var EditByMenuActions = new Dictionary<int, (string, Action action)> {
+                { 1, ("Edit Name", () => UpdateContactField("Name", true, value => ContactToEdit.Name = value))},
+                { 2, ("Edit Phone Number", () => UpdateContactField("Phone Number", true, value => ContactToEdit.PhoneNumber = value))},
+                { 3, ("Edit Email", () => UpdateContactField("Email", true, value => ContactToEdit.Email = value))},
+                { 4, ("Edit Additional Information", () => UpdateContactField("Additional Information", false, value => ContactToEdit.AdditionalInformation = value))},
+                { 5, ("Main Menu", () => { IsEditSuccessful = false; })}
             };
 
             bool isValidChoice = false;
             Console.Clear();
             DisplayDetails(ContactToEdit);
-            DisplayEditByMenu();
+            DisplayMenu("Edit", EditByMenuActions);
 
             do {
                 Console.Write("\n[Menu] Enter your choice: ");
@@ -428,10 +399,8 @@
                     continue;
                 }
 
-                if (isValidChoice && EdiByMenuActions.ContainsKey(choice)) {
-                    EdiByMenuActions[choice].Invoke();
-                } else if (isValidChoice && choice == 5) {
-                    return;
+                if (isValidChoice && EditByMenuActions.ContainsKey(choice)) {
+                    EditByMenuActions[choice].action.Invoke();
                 } else {
                     Console.WriteLine("[Error] Invalid choice. Please select a valid option.");
                 }
@@ -444,17 +413,6 @@
         /// <param name="ContactBy">The attribute to find the contact by (e.g., "Name", "Phone Number", "Email").</param>
         void EditContactBy(string ContactBy) {
             HandleEditOrDeleteContactBy(ContactBy, EditBy, ref IsEditSuccessful);
-        }
-
-        /// <summary>
-        /// Displays the menu options for deleting contacts.
-        /// </summary>
-        void DeleteContactMenu() {
-            Console.WriteLine("\n========== Delete Contact ==========\n");
-            Console.WriteLine("1. Delete Contact by Name");
-            Console.WriteLine("2. Delete Contact by Phone number");
-            Console.WriteLine("3. Delete Contact by Email");
-            Console.WriteLine("4. Main Menu");
         }
 
         /// <summary>

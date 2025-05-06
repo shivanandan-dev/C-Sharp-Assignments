@@ -14,18 +14,18 @@
             ContactManager.contacts.Add(new Contact("Alice Johnson", "+918765432109", "alice.johnson@example.in", "Family friend"));
             ContactManager.contacts.Add(new Contact("Bob Brown", "+61234567890", "bob.brown@example.au", "Neighbor"));
 
-            var mainMenuActions = new Dictionary<int, Action> {
-                { 1, () => manager.AddNewContact() },
-                { 2, () => manager.ViewContacts(ContactManager.contacts) },
-                { 3, () => manager.SearchContact() },
-                { 4, () => manager.EditContact() },
-                { 5, () => manager.DeleteContact() },
-                { 6, () => manager.ExitEnvironment()}
+            var mainMenuActions = new Dictionary<int, (string, Action action)> {
+                { 1, ("Add New Contact", () => manager.AddNewContact()) },
+                { 2, ("View Contacts", () => manager.ViewContacts(ContactManager.contacts)) },
+                { 3, ("Search Contact", () => manager.SearchContact()) },
+                { 4, ("Edit Contact", () => manager.EditContact()) },
+                { 5, ("Delete Contact", () => manager.DeleteContact()) },
+                { 6, ("Exit", () => manager.ExitEnvironment()) }
             };
 
             do {
                 Console.Clear();
-                ContactManager.MainMenu();
+                manager.DisplayMenu("Main Menu", mainMenuActions);
                 Console.Write("\n[Menu] Enter your choice: ");
 
                 string input = Console.ReadLine();
@@ -34,7 +34,7 @@
 
                 if (isNumber && mainMenuActions.ContainsKey(choice)) {
                     Console.Clear();
-                    mainMenuActions[choice].Invoke();
+                    mainMenuActions[choice].action.Invoke();
                 } else {
                     Console.WriteLine("[Error] Invalid choice!");
                 }
