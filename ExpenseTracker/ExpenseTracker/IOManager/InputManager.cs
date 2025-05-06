@@ -1,4 +1,5 @@
-﻿using ExpenseTracker.Utils;
+﻿using ExpenseTracker.Model;
+using ExpenseTracker.Utils;
 
 namespace ExpenseTracker.IOManager {
     internal class InputManager {
@@ -49,6 +50,22 @@ namespace ExpenseTracker.IOManager {
                     OutputManager.DisplayInvalidInputError("Invalid Date Format");
                 }
             } while (true);
+        }
+
+        public static int GetExpenseId(List<ExpenseDetail> expenseDetails) {
+
+            Console.Write("Enter Id: ");
+            string input = Console.ReadLine();
+            bool isNumber = int.TryParse(input, out int id);
+
+            if (isNumber && id < expenseDetails.Count + 1 && id > 0) {
+                return id;
+            } else if (isNumber) {
+                OutputManager.DisplayInvalidInputError($"ID should be between (1 - {expenseDetails.Count + 1})");
+            } else {
+                OutputManager.DisplayInvalidInputError();
+            }
+            return -1;
         }
 
         public static string GetCategoryOrSource(string type) {

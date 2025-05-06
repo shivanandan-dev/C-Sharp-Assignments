@@ -69,8 +69,42 @@ namespace ExpenseTracker.AppInteraction {
             Console.WriteLine("===== Expenses =====\n");
             if (ExpenseDetails.Count == 0) {
                 Console.WriteLine("[Error] Empty list.");
+                return;
             } else {
                 OutputManager.DisplayExpenses(ExpenseDetails);
+            }
+        }
+
+        public static void DeleteTransaction() {
+            do {
+                Console.Clear();
+                Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>() {
+                    { 1, ("Delete Expense", ExpenseManager.DeleteExpense )},
+                    { 2, ("Delete Income", () => { })},
+                    { 3, ("Main Menu", () => { })}
+                };
+
+                OutputManager.DisplayMenu("View Transactions", menuActions);
+                int choice = InputManager.GetMenuChoice(menuActions);
+                if (choice == 3) {
+                    return;
+                }
+                menuActions[choice].action.Invoke();
+
+                InputManager.PromptForContinuation();
+            } while (true);
+        }
+
+        static void DeleteExpense() {
+            Console.Clear();
+            ViewExpenses();
+            if (ExpenseDetails.Count == 0)
+                return;
+            Console.WriteLine("\n===== Delete =====\n");
+            int expenseId = InputManager.GetExpenseId(ExpenseDetails);
+            if (expenseId > 0) {
+                ExpenseDetails.RemoveAt(expenseId - 1);
+                OutputManager.DisplaySuccessMessage("Expense deleted");
             }
         }
     }
