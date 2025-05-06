@@ -6,7 +6,7 @@ namespace ExpenseTracker.AppInteraction {
             do {
                 Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>() {
                     { 1, ("Add Transaction", ExpenseManager.AddTransaction )},
-                    { 2, ("View Transactions", () => { })},
+                    { 2, ("View Transactions", ExpenseManager.ViewTransactions )},
                     { 3, ("Edit Transactions", () => { })},
                     { 4, ("Delete Transactions", () => { })},
                     { 5, ("Financial Summary", () => { })},

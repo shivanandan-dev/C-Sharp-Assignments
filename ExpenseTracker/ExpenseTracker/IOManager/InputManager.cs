@@ -8,13 +8,15 @@ namespace ExpenseTracker.IOManager {
         }
 
         public static int GetMenuChoice(Dictionary<int, (string, Action)> menuActions) {
+            Console.WriteLine();
             do {
+                Console.Write($"[Menu] Enter choice: ");
                 string input = Console.ReadLine();
                 bool isNumber = int.TryParse(input, out int choice);
                 if (isNumber && menuActions.ContainsKey(choice)) {
                     return choice;
                 } else {
-                    OutputManager.DisplayInvalidChoiceError();
+                    OutputManager.DisplayInvalidInputError("Invalid Choice");
                 }
             } while (true);
         }
@@ -28,7 +30,7 @@ namespace ExpenseTracker.IOManager {
                 if (isDecimal && amount > 0) {
                     return amount;
                 } else if (isDecimal) {
-                    OutputManager.DisplayNegativeAmountError();
+                    OutputManager.DisplayInvalidInputError("Amount should be a positive decimal");
                 } else {
                     OutputManager.DisplayInvalidInputError();
                 }
@@ -44,7 +46,7 @@ namespace ExpenseTracker.IOManager {
                 if (isValidDate) {
                     return DateTime.Parse(input);
                 } else {
-                    OutputManager.DisplayInvalidInputError();
+                    OutputManager.DisplayInvalidInputError("Invalid Date Format");
                 }
             } while (true);
         }
