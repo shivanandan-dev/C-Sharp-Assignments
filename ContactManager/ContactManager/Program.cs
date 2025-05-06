@@ -14,7 +14,7 @@
             ContactManager.contacts.Add(new Contact("Alice Johnson", "+918765432109", "alice.johnson@example.in", "Family friend"));
             ContactManager.contacts.Add(new Contact("Bob Brown", "+61234567890", "bob.brown@example.au", "Neighbor"));
 
-            var actions = new Dictionary<int, Action> {
+            var mainMenuActions = new Dictionary<int, Action> {
                 { 1, () => manager.AddNewContact() },
                 { 2, () => manager.ViewContacts(ContactManager.contacts) },
                 { 3, () => manager.SearchContact() },
@@ -32,9 +32,9 @@
                 bool isNumber = int.TryParse(input, out int choice);
 
 
-                if (isNumber && actions.ContainsKey(choice)) {
+                if (isNumber && mainMenuActions.ContainsKey(choice)) {
                     Console.Clear();
-                    actions[choice].Invoke();
+                    mainMenuActions[choice].Invoke();
                 } else {
                     Console.WriteLine("[Error] Invalid choice!");
                 }
