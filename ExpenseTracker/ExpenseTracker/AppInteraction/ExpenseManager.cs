@@ -173,7 +173,7 @@ namespace ExpenseTracker.AppInteraction {
                 { 4, ("Menu", () => { }) }
             };
 
-            Application.DisplayMenuWithActions("Edit Expense", menuActions, 4);
+            Application.DisplayMenuWithActions("Edit Expense", menuActions, 4, false, false, false);
         }
     }
 }

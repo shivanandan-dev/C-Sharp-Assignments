@@ -9,17 +9,23 @@ namespace ExpenseTracker.AppInteraction {
         /// <param name="title">The title of the menu to display.</param>
         /// <param name="menuActions">A dictionary mapping menu options to their respective descriptions and actions.</param>
         /// <param name="exitOption">The menu option that terminates the loop and exits.</param>
-        public static void DisplayMenuWithActions(string title, Dictionary<int, (string, Action action)> menuActions, int exitOption = 0) {
+        /// <param name="clearConsole">Whether to clear the console before displaying the menu.</param>
+        /// <param name="repeat">Whether to repeat the menu after an action is performed.</param>
+        /// <param name="promptForContinuation">Whether to prompt for continuation after each action.</param>
+        public static void DisplayMenuWithActions(string title, Dictionary<int, (string, Action action)> menuActions, int exitOption = 0, bool clearConsole = true, bool repeat = true, bool promptForContinuation = true) {
             do {
-                Console.Clear();
+                Console.WriteLine();
+                if (clearConsole)
+                    Console.Clear();
                 OutputManager.DisplayMenu(title, menuActions);
                 int choice = InputManager.GetMenuChoice(menuActions);
                 if (choice == exitOption) {
                     return;
                 }
                 menuActions[choice].action.Invoke();
-                InputManager.PromptForContinuation();
-            } while (true);
+                if (promptForContinuation)
+                    InputManager.PromptForContinuation();
+            } while (repeat);
         }
 
         /// <summary>
