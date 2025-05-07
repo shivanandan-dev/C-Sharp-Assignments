@@ -40,18 +40,18 @@ namespace ExpenseTracker.IOManager {
         /// Displays a list of expense details in a tabular format with columns for ID, amount, date, and category.
         /// </summary>
         /// <param name="expenseDetails">A list of <see cref="ExpenseDetail"/> objects containing details about each expense.</param>
-        public static void DisplayExpenses(List<ExpenseDetail> expenseDetails) {
-            Console.WriteLine("{0, -5} | {1, -15} | {2, -10} | {3, -20}", "Id", "Amount", "Date", "Category");
+        public static void DisplayTransaction(List<TransactionDetail> expenseDetails, string type) {
+            Console.WriteLine("{0, -5} | {1, -15} | {2, -10} | {3, -20}", "Id", "Amount", "Date", $"{type}");
             Console.WriteLine(new string('-', 60));
 
             int count = 1;
-            foreach (ExpenseDetail expenseDetail in expenseDetails) {
+            foreach (TransactionDetail expenseDetail in expenseDetails) {
                 Console.WriteLine(
                     "{0,-5} | {1,-15} | {2,-10} | {3,-20:C}",
                     count++,
                     expenseDetail.Amount,
                     expenseDetail.Date.ToString("dd/MM/yyyy"),
-                    expenseDetail.Category
+                    expenseDetail.AdditionalInformation
                 );
             }
         }

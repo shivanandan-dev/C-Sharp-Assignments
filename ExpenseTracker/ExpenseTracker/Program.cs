@@ -3,7 +3,7 @@
 namespace ExpenseTracker {
     internal class Program {
         public static void Main() {
-            ExpenseManager.AddDefaultData();
+            TransactionManager.AddDefaultData();
             Application.HandleMainMenu();
             Console.ReadKey();
         }

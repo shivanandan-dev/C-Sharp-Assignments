@@ -75,8 +75,8 @@ namespace ExpenseTracker.IOManager {
         /// </summary>
         /// <param name="expenseDetails">A list of expense details to validate the entered ID against.</param>
         /// <returns>The valid expense ID entered by the user, or -1 if the input is invalid.</returns>
-        public static int GetExpenseId(List<ExpenseDetail> expenseDetails) {
-            Console.Write("\nEnter ID: ");
+        public static int GetExpenseId(List<TransactionDetail> expenseDetails) {
+            Console.Write("\nEnter Id: ");
             string input = Console.ReadLine();
             bool isNumber = int.TryParse(input, out int id);
 

@@ -3,21 +3,23 @@ using ExpenseTracker.Model;
 
 namespace ExpenseTracker.AppInteraction {
     internal class TransactionManager {
-        static List<ExpenseDetail> ExpenseDetails = new List<ExpenseDetail>();
-        static List<ExpenseDetail> IncomeDetails = new List<ExpenseDetail>();
+        static List<TransactionDetail> ExpenseDetails = new List<TransactionDetail>();
+        static List<TransactionDetail> IncomeDetails = new List<TransactionDetail>();
 
         /// <summary>
         /// Adds default expense and income data to their respective lists.
         /// </summary>
         public static void AddDefaultData() {
-            ExpenseDetails.Add(new ExpenseDetail(50.75M, new DateTime(2025, 1, 15), "Groceries"));
-            ExpenseDetails.Add(new ExpenseDetail(120.00M, new DateTime(2025, 2, 10), "Utilities"));
-            ExpenseDetails.Add(new ExpenseDetail(45.30M, new DateTime(2025, 3, 5), "Transport"));
-            ExpenseDetails.Add(new ExpenseDetail(200.00M, new DateTime(2025, 4, 20), "Dining Out"));
-            ExpenseDetails.Add(new ExpenseDetail(80.00M, new DateTime(2025, 5, 1), "Leisure"));
+            ExpenseDetails.Add(new TransactionDetail(50.75M, new DateTime(2025, 1, 15), "Groceries"));
+            ExpenseDetails.Add(new TransactionDetail(120.00M, new DateTime(2025, 2, 10), "Utilities"));
+            ExpenseDetails.Add(new TransactionDetail(45.30M, new DateTime(2025, 3, 5), "Transport"));
+            ExpenseDetails.Add(new TransactionDetail(200.00M, new DateTime(2025, 4, 20), "Dining Out"));
+            ExpenseDetails.Add(new TransactionDetail(80.00M, new DateTime(2025, 5, 1), "Leisure"));
 
-            IncomeDetails.Add(new ExpenseDetail(1000.00M, new DateTime(2025, 1, 1), "Salary"));
-            IncomeDetails.Add(new ExpenseDetail(200.00M, new DateTime(2025, 2, 10), "Freelancing"));
+            IncomeDetails.Add(new TransactionDetail(1000.00M, new DateTime(2025, 1, 1), "Salary"));
+            IncomeDetails.Add(new TransactionDetail(200.00M, new DateTime(2025, 2, 10), "Freelancing"));
+            IncomeDetails.Add(new TransactionDetail(10000.00M, new DateTime(2025, 1, 1), "Youtube Channel"));
+            IncomeDetails.Add(new TransactionDetail(200.90M, new DateTime(2025, 2, 10), "Gaming"));
         }
 
         /// <summary>
@@ -41,9 +43,9 @@ namespace ExpenseTracker.AppInteraction {
             Console.WriteLine("===== New Expense =====\n");
             decimal amount = InputManager.GetAmount();
             DateTime date = InputManager.GetDate();
-            string category = InputManager.GetCategoryOrSource("Category");
+            string additionalInformation = InputManager.GetCategoryOrSource("Category");
 
-            ExpenseDetails.Add(new ExpenseDetail(amount, date, category));
+            ExpenseDetails.Add(new TransactionDetail(amount, date, additionalInformation));
             OutputManager.DisplaySuccessMessage("New expense added.");
         }
 
@@ -57,7 +59,7 @@ namespace ExpenseTracker.AppInteraction {
             DateTime date = InputManager.GetDate();
             string source = InputManager.GetCategoryOrSource("Source");
 
-            IncomeDetails.Add(new ExpenseDetail(amount, date, source));
+            IncomeDetails.Add(new TransactionDetail(amount, date, source));
             OutputManager.DisplaySuccessMessage("New income added.");
         }
 
@@ -85,7 +87,7 @@ namespace ExpenseTracker.AppInteraction {
                 return;
             }
 
-            OutputManager.DisplayExpenses(ExpenseDetails);
+            OutputManager.DisplayTransaction(ExpenseDetails, "Category");
         }
 
         /// <summary>
@@ -99,7 +101,7 @@ namespace ExpenseTracker.AppInteraction {
                 return;
             }
 
-            OutputManager.DisplayExpenses(IncomeDetails);
+            OutputManager.DisplayTransaction(IncomeDetails, "Source");
         }
 
         /// <summary>
@@ -197,7 +199,7 @@ namespace ExpenseTracker.AppInteraction {
         /// </summary>
         /// <param name="transactionId">The ID of the transaction to edit.</param>
         /// <param name="transactionList">The list of transactions (expenses or incomes).</param>
-        static void EditTransactionAt(int transactionId, List<ExpenseDetail> transactionList) {
+        static void EditTransactionAt(int transactionId, List<TransactionDetail> transactionList) {
             Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>(){
                 { 1, ("Edit Amount", () => UpdateTransactionAmount(transactionId, transactionList, InputManager.GetAmount)) },
                 { 2, ("Edit Date", () => UpdateTransactionDate(transactionId, transactionList, InputManager.GetDate)) },
@@ -211,7 +213,7 @@ namespace ExpenseTracker.AppInteraction {
         /// <summary>
         /// Updates the amount of a specific transaction.
         /// </summary>
-        static void UpdateTransactionAmount(int transactionId, List<ExpenseDetail> transactionList, Func<decimal> action) {
+        static void UpdateTransactionAmount(int transactionId, List<TransactionDetail> transactionList, Func<decimal> action) {
             decimal updatedValue = action.Invoke();
             transactionList[transactionId].Amount = updatedValue;
             OutputManager.DisplaySuccessMessage("Amount updated.");
@@ -220,7 +222,7 @@ namespace ExpenseTracker.AppInteraction {
         /// <summary>
         /// Updates the date of a specific transaction.
         /// </summary>
-        static void UpdateTransactionDate(int transactionId, List<ExpenseDetail> transactionList, Func<DateTime> action) {
+        static void UpdateTransactionDate(int transactionId, List<TransactionDetail> transactionList, Func<DateTime> action) {
             DateTime updatedValue = action.Invoke();
             transactionList[transactionId].Date = updatedValue;
             OutputManager.DisplaySuccessMessage("Date updated.");
@@ -229,9 +231,9 @@ namespace ExpenseTracker.AppInteraction {
         /// <summary>
         /// Updates the category or source of a specific transaction.
         /// </summary>
-        static void UpdateTransactionCategory(int transactionId, List<ExpenseDetail> transactionList, Func<string, string> action) {
+        static void UpdateTransactionCategory(int transactionId, List<TransactionDetail> transactionList, Func<string, string> action) {
             string updatedValue = action.Invoke("Category/Source");
-            transactionList[transactionId].Category = updatedValue;
+            transactionList[transactionId].AdditionalInformation = updatedValue;
             OutputManager.DisplaySuccessMessage("Category/Source updated.");
         }
     }
