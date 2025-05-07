@@ -91,6 +91,24 @@ namespace ExpenseTracker.AppInteraction {
         }
 
         /// <summary>
+        /// Calculates and displays a financial summary including total expenses, total incomes, and net balance.
+        /// </summary>
+        public static void ViewFinancialSummary() {
+            Console.Clear();
+            Console.WriteLine("===== Financial Summary =====");
+            decimal totalExpense = 0M;
+            decimal totalIncome = 0M;
+            foreach (TransactionDetail incomeDetail in IncomeDetails) {
+                totalExpense += incomeDetail.Amount;
+            }
+            foreach (TransactionDetail expenseDetail in ExpenseDetails) {
+                totalIncome += expenseDetail.Amount;
+            }
+
+            OutputManager.DisplayFinancialSummary(totalExpense, totalIncome);
+        }
+
+        /// <summary>
         /// Displays all incomes from the IncomeDetails list.
         /// </summary>
         static void ViewIncomes() {

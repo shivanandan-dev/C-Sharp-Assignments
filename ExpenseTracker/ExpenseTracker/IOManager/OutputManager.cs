@@ -55,5 +55,16 @@ namespace ExpenseTracker.IOManager {
                 );
             }
         }
+
+        /// <summary>
+        /// Displays a financial summary, including total incomes, total expenses, and the net balance.
+        /// </summary>
+        /// <param name="totalExpenses">The total amount of expenses.</param>
+        /// <param name="totalIncomes">The total amount of incomes.</param>
+        public static void DisplayFinancialSummary(decimal totalExpenses, decimal totalIncomes) {
+            Console.WriteLine("\n{0, -11} : {1, -10}", "Income", totalIncomes);
+            Console.WriteLine("{0, -11} : {1, -10}", "Expences", totalExpenses);
+            Console.WriteLine("{0, -11} : {1, -10}", "Net balance", totalIncomes - totalExpenses);
+        }
     }
 }

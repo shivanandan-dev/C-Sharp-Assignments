@@ -38,7 +38,7 @@ namespace ExpenseTracker.AppInteraction {
                     { 2, ("View Transactions", TransactionManager.ViewTransactions )},
                     { 3, ("Edit Transactions", TransactionManager.EditTransaction )},
                     { 4, ("Delete Transactions", TransactionManager.DeleteTransaction )},
-                    { 5, ("Financial Summary", () => { })},
+                    { 5, ("Financial Summary", TransactionManager.ViewFinancialSummary )},
                     { 6, ("Exit", () => { Environment.Exit(0); })}
                 };
 
