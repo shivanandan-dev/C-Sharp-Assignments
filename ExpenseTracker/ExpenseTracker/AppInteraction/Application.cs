@@ -2,9 +2,32 @@
 
 namespace ExpenseTracker.AppInteraction {
     internal class Application {
-        public static void HandleMainMenu() {
+
+        /// <summary>
+        /// Displays a menu and performs the action based on the user's selection.
+        /// </summary>
+        /// <param name="title">The title of the menu to display.</param>
+        /// <param name="menuActions">A dictionary mapping menu options to their respective descriptions and actions.</param>
+        /// <param name="exitOption">The menu option that terminates the loop and exits.</param>
+        public static void DisplayMenuWithActions(string title, Dictionary<int, (string, Action action)> menuActions, int exitOption = 0) {
             do {
-                Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>() {
+                Console.Clear();
+                OutputManager.DisplayMenu(title, menuActions);
+                int choice = InputManager.GetMenuChoice(menuActions);
+                if (choice == exitOption) {
+                    return;
+                }
+                menuActions[choice].action.Invoke();
+                InputManager.PromptForContinuation();
+            } while (true);
+        }
+
+        /// <summary>
+        /// Displays the main menu of the application and handles user interaction with various options, such as adding, viewing, editing, and deleting transactions, 
+        /// as well as generating a financial summary or exiting the application.
+        /// </summary>
+        public static void HandleMainMenu() {
+            Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>() {
                     { 1, ("Add Transaction", ExpenseManager.AddTransaction )},
                     { 2, ("View Transactions", ExpenseManager.ViewTransactions )},
                     { 3, ("Edit Transactions", ExpenseManager.EditTransaction )},
@@ -13,13 +36,7 @@ namespace ExpenseTracker.AppInteraction {
                     { 6, ("Exit", () => { Environment.Exit(0); })}
                 };
 
-                OutputManager.DisplayMenu("Main Menu", menuActions);
-
-                int choice = InputManager.GetMenuChoice(menuActions);
-                menuActions[choice].action.Invoke();
-                InputManager.PromptForContinuation();
-                Console.Clear();
-            } while (true);
+            DisplayMenuWithActions("Main Menu", menuActions);
         }
     }
 }
