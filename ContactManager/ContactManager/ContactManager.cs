@@ -177,18 +177,18 @@
         /// <summary>
         /// Prompts the user to enter information until the input does not match any existing contact.
         /// </summary>
-        /// <param name="informationType">The type of information being requested (e.g., "Name", "Phone Number").</param>
+        /// <param name="contactInformationType">The type of information being requested (e.g., "Name", "Phone Number").</param>
         /// <returns>Returns the user-provided input that does not already exist.</returns>
-        string GetUniqueContactInput(string informationType) {
+        string GetUniqueContactInput(string contactInformationType) {
             string input;
 
             do {
-                Console.Write($"Enter {informationType}: ");
+                Console.Write($"Enter {contactInformationType}: ");
                 input = Console.ReadLine();
-                if (string.IsNullOrEmpty(input) && informationType != _consoleAdditionalInformation)
-                    Console.WriteLine($"[Error] {informationType} cannot be empty!");
+                if (string.IsNullOrEmpty(input) && contactInformationType != _consoleAdditionalInformation)
+                    Console.WriteLine($"[Error] {contactInformationType} cannot be empty!");
                 else if (IsContactDuplicate(input)) {
-                    Console.WriteLine($"[Error] A contact with this {informationType} already exists.");
+                    Console.WriteLine($"[Error] A contact with this {contactInformationType} already exists.");
                 } else {
                     break;
                 }
