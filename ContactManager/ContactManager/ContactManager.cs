@@ -4,10 +4,10 @@
         public static bool IsEditSuccessful = true;
         public static bool IsDeleteSuccessful = true;
 
-        readonly string _name = StringFormatter.AddSpaces(nameof(ContactDetails.Name));
-        readonly string _phoneNumber = StringFormatter.AddSpaces(nameof(ContactDetails.PhoneNumber));
-        readonly string _email = StringFormatter.AddSpaces(nameof(ContactDetails.Email));
-        readonly string _additionalInformation = StringFormatter.AddSpaces(nameof(ContactDetails.AdditionalInformation));
+        readonly string _consoleName = StringFormatter.AddSpaces(nameof(ContactDetails.Name));
+        readonly string _consolePhoneNumber = StringFormatter.AddSpaces(nameof(ContactDetails.PhoneNumber));
+        readonly string _consoleEmail = StringFormatter.AddSpaces(nameof(ContactDetails.Email));
+        readonly string _consoleAdditionalInformation = StringFormatter.AddSpaces(nameof(ContactDetails.AdditionalInformation));
 
         /// <summary>
         /// Displays a prompt asking the user to press any key to continue and waits until a key is pressed.
@@ -22,10 +22,10 @@
         /// </summary>
         public void AddNewContact() {
             Console.WriteLine("========== Add new contact ==========\n");
-            string name = GetContactInformation(_name, true);
-            string phoneNumber = GetContactInformation(_phoneNumber, true);
-            string email = GetContactInformation(_email, true);
-            string additionalInformation = GetContactInformation(_additionalInformation, true);
+            string name = GetContactInformation(_consoleName, true);
+            string phoneNumber = GetContactInformation(_consolePhoneNumber, true);
+            string email = GetContactInformation(_consoleEmail, true);
+            string additionalInformation = GetContactInformation(_consoleAdditionalInformation, true);
 
             contacts.Add(new ContactDetails(name, phoneNumber, email, additionalInformation));
             Console.WriteLine("[Success] New contact is created successfully!");
@@ -36,7 +36,7 @@
         /// </summary>
         /// <param name="contactList">List of contacts to display.</param>
         public void DisplayContacts(List<ContactDetails> contactList) {
-            Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}", _name, _phoneNumber, _email, _additionalInformation);
+            Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}", _consoleName, _consolePhoneNumber, _consoleEmail, _consoleAdditionalInformation);
             Console.WriteLine(new string('-', 100));
 
             foreach (ContactDetails contactInfo in contactList) {
@@ -85,9 +85,9 @@
         /// </summary>
         public void SearchContact() {
             var searchMenuActions = new Dictionary<int, (string, Action action)> {
-                { 1, ("Search by Name", () => SearchContactBy(_name))},
-                { 2, ("Search by Phone Number", () => SearchContactBy(_phoneNumber))},
-                { 3, ("Search by Email", () => SearchContactBy(_email))},
+                { 1, ("Search by Name", () => SearchContactBy(_consoleName))},
+                { 2, ("Search by Phone Number", () => SearchContactBy(_consolePhoneNumber))},
+                { 3, ("Search by Email", () => SearchContactBy(_consoleEmail))},
                 { 4, ("Main Menu", () => { })}
             };
 
@@ -116,13 +116,13 @@
         /// </summary>
         public void DeleteContact() {
             var deleteMenuActions = new Dictionary<int, (string, Action)> {
-                { 1, ("Delete Contact by Name", () => DeleteContactBy(_name)) },
-                { 2, ("Delete Contact by Phone Number", () => DeleteContactBy(_phoneNumber)) },
-                { 3, ("Delete Contact by Email", () => DeleteContactBy(_email)) },
+                { 1, ("Delete Contact by Name", () => DeleteContactBy(_consoleName)) },
+                { 2, ("Delete Contact by Phone Number", () => DeleteContactBy(_consolePhoneNumber)) },
+                { 3, ("Delete Contact by Email", () => DeleteContactBy(_consoleEmail)) },
                 { 4, ("Main Menu", () => { }) }
             };
 
-            HandleEditOrDeleteOperation("Delete", deleteMenuActions, ref IsDeleteSuccessful);
+            HandleMenuActions("Delete", deleteMenuActions, ref IsDeleteSuccessful);
         }
 
         /// <summary>
@@ -139,13 +139,13 @@
         /// </summary>
         public void EditContact() {
             var editMenuActions = new Dictionary<int, (string, Action)> {
-                { 1, ("Find Contact by Name", () => EditContactBy(_name))},
-                { 2, ("Find Contact by Phone Number", () => EditContactBy(_phoneNumber))},
-                { 3, ("Find Contact by Email", () => EditContactBy(_email))},
+                { 1, ("Find Contact by Name", () => EditContactBy(_consoleName))},
+                { 2, ("Find Contact by Phone Number", () => EditContactBy(_consolePhoneNumber))},
+                { 3, ("Find Contact by Email", () => EditContactBy(_consoleEmail))},
                 { 4, ("Main Menu", () => { })}
             };
 
-            HandleEditOrDeleteOperation("Edit by", editMenuActions, ref IsEditSuccessful);
+            HandleMenuActions("Edit by", editMenuActions, ref IsEditSuccessful);
         }
 
         /// <summary>
@@ -185,7 +185,7 @@
             do {
                 Console.Write($"Enter {informationType}: ");
                 input = Console.ReadLine();
-                if (string.IsNullOrEmpty(input) && informationType != _additionalInformation)
+                if (string.IsNullOrEmpty(input) && informationType != _consoleAdditionalInformation)
                     Console.WriteLine($"[Error] {informationType} cannot be empty!");
                 else if (IsContactDuplicate(input)) {
                     Console.WriteLine($"[Error] A contact with this {informationType} already exists.");
@@ -275,10 +275,10 @@
         /// <param name="contactInfo">The contact whose details are to be displayed.</param>
         void DisplayDetails(ContactDetails contactInfo) {
             Console.WriteLine("\n========== Details ==========\n");
-            Console.WriteLine("{0,-25}: {1}", _name, contactInfo.Name);
-            Console.WriteLine("{0,-25}: {1}", _phoneNumber, contactInfo.PhoneNumber);
-            Console.WriteLine("{0,-25}: {1}", _email, contactInfo.Email);
-            Console.WriteLine("{0,-25}: {1}", _additionalInformation, contactInfo.AdditionalInformation);
+            Console.WriteLine("{0,-25}: {1}", _consoleName, contactInfo.Name);
+            Console.WriteLine("{0,-25}: {1}", _consolePhoneNumber, contactInfo.PhoneNumber);
+            Console.WriteLine("{0,-25}: {1}", _consoleEmail, contactInfo.Email);
+            Console.WriteLine("{0,-25}: {1}", _consoleAdditionalInformation, contactInfo.AdditionalInformation);
         }
 
         /// <summary>
@@ -289,11 +289,11 @@
         /// <returns>The contact that matches the attribute and value; otherwise, null.</returns>
         ContactDetails FindContactByAttribute(string attribute, string value) {
             return contacts.Find(contact =>
-                (attribute.Equals(_name, StringComparison.OrdinalIgnoreCase) &&
+                (attribute.Equals(_consoleName, StringComparison.OrdinalIgnoreCase) &&
                 contact.Name.Equals(value, StringComparison.OrdinalIgnoreCase)) ||
-                (attribute.Equals(_phoneNumber, StringComparison.OrdinalIgnoreCase) &&
+                (attribute.Equals(_consolePhoneNumber, StringComparison.OrdinalIgnoreCase) &&
                 contact.PhoneNumber.Equals(value, StringComparison.OrdinalIgnoreCase)) ||
-                (attribute.Equals(_email, StringComparison.OrdinalIgnoreCase) &&
+                (attribute.Equals(_consoleEmail, StringComparison.OrdinalIgnoreCase) &&
                 contact.Email.Equals(value, StringComparison.OrdinalIgnoreCase))
             );
         }
@@ -333,18 +333,17 @@
         /// <param name="menuActions">A dictionary mapping menu choices to their corresponding actions.</param>
         /// <param name="isOperationSuccessful">A reference to the success flag for the operation (e.g., IsEditSuccessful, IsDeleteSuccessful).</param>
         /// 
-        void HandleEditOrDeleteOperation(string menuTitle, Dictionary<int, (string, Action action)> menuActions, ref bool isOperationSuccessful) {
+        void HandleMenuActions(string menuTitle, Dictionary<int, (string, Action action)> menuActions, ref bool isOperationSuccessful) {
             do {
                 Console.Clear();
-                DisplayMenu(menuTitle, menuActions); // Display the menu
-                Console.WriteLine("");
-                Console.Write("[Menu] Enter your choice: ");
+                DisplayMenu(menuTitle, menuActions);
+                Console.Write("\n[Menu] Enter your choice: ");
                 string input = Console.ReadLine();
                 bool isNumber = int.TryParse(input, out int choice);
 
                 if (isNumber && menuActions.ContainsKey(choice) && choice != 4) {
-                    menuActions[choice].action.Invoke(); // Execute the selected action
-                } else if (isNumber && choice == 4) { // Exit option
+                    menuActions[choice].action.Invoke();
+                } else if (isNumber && choice == menuActions.Count) {
                     return;
                 } else {
                     Console.WriteLine("[Error] Invalid choice!");
@@ -355,36 +354,28 @@
         }
 
         /// <summary>
-        /// Handles the workflow for finding a contact by an attribute and performing an action on it.
+        /// Retrieves a contact's details by searching for it based on a specified attribute.
         /// </summary>
-        /// <param name="ContactBy">The attribute to find the contact by (e.g., "Name", "Phone Number", "Email").</param>
-        /// <param name="action">The action to perform on the found contact (e.g., Edit, Delete).</param>
-        /// <param name="isOperationSuccessful">A reference to the success flag for the operation (e.g., IsEditSuccessful, IsDeleteSuccessful).</param>
-        void HandleEditOrDeleteContactBy(string ContactBy, Action<ContactDetails> action, ref bool isOperationSuccessful) {
-            do {
-                string input = GetContactInformation(ContactBy);
-                ContactDetails contact = FindContactByAttribute(ContactBy, input);
-
-                if (contact == null) {
-                    Console.WriteLine("[Error] No Contact Found");
-                    PromptForContinuation();
-                    return;
-                } else {
-                    action(contact);
-                }
-            } while (isOperationSuccessful);
+        /// <param name="ContactBy">The attribute to search the contact by (e.g., "Name", "Phone Number", "Email").</param>
+        /// <returns>
+        /// The <see cref="ContactDetails"/> object representing the contact if found; otherwise, null.
+        /// </returns>
+        ContactDetails GetContactDetailByAttribute(string ContactBy) {
+            string input = GetContactInformation(ContactBy);
+            ContactDetails contact = FindContactByAttribute(ContactBy, input);
+            return contact;
         }
 
         /// <summary>
-        /// Handles the field-specific editing of a contact by displaying a submenu and executing actions.
+        /// Displays a submenu for editing specific fields of a contact and performs the selected action.
         /// </summary>
-        /// <param name="ContactToEdit">The contact to be edited.</param>
+        /// <param name="ContactToEdit">The <see cref="ContactDetails"/> object representing the contact to be edited.</param>
         void EditBy(ContactDetails ContactToEdit) {
             var EditByMenuActions = new Dictionary<int, (string, Action action)> {
-                { 1, ("Edit Name", () => UpdateContactField(_name, true, value => ContactToEdit.Name = value))},
-                { 2, ("Edit Phone Number", () => UpdateContactField(_phoneNumber, true, value => ContactToEdit.PhoneNumber = value))},
-                { 3, ("Edit Email", () => UpdateContactField(_email, true, value => ContactToEdit.Email = value))},
-                { 4, ("Edit Additional Information", () => UpdateContactField(_additionalInformation, false, value => ContactToEdit.AdditionalInformation = value))},
+                { 1, ("Edit Name", () => UpdateContactField(_consoleName, true, value => ContactToEdit.Name = value))},
+                { 2, ("Edit Phone Number", () => UpdateContactField(_consolePhoneNumber, true, value => ContactToEdit.PhoneNumber = value))},
+                { 3, ("Edit Email", () => UpdateContactField(_consoleEmail, true, value => ContactToEdit.Email = value))},
+                { 4, ("Edit Additional Information", () => UpdateContactField(_consoleAdditionalInformation, false, value => ContactToEdit.AdditionalInformation = value))},
                 { 5, ("Main Menu", () => { IsEditSuccessful = false; })}
             };
 
@@ -398,11 +389,6 @@
                 string input = Console.ReadLine();
                 isValidChoice = int.TryParse(input, out int choice);
 
-                if (!isValidChoice) {
-                    Console.WriteLine("[Error] Invalid input. Please enter a number.");
-                    continue;
-                }
-
                 if (isValidChoice && EditByMenuActions.ContainsKey(choice)) {
                     EditByMenuActions[choice].action.Invoke();
                 } else {
@@ -412,29 +398,34 @@
         }
 
         /// <summary>
-        /// Edits a contact by searching for it based on an attribute.
+        /// Edits a contact by allowing the user to search for it using a specified attribute and then perform field-specific edits.
         /// </summary>
-        /// <param name="ContactBy">The attribute to find the contact by (e.g., "Name", "Phone Number", "Email").</param>
+        /// <param name="ContactBy">The attribute to search the contact by (e.g., "Name", "Phone Number", "Email").</param>
         void EditContactBy(string ContactBy) {
-            HandleEditOrDeleteContactBy(ContactBy, EditBy, ref IsEditSuccessful);
+            ContactDetails contact = GetContactDetailByAttribute(ContactBy);
+            if (contact != null) {
+                EditBy(contact);
+                IsEditSuccessful = false;
+            } else {
+                Console.WriteLine("[Error] No Contact Found");
+                PromptForContinuation();
+            }
         }
 
         /// <summary>
-        /// Deletes a contact from the contact list and updates the deletion state.
+        /// Deletes a contact by allowing the user to search for it using a specified attribute and removing it from the contact list.
         /// </summary>
-        /// <param name="ContactToDelete">The contact to be deleted.</param>
-        void Delete(ContactDetails ContactToDelete) {
-            contacts.Remove(ContactToDelete);
-            Console.WriteLine("[Success] Contact Deleted Successfully");
-            IsDeleteSuccessful = false;
-        }
-
-        /// <summary>
-        /// Deletes a contact by searching for it based on an attribute.
-        /// </summary>
-        /// <param name="ContactBy">The attribute to find the contact by (e.g., "Name", "Phone Number", "Email").</param>
+        /// <param name="ContactBy">The attribute to search the contact by (e.g., "Name", "Phone Number", "Email").</param>
         void DeleteContactBy(string ContactBy) {
-            HandleEditOrDeleteContactBy(ContactBy, Delete, ref IsDeleteSuccessful);
+            ContactDetails contact = GetContactDetailByAttribute(ContactBy);
+            if (contact != null) {
+                contacts.Remove(contact);
+                Console.WriteLine("[Success] Contact Deleted Successfully");
+                IsDeleteSuccessful = false;
+            } else {
+                Console.WriteLine("[Error] No Contact Found");
+                PromptForContinuation();
+            }
         }
     }
 }
