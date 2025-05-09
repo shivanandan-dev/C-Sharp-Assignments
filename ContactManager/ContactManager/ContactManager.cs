@@ -17,10 +17,10 @@
         /// </summary>
         public void AddNewContact() {
             Console.WriteLine("========== Add new contact ==========\n");
-            string name = GetInformation("Name", true);
-            string phoneNumber = GetInformation("Phone Number", true);
-            string email = GetInformation("Email", true);
-            string additionalInformation = GetInformation("Additional Information", true);
+            string name = GetContactInformation("Name", true);
+            string phoneNumber = GetContactInformation("Phone Number", true);
+            string email = GetContactInformation("Email", true);
+            string additionalInformation = GetContactInformation("Additional Information", true);
 
             contacts.Add(new ContactDetails(name, phoneNumber, email, additionalInformation));
             Console.WriteLine("[Success] New contact is created successfully!");
@@ -220,7 +220,7 @@
         /// <param name="informationType">The type of information being requested (e.g., "Name", "Phone Number", "Email").</param>
         /// <param name="checkForDuplicate">Indicates whether to check for duplicate entries in the contact list.</param>
         /// <returns>Validated string input provided by the user.</returns>
-        string GetInformation(string informationType, bool checkForDuplicate = false) {
+        string GetContactInformation(string informationType, bool checkForDuplicate = false) {
             string input;
             do {
                 if (checkForDuplicate) {
@@ -299,7 +299,7 @@
         /// </summary>
         /// <param name="informationType">The type of information to search by (e.g., "Name", "Phone Number").</param>
         void SearchContactBy(string informationType) {
-            string input = GetInformation(informationType);
+            string input = GetContactInformation(informationType);
             ContactDetails contactInfo = FindContactByAttribute(informationType, input);
             if (contactInfo == null) {
                 Console.WriteLine("[Error] No Contact Found");
@@ -316,7 +316,7 @@
         /// <param name="checkForDuplicate">Indicates whether to check for duplicate entries when updating the field.</param>
         /// <param name="updateAction">The action to perform for updating the field.</param>
         void UpdateContactField(string fieldName, bool checkForDuplicate, Action<string> updateAction) {
-            string updatedValue = GetInformation(fieldName, checkForDuplicate);
+            string updatedValue = GetContactInformation(fieldName, checkForDuplicate);
             updateAction(updatedValue);
             Console.WriteLine($"[Success] {fieldName} updated successfully!");
             IsEditSuccessful = false;
@@ -358,7 +358,7 @@
         /// <param name="isOperationSuccessful">A reference to the success flag for the operation (e.g., IsEditSuccessful, IsDeleteSuccessful).</param>
         void HandleEditOrDeleteContactBy(string ContactBy, Action<ContactDetails> action, ref bool isOperationSuccessful) {
             do {
-                string input = GetInformation(ContactBy);
+                string input = GetContactInformation(ContactBy);
                 ContactDetails contact = FindContactByAttribute(ContactBy, input);
 
                 if (contact == null) {
