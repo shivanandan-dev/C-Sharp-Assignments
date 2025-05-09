@@ -333,9 +333,10 @@
         /// <param name="menuActions">A dictionary mapping menu choices to their corresponding actions.</param>
         /// <param name="isOperationSuccessful">A reference to the success flag for the operation (e.g., IsEditSuccessful, IsDeleteSuccessful).</param>
         /// 
-        void HandleMenuActions(string menuTitle, Dictionary<int, (string, Action action)> menuActions, ref bool isOperationSuccessful) {
+        void HandleMenuActions(string menuTitle, Dictionary<int, (string, Action action)> menuActions, ref bool isOperationSuccessful, bool clearConsole = true) {
             do {
-                Console.Clear();
+                if (clearConsole)
+                    Console.Clear();
                 DisplayMenu(menuTitle, menuActions);
                 Console.Write("\n[Menu] Enter your choice: ");
                 string input = Console.ReadLine();
@@ -382,19 +383,8 @@
             bool isValidChoice = false;
             Console.Clear();
             DisplayDetails(ContactToEdit);
-            DisplayMenu("Edit", EditByMenuActions);
 
-            do {
-                Console.Write("\n[Menu] Enter your choice: ");
-                string input = Console.ReadLine();
-                isValidChoice = int.TryParse(input, out int choice);
-
-                if (isValidChoice && EditByMenuActions.ContainsKey(choice)) {
-                    EditByMenuActions[choice].action.Invoke();
-                } else {
-                    Console.WriteLine("[Error] Invalid choice. Please select a valid option.");
-                }
-            } while (IsEditSuccessful);
+            HandleMenuActions("Edit", EditByMenuActions, ref IsEditSuccessful, false);
         }
 
         /// <summary>
