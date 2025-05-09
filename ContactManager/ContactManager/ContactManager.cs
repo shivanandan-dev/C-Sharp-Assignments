@@ -138,9 +138,9 @@
         /// </summary>
         public void EditContact() {
             var editMenuActions = new Dictionary<int, (string, Action)> {
-                { 1, ("Find Contact by Name", () => EditContactBy(_consoleName))},
-                { 2, ("Find Contact by Phone Number", () => EditContactBy(_consolePhoneNumber))},
-                { 3, ("Find Contact by Email", () => EditContactBy(_consoleEmail))},
+                { 1, ("Edit Contact by Name", () => EditContactBy(_consoleName))},
+                { 2, ("Edit Contact by Phone Number", () => EditContactBy(_consolePhoneNumber))},
+                { 3, ("Edit Contact by Email", () => EditContactBy(_consoleEmail))},
                 { 4, ("Main Menu", () => { })}
             };
 
