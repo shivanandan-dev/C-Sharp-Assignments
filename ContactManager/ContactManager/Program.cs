@@ -39,8 +39,7 @@
                     Console.WriteLine("[Error] Invalid choice!");
                 }
 
-                ContactManager.IsDeleteSuccessful = true;
-                ContactManager.IsEditSuccessful = true;
+                ContactManager.IsOperationSuccessful = false;
                 ContactManager.PromptForContinuation();
                 Console.Clear();
             } while (true);

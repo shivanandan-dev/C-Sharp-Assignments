@@ -1,8 +1,7 @@
 ﻿namespace ContactManager {
     internal class ContactManager {
         public static List<ContactDetails> contacts = new List<ContactDetails>();
-        public static bool IsEditSuccessful = true;
-        public static bool IsDeleteSuccessful = true;
+        public static bool IsOperationSuccessful = false;
 
         readonly string _consoleName = StringFormatter.AddSpaces(nameof(ContactDetails.Name));
         readonly string _consolePhoneNumber = StringFormatter.AddSpaces(nameof(ContactDetails.PhoneNumber));
@@ -122,7 +121,7 @@
                 { 4, ("Main Menu", () => { }) }
             };
 
-            HandleMenuActions("Delete", deleteMenuActions, ref IsDeleteSuccessful);
+            HandleMenuActions("Delete", deleteMenuActions);
         }
 
         /// <summary>
@@ -145,7 +144,7 @@
                 { 4, ("Main Menu", () => { })}
             };
 
-            HandleMenuActions("Edit by", editMenuActions, ref IsEditSuccessful);
+            HandleMenuActions("Edit by", editMenuActions);
         }
 
         /// <summary>
@@ -323,7 +322,7 @@
             string updatedValue = GetContactInformation(fieldName, checkForDuplicate);
             updateAction(updatedValue);
             Console.WriteLine($"[Success] {fieldName} updated successfully!");
-            IsEditSuccessful = false;
+            IsOperationSuccessful = true;
         }
 
         /// <summary>
@@ -331,9 +330,8 @@
         /// </summary>
         /// <param name="menuTitle">Title of the Menu.</param>
         /// <param name="menuActions">A dictionary mapping menu choices to their corresponding actions.</param>
-        /// <param name="isOperationSuccessful">A reference to the success flag for the operation (e.g., IsEditSuccessful, IsDeleteSuccessful).</param>
         /// 
-        void HandleMenuActions(string menuTitle, Dictionary<int, (string, Action action)> menuActions, ref bool isOperationSuccessful, bool clearConsole = true) {
+        void HandleMenuActions(string menuTitle, Dictionary<int, (string, Action action)> menuActions, bool clearConsole = true) {
             do {
                 if (clearConsole)
                     Console.Clear();
@@ -351,7 +349,7 @@
                     PromptForContinuation();
                 }
 
-            } while (isOperationSuccessful);
+            } while (!IsOperationSuccessful);
         }
 
         /// <summary>
@@ -377,14 +375,14 @@
                 { 2, ("Edit Phone Number", () => UpdateContactField(_consolePhoneNumber, true, value => ContactToEdit.PhoneNumber = value))},
                 { 3, ("Edit Email", () => UpdateContactField(_consoleEmail, true, value => ContactToEdit.Email = value))},
                 { 4, ("Edit Additional Information", () => UpdateContactField(_consoleAdditionalInformation, false, value => ContactToEdit.AdditionalInformation = value))},
-                { 5, ("Main Menu", () => { IsEditSuccessful = false; })}
+                { 5, ("Main Menu", () => { IsOperationSuccessful = true; })}
             };
 
             bool isValidChoice = false;
             Console.Clear();
             DisplayDetails(ContactToEdit);
 
-            HandleMenuActions("Edit", EditByMenuActions, ref IsEditSuccessful, false);
+            HandleMenuActions("Edit", EditByMenuActions, false);
         }
 
         /// <summary>
@@ -395,7 +393,7 @@
             ContactDetails contact = GetContactDetailByAttribute(ContactBy);
             if (contact != null) {
                 EditBy(contact);
-                IsEditSuccessful = false;
+                IsOperationSuccessful = true;
             } else {
                 Console.WriteLine("[Error] No Contact Found");
                 PromptForContinuation();
@@ -411,7 +409,7 @@
             if (contact != null) {
                 contacts.Remove(contact);
                 Console.WriteLine("[Success] Contact Deleted Successfully");
-                IsDeleteSuccessful = false;
+                IsOperationSuccessful = true;
             } else {
                 Console.WriteLine("[Error] No Contact Found");
                 PromptForContinuation();
