@@ -25,7 +25,7 @@
         public string AdditionalInformation { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Contact"/> class with the specified details.
+        /// Initializes a new instance of the <see cref="ContactDetails"/> class with the specified details.
         /// </summary>
         /// <param name="name">The name of the contact.</param>
         /// <param name="phoneNumber">The phone number of the contact.</param>
