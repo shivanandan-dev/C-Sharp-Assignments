@@ -4,6 +4,11 @@
         public static bool IsEditSuccessful = true;
         public static bool IsDeleteSuccessful = true;
 
+        readonly string _name = StringFormatter.AddSpaces(nameof(ContactDetails.Name));
+        readonly string _phoneNumber = StringFormatter.AddSpaces(nameof(ContactDetails.PhoneNumber));
+        readonly string _email = StringFormatter.AddSpaces(nameof(ContactDetails.Email));
+        readonly string _additionalInformation = StringFormatter.AddSpaces(nameof(ContactDetails.AdditionalInformation));
+
         /// <summary>
         /// Displays a prompt asking the user to press any key to continue and waits until a key is pressed.
         /// </summary>
@@ -17,10 +22,10 @@
         /// </summary>
         public void AddNewContact() {
             Console.WriteLine("========== Add new contact ==========\n");
-            string name = GetContactInformation("Name", true);
-            string phoneNumber = GetContactInformation("Phone Number", true);
-            string email = GetContactInformation("Email", true);
-            string additionalInformation = GetContactInformation("Additional Information", true);
+            string name = GetContactInformation(_name, true);
+            string phoneNumber = GetContactInformation(_phoneNumber, true);
+            string email = GetContactInformation(_email, true);
+            string additionalInformation = GetContactInformation(_additionalInformation, true);
 
             contacts.Add(new ContactDetails(name, phoneNumber, email, additionalInformation));
             Console.WriteLine("[Success] New contact is created successfully!");
@@ -31,7 +36,7 @@
         /// </summary>
         /// <param name="contactList">List of contacts to display.</param>
         public void DisplayContacts(List<ContactDetails> contactList) {
-            Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}", "Name", "Phone Number", "Email", "Additional Information");
+            Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}", _name, _phoneNumber, _email, _additionalInformation);
             Console.WriteLine(new string('-', 100));
 
             foreach (ContactDetails contactInfo in contactList) {
@@ -80,9 +85,9 @@
         /// </summary>
         public void SearchContact() {
             var searchMenuActions = new Dictionary<int, (string, Action action)> {
-                { 1, ("Search by Name", () => SearchContactBy("Name"))},
-                { 2, ("Search by Phone Number", () => SearchContactBy("Phone Number"))},
-                { 3, ("Search by Email", () => SearchContactBy("Email"))},
+                { 1, ("Search by Name", () => SearchContactBy(_name))},
+                { 2, ("Search by Phone Number", () => SearchContactBy(_phoneNumber))},
+                { 3, ("Search by Email", () => SearchContactBy(_email))},
                 { 4, ("Main Menu", () => { })}
             };
 
@@ -111,9 +116,9 @@
         /// </summary>
         public void DeleteContact() {
             var deleteMenuActions = new Dictionary<int, (string, Action)> {
-                { 1, ("Delete Contact by Name", () => DeleteContactBy("Name")) },
-                { 2, ("Delete Contact by Phone Number", () => DeleteContactBy("Phone Number")) },
-                { 3, ("Delete Contact by Email", () => DeleteContactBy("Email")) },
+                { 1, ("Delete Contact by Name", () => DeleteContactBy(_name)) },
+                { 2, ("Delete Contact by Phone Number", () => DeleteContactBy(_phoneNumber)) },
+                { 3, ("Delete Contact by Email", () => DeleteContactBy(_email)) },
                 { 4, ("Main Menu", () => { }) }
             };
 
@@ -134,9 +139,9 @@
         /// </summary>
         public void EditContact() {
             var editMenuActions = new Dictionary<int, (string, Action)> {
-                { 1, ("Find Contact by Name", () => EditContactBy("Name"))},
-                { 2, ("Find Contact by Phone Number", () => EditContactBy("Phone Number"))},
-                { 3, ("Find Contact by Email", () => EditContactBy("Email"))},
+                { 1, ("Find Contact by Name", () => EditContactBy(_name))},
+                { 2, ("Find Contact by Phone Number", () => EditContactBy(_phoneNumber))},
+                { 3, ("Find Contact by Email", () => EditContactBy(_email))},
                 { 4, ("Main Menu", () => { })}
             };
 
@@ -180,7 +185,7 @@
             do {
                 Console.Write($"Enter {informationType}: ");
                 input = Console.ReadLine();
-                if (string.IsNullOrEmpty(input) && informationType != "Additional Information")
+                if (string.IsNullOrEmpty(input) && informationType != _additionalInformation)
                     Console.WriteLine($"[Error] {informationType} cannot be empty!");
                 else if (IsContactDuplicate(input)) {
                     Console.WriteLine($"[Error] A contact with this {informationType} already exists.");
@@ -270,10 +275,10 @@
         /// <param name="contactInfo">The contact whose details are to be displayed.</param>
         void DisplayDetails(ContactDetails contactInfo) {
             Console.WriteLine("\n========== Details ==========\n");
-            Console.WriteLine("{0,-25}: {1}", "Name", contactInfo.Name);
-            Console.WriteLine("{0,-25}: {1}", "Phone Number", contactInfo.PhoneNumber);
-            Console.WriteLine("{0,-25}: {1}", "Email", contactInfo.Email);
-            Console.WriteLine("{0,-25}: {1}", "Additional Information", contactInfo.AdditionalInformation);
+            Console.WriteLine("{0,-25}: {1}", _name, contactInfo.Name);
+            Console.WriteLine("{0,-25}: {1}", _phoneNumber, contactInfo.PhoneNumber);
+            Console.WriteLine("{0,-25}: {1}", _email, contactInfo.Email);
+            Console.WriteLine("{0,-25}: {1}", _additionalInformation, contactInfo.AdditionalInformation);
         }
 
         /// <summary>
@@ -284,11 +289,11 @@
         /// <returns>The contact that matches the attribute and value; otherwise, null.</returns>
         ContactDetails FindContactByAttribute(string attribute, string value) {
             return contacts.Find(contact =>
-                (attribute.Equals("Name", StringComparison.OrdinalIgnoreCase) &&
+                (attribute.Equals(_name, StringComparison.OrdinalIgnoreCase) &&
                 contact.Name.Equals(value, StringComparison.OrdinalIgnoreCase)) ||
-                (attribute.Equals("Phone Number", StringComparison.OrdinalIgnoreCase) &&
+                (attribute.Equals(_phoneNumber, StringComparison.OrdinalIgnoreCase) &&
                 contact.PhoneNumber.Equals(value, StringComparison.OrdinalIgnoreCase)) ||
-                (attribute.Equals("Email", StringComparison.OrdinalIgnoreCase) &&
+                (attribute.Equals(_email, StringComparison.OrdinalIgnoreCase) &&
                 contact.Email.Equals(value, StringComparison.OrdinalIgnoreCase))
             );
         }
@@ -376,10 +381,10 @@
         /// <param name="ContactToEdit">The contact to be edited.</param>
         void EditBy(ContactDetails ContactToEdit) {
             var EditByMenuActions = new Dictionary<int, (string, Action action)> {
-                { 1, ("Edit Name", () => UpdateContactField("Name", true, value => ContactToEdit.Name = value))},
-                { 2, ("Edit Phone Number", () => UpdateContactField("Phone Number", true, value => ContactToEdit.PhoneNumber = value))},
-                { 3, ("Edit Email", () => UpdateContactField("Email", true, value => ContactToEdit.Email = value))},
-                { 4, ("Edit Additional Information", () => UpdateContactField("Additional Information", false, value => ContactToEdit.AdditionalInformation = value))},
+                { 1, ("Edit Name", () => UpdateContactField(_name, true, value => ContactToEdit.Name = value))},
+                { 2, ("Edit Phone Number", () => UpdateContactField(_phoneNumber, true, value => ContactToEdit.PhoneNumber = value))},
+                { 3, ("Edit Email", () => UpdateContactField(_email, true, value => ContactToEdit.Email = value))},
+                { 4, ("Edit Additional Information", () => UpdateContactField(_additionalInformation, false, value => ContactToEdit.AdditionalInformation = value))},
                 { 5, ("Main Menu", () => { IsEditSuccessful = false; })}
             };
 
