@@ -160,7 +160,7 @@
         /// </summary>
         /// <param name="value">The value to check (name, email, or phone number).</param>
         /// <returns>Returns true if a contact with the given value already exists; otherwise, false.</returns>
-        bool IsContactAlreadyExist(string value) {
+        bool IsContactDuplicate(string value) {
             foreach (ContactDetails contactInfo in contacts) {
                 if (contactInfo.Name == value || contactInfo.Email == value || contactInfo.PhoneNumber == value) {
                     return true;
@@ -173,7 +173,6 @@
         /// Prompts the user to enter information until the input does not match any existing contact.
         /// </summary>
         /// <param name="informationType">The type of information being requested (e.g., "Name", "Phone Number").</param>
-        /// <param name="isContactAlreadyExist">Outputs whether a duplicate contact was found.</param>
         /// <returns>Returns the user-provided input that does not already exist.</returns>
         string GetUniqueContactInput(string informationType) {
             string input;
@@ -183,7 +182,7 @@
                 input = Console.ReadLine();
                 if (string.IsNullOrEmpty(input) && informationType != "Additional Information")
                     Console.WriteLine($"[Error] {informationType} cannot be empty!");
-                else if (IsContactAlreadyExist(input)) {
+                else if (IsContactDuplicate(input)) {
                     Console.WriteLine($"[Error] A contact with this {informationType} already exists.");
                 } else {
                     break;
