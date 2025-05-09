@@ -16,7 +16,7 @@
 
             var mainMenuActions = new Dictionary<int, (string, Action action)> {
                 { 1, ("Add New Contact", () => manager.AddNewContact()) },
-                { 2, ("View Contacts", () => manager.ViewContacts(ContactManager.contacts)) },
+                { 2, ("View Contacts", () => manager.ViewContacts()) },
                 { 3, ("Search Contact", () => manager.SearchContact()) },
                 { 4, ("Edit Contact", () => manager.EditContact()) },
                 { 5, ("Delete Contact", () => manager.DeleteContact()) },

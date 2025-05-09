@@ -58,17 +58,17 @@
         /// <summary>
         /// Displays all contacts in the contact list in a formatted table.
         /// </summary>
-        public void ViewContacts(List<ContactDetails> contactList) {
+        public void ViewContacts() {
             while (true) {
                 Console.Clear();
                 Console.WriteLine("========== Contacts ==========\n");
 
-                if (contactList.Count == 0) {
+                if (contacts.Count == 0) {
                     Console.WriteLine("[Error] Contact list is empty.");
                     return;
                 }
 
-                DisplayContacts(contactList);
+                DisplayContacts(contacts);
                 Console.WriteLine("\nPress (1-3) to Sort, (4) to Exit:");
                 ConsoleKey input = Console.ReadKey().Key;
 
@@ -76,7 +76,7 @@
                     return;
                 }
 
-                contactList = SortContacts(contactList, input);
+                contacts = SortContacts(contacts, input);
             }
         }
 
