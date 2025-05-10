@@ -4,11 +4,11 @@
         /// <summary>
         /// Displays the main menu options to the user.
         /// </summary>
-        void DisplayMenu() {
-            Console.WriteLine("\nShape Area Calculator");
-            Console.WriteLine("1. Create Rectangle");
-            Console.WriteLine("2. Create Circle");
-            Console.WriteLine("3. Exit");
+        void DisplayMenu(string menuTitle, Dictionary<int, (string description, Action)> menuActions) {
+            Console.WriteLine($"\n{menuTitle}");
+            foreach (var menuAction in menuActions) {
+                Console.WriteLine($"{menuAction.Key}. {menuAction.Value.description}");
+            }
             Console.Write("\n[Menu] Enter your choice: ");
         }
 
@@ -66,9 +66,9 @@
             double radius = GetValidatedDouble("Enter length: ");
             if (radius < 0) return;
 
-            CircleShape rectangle = new CircleShape(color, radius);
+            CircleShape circle = new CircleShape(color, radius);
             Console.Write("[Info] ");
-            rectangle.PrintDetails();
+            circle.PrintDetails();
         }
 
         /// <summary>
@@ -78,22 +78,21 @@
         static void Main(string[] args) {
             ShapeApplication shape = new ShapeApplication();
 
-            Dictionary<int, Action> action = new Dictionary<int, Action>() {
-                { 1, shape.CreateRectangle },
-                { 2, shape.CreateCircle },
-                { 3, () => Environment.Exit(0) }
+            Dictionary<int, (string, Action action)> mainMenuAction = new Dictionary<int, (string, Action)>() {
+                { 1, ("Create Rectangle", shape.CreateRectangle) },
+                { 2, ("Create Circle", shape.CreateCircle) },
+                { 3, ("Exit", () => Environment.Exit(0)) }
             };
 
             while (true) {
                 Console.Clear();
-                shape.DisplayMenu();
+                shape.DisplayMenu("Shape Calculator", mainMenuAction);
                 string input = Console.ReadLine();
                 bool isNumber = int.TryParse(input, out int choice);
 
-                if (isNumber && action.ContainsKey(choice)) {
-                    action[choice]();
-                }
-                else {
+                if (isNumber && mainMenuAction.ContainsKey(choice)) {
+                    mainMenuAction[choice].action.Invoke();
+                } else {
                     Console.WriteLine("[Error] Invalid input!");
                 }
                 shape.PromptForContinuation();
