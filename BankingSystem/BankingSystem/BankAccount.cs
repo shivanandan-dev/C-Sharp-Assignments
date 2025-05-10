@@ -1,6 +1,15 @@
 ﻿namespace BankingSystem {
     public class BankAccount {
+        /// <summary>
+        /// The account number for the user.
+        /// </summary>
+        /// <value>The account number is a unique identifier for the user's account.</value>
         public string AccountNumber { get; set; }
+
+        /// <summary>
+        /// The balance of the account.
+        /// </summary>
+        /// <value>The balance represents the current amount of money in the user's account.</value>
         public decimal Balance { get; set; }
 
         /// <summary>
