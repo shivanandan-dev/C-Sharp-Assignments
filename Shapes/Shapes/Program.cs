@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ShapesApplication {
+﻿namespace ShapesApplication {
     internal class Program {
         /// <summary>
         /// Entry point of the program. Displays menu and handles user interaction in a loop.

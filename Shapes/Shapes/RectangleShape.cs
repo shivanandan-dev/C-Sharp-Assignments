@@ -1,6 +1,13 @@
 ﻿namespace ShapesApplication {
     public class RectangleShape : Shape {
+        /// <summary>
+        /// Represents the length of the object.
+        /// </summary>
         public double Length { get; set; }
+
+        /// <summary>
+        /// Represents the width of the object.
+        /// </summary>
         public double Width { get; set; }
 
         /// <summary>

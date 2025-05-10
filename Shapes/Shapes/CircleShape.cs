@@ -1,5 +1,9 @@
 ﻿namespace ShapesApplication {
     public class CircleShape : Shape {
+        /// <summary>
+        /// Gets the radius of the object. This property is read-only and represents
+        /// the distance from the center of the object to its edge in a circular or spherical context.
+        /// </summary>
         public double Radius { get; }
 
         /// <summary>

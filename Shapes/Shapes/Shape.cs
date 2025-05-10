@@ -1,5 +1,8 @@
 ﻿namespace ShapesApplication {
     public abstract class Shape {
+        /// <summary>
+        /// Represents the color of the object.
+        /// </summary>
         public string Color { get; set; }
 
         /// <summary>
