@@ -41,10 +41,10 @@
         /// Handles the process of creating a circle by taking user input and displaying details.
         /// </summary>
         public static void CreateCircle() {
-            Console.Write("Enter the color of the rectangle: ");
+            Console.Write("Enter the color of the Circle: ");
             string color = Console.ReadLine();
 
-            double radius = GetValidatedDoubleValue("Enter length: ");
+            double radius = GetValidatedDoubleValue("Enter radius: ");
             if (radius < 0) return;
 
             CircleShape circle = new CircleShape(color, radius);
