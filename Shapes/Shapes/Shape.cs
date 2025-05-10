@@ -1,4 +1,4 @@
-﻿namespace ShapeApplication {
+﻿namespace ShapesApplication {
     public abstract class Shape {
         public string Color { get; set; }
 

@@ -1,4 +1,4 @@
-﻿namespace ShapeApplication {
+﻿namespace ShapesApplication {
     public class CircleShape : Shape {
         public double Radius { get; }
 

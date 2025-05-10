@@ -1,10 +1,9 @@
-﻿namespace ShapeApplication {
-    internal class ShapeApplication {
-
+﻿namespace ShapesApplication {
+    public class ShapeApplication {
         /// <summary>
-        /// Displays the main menu options to the user.
+        /// Displays the menu options to the user.
         /// </summary>
-        void DisplayMenu(string menuTitle, Dictionary<int, (string description, Action)> menuActions) {
+        public static void DisplayMenu(string menuTitle, Dictionary<int, (string description, Action)> menuActions) {
             Console.WriteLine($"\n{menuTitle}");
             foreach (var menuAction in menuActions) {
                 Console.WriteLine($"{menuAction.Key}. {menuAction.Value.description}");
@@ -15,40 +14,22 @@
         /// <summary>
         /// Prompts the user to press any key to continue.
         /// </summary>
-        void PromptForContinuation() {
+        public static void PromptForContinuation() {
             Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey();
         }
 
         /// <summary>
-        /// Prompts the user for a double input and validates it.
-        /// </summary>
-        /// <param name="prompt">The prompt message to display.</param>
-        /// <returns>A valid double value or -1 if input is invalid.</returns>
-        double GetValidatedDouble(string prompt) {
-            Console.Write(prompt);
-            string input = Console.ReadLine();
-            bool isValid = double.TryParse(input, out double value);
-
-            if (!isValid) {
-                Console.WriteLine("[Error] Invalid input. Try again!");
-                return -1;
-            }
-
-            return value;
-        }
-
-        /// <summary>
         /// Handles the process of creating a rectangle by taking user input and displaying details.
         /// </summary>
-        void CreateRectangle() {
+        public static void CreateRectangle() {
             Console.Write("Enter the color of the rectangle: ");
             string color = Console.ReadLine();
 
-            double length = GetValidatedDouble("Enter length: ");
+            double length = GetValidatedDoubleValue("Enter length: ");
             if (length < 0) return;
 
-            double width = GetValidatedDouble("Enter width: ");
+            double width = GetValidatedDoubleValue("Enter width: ");
             if (width < 0) return;
 
             RectangleShape rectangle = new RectangleShape(color, length, width);
@@ -59,11 +40,11 @@
         /// <summary>
         /// Handles the process of creating a circle by taking user input and displaying details.
         /// </summary>
-        void CreateCircle() {
+        public static void CreateCircle() {
             Console.Write("Enter the color of the rectangle: ");
             string color = Console.ReadLine();
 
-            double radius = GetValidatedDouble("Enter length: ");
+            double radius = GetValidatedDoubleValue("Enter length: ");
             if (radius < 0) return;
 
             CircleShape circle = new CircleShape(color, radius);
@@ -72,31 +53,21 @@
         }
 
         /// <summary>
-        /// Entry point of the program. Displays menu and handles user interaction in a loop.
+        /// Prompts the user for a double input and validates it.
         /// </summary>
-        /// <param name="args">Command-line arguments.</param>
-        static void Main(string[] args) {
-            ShapeApplication shape = new ShapeApplication();
+        /// <param name="prompt">The prompt message to display.</param>
+        /// <returns>A valid double value or -1 if input is invalid.</returns>
+        static double GetValidatedDoubleValue(string prompt) {
+            Console.Write(prompt);
+            string input = Console.ReadLine();
+            bool isValid = double.TryParse(input, out double value);
 
-            Dictionary<int, (string, Action action)> mainMenuAction = new Dictionary<int, (string, Action)>() {
-                { 1, ("Create Rectangle", shape.CreateRectangle) },
-                { 2, ("Create Circle", shape.CreateCircle) },
-                { 3, ("Exit", () => Environment.Exit(0)) }
-            };
-
-            while (true) {
-                Console.Clear();
-                shape.DisplayMenu("Shape Calculator", mainMenuAction);
-                string input = Console.ReadLine();
-                bool isNumber = int.TryParse(input, out int choice);
-
-                if (isNumber && mainMenuAction.ContainsKey(choice)) {
-                    mainMenuAction[choice].action.Invoke();
-                } else {
-                    Console.WriteLine("[Error] Invalid input!");
-                }
-                shape.PromptForContinuation();
+            if (!isValid) {
+                Console.WriteLine("[Error] Invalid input. Try again!");
+                return -1;
             }
+
+            return value;
         }
     }
 }
