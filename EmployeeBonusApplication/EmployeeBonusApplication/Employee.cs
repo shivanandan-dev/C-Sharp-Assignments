@@ -1,5 +1,8 @@
 ﻿namespace EmployeeBonusApplication {
     public abstract class Employee {
+        /// <summary>
+        /// Gets or sets the name of the employee.
+        /// </summary>
         public string Name { get; set; }
 
         /// <summary>
