@@ -1,7 +1,7 @@
 ﻿using ExceptionHandling.Exceptions;
 
 namespace ExceptionHandling.IOManager {
-    public class InputManager {
+    public static class InputManager {
         /// <summary>
         /// Gets the user's menu choice from a list of menu options.
         /// </summary>
