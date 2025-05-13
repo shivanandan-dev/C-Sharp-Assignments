@@ -1,4 +1,5 @@
-﻿using ExceptionHandling.IOManager;
+﻿using ExceptionHandling.Exceptions;
+using ExceptionHandling.IOManager;
 
 namespace ExceptionHandling.AppInteraction {
     internal class DivisionApplication {
@@ -16,7 +17,7 @@ namespace ExceptionHandling.AppInteraction {
                 Console.WriteLine($"{dividend} divided by {divisor} is {dividend / divisor}");
             } catch (DivideByZeroException) {
                 Console.WriteLine("[Error] Divisor cannot be zero!");
-            } catch (FormatException e) {
+            } catch (InvalidUserInputException e) {
                 Console.WriteLine(e.Message);
             } catch (Exception e) {
                 Console.WriteLine($"[Error] An unexpected error occured: {e.Message}");

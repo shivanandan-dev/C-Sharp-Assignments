@@ -1,4 +1,6 @@
-﻿namespace ExceptionHandling.IOManager {
+﻿using ExceptionHandling.Exceptions;
+
+namespace ExceptionHandling.IOManager {
     public class InputManager {
         /// <summary>
         /// Gets the user's menu choice from a list of menu options.
@@ -26,13 +28,13 @@
         /// Reads and parses a decimal input from the user.
         /// </summary>
         /// <returns>The parsed decimal value.</returns>
-        /// <exception cref="FormatException">Thrown when the input is not a valid decimal.</exception>
+        /// <exception cref="InvalidUserInputException">Thrown when the input is not a valid decimal.</exception>
         public static decimal GetDecimal() {
             string input = Console.ReadLine();
             bool isDecimal = decimal.TryParse(input, out decimal number);
 
             if (!isDecimal)
-                throw new FormatException("[Error] Invalid input. Please enter a valid integer.");
+                throw new InvalidUserInputException("[Error] Invalid input. Please enter a valid integer.");
 
             return number;
         }
@@ -41,13 +43,13 @@
         /// Reads and parses an integer input from the user.
         /// </summary>
         /// <returns>The parsed integer value.</returns>
-        /// <exception cref="FormatException">Thrown when the input is not a valid integer.</exception>
+        /// <exception cref="InvalidUserInputException">Thrown when the input is not a valid integer.</exception>
         public static int GetNumber() {
             string input = Console.ReadLine();
             bool isNumber = int.TryParse(input, out int number);
 
             if (!isNumber) {
-                throw new FormatException("[Error] Invalid input. Please enter a valid integer.");
+                throw new InvalidUserInputException("[Error] Invalid input. Please enter a valid integer.");
             }
 
             return number;

@@ -1,4 +1,5 @@
-﻿using ExceptionHandling.IOManager;
+﻿using ExceptionHandling.Exceptions;
+using ExceptionHandling.IOManager;
 
 namespace ExceptionHandling.AppInteraction {
     internal class ArrayApplication {
@@ -15,8 +16,10 @@ namespace ExceptionHandling.AppInteraction {
                 ArrayElementAt(index);
             } catch (IndexOutOfRangeException e) {
                 Console.WriteLine(e.Message);
-            } catch (FormatException e) {
+            } catch (InvalidUserInputException e) {
                 Console.WriteLine(e.Message);
+            } catch (Exception e) {
+                Console.WriteLine($"[Error] An unexpected error occured: {e.Message}");
             } finally {
                 OutputManager.PromptForContinuation();
             }
