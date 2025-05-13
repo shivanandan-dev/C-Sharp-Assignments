@@ -368,18 +368,18 @@
         /// <summary>
         /// Displays a submenu for editing specific fields of a contact and performs the selected action.
         /// </summary>
-        /// <param name="ContactToEdit">The <see cref="ContactDetails"/> object representing the contact to be edited.</param>
-        void EditBy(ContactDetails ContactToEdit) {
+        /// <param name="contactToEdit">The <see cref="ContactDetails"/> object representing the contact to be edited.</param>
+        void EditBy(ContactDetails contactToEdit) {
             var EditByMenuActions = new Dictionary<int, (string, Action action)> {
-                { 1, ("Edit Name", () => UpdateContactField(_consoleName, true, value => ContactToEdit.Name = value))},
-                { 2, ("Edit Phone Number", () => UpdateContactField(_consolePhoneNumber, true, value => ContactToEdit.PhoneNumber = value))},
-                { 3, ("Edit Email", () => UpdateContactField(_consoleEmail, true, value => ContactToEdit.Email = value))},
-                { 4, ("Edit Additional Information", () => UpdateContactField(_consoleAdditionalInformation, false, value => ContactToEdit.AdditionalInformation = value))},
+                { 1, ("Edit Name", () => UpdateContactField(_consoleName, true, value => contactToEdit.Name = value))},
+                { 2, ("Edit Phone Number", () => UpdateContactField(_consolePhoneNumber, true, value => contactToEdit.PhoneNumber = value))},
+                { 3, ("Edit Email", () => UpdateContactField(_consoleEmail, true, value => contactToEdit.Email = value))},
+                { 4, ("Edit Additional Information", () => UpdateContactField(_consoleAdditionalInformation, false, value => contactToEdit.AdditionalInformation = value))},
                 { 5, ("Main Menu", () => { IsOperationSuccessful = true; })}
             };
 
             Console.Clear();
-            DisplayDetails(ContactToEdit);
+            DisplayDetails(contactToEdit);
 
             HandleMenuActions("Edit", EditByMenuActions, false);
         }
