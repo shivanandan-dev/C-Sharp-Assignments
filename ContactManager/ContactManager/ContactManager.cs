@@ -353,7 +353,7 @@
         }
 
         /// <summary>
-        /// Retrieves a contact's details by searching for it based on a specified attribute.
+        /// Retrieves contact details by searching for it based on a specified attribute.
         /// </summary>
         /// <param name="ContactBy">The attribute to search the contact by (e.g., "Name", "Phone Number", "Email").</param>
         /// <returns>
