@@ -32,7 +32,23 @@
             bool isDecimal = decimal.TryParse(input, out decimal number);
 
             if (!isDecimal)
-                throw new FormatException();
+                throw new FormatException("[Error] Invalid input. Please enter a valid integer.");
+
+            return number;
+        }
+
+        /// <summary>
+        /// Reads and parses an integer input from the user.
+        /// </summary>
+        /// <returns>The parsed integer value.</returns>
+        /// <exception cref="FormatException">Thrown when the input is not a valid integer.</exception>
+        public static int GetNumber() {
+            string input = Console.ReadLine();
+            bool isNumber = int.TryParse(input, out int number);
+
+            if (!isNumber) {
+                throw new FormatException("[Error] Invalid input. Please enter a valid integer.");
+            }
 
             return number;
         }

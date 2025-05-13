@@ -16,8 +16,8 @@ namespace ExceptionHandling.AppInteraction {
                 Console.WriteLine($"{dividend} divided by {divisor} is {dividend / divisor}");
             } catch (DivideByZeroException) {
                 Console.WriteLine("[Error] Divisor cannot be zero!");
-            } catch (FormatException) {
-                Console.WriteLine("[Error] Invalid input. Please enter a valid number or decimal value.");
+            } catch (FormatException e) {
+                Console.WriteLine(e.Message);
             } catch (Exception e) {
                 Console.WriteLine($"[Error] An unexpected error occured: {e.Message}");
             } finally {

@@ -20,5 +20,16 @@
             Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey();
         }
+
+        /// <summary>
+        /// Displays the elements of an integer array.
+        /// </summary>
+        /// <param name="numbers">The array of integers to display.</param>
+        public static void DisplayArray(int[] numbers) {
+            Console.Write("Array elements:");
+            foreach (int number in numbers) {
+                Console.Write($"{number} ");
+            }
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace ExceptionHandling.AppInteraction {
                 Console.Clear();
                 List<string> mainMenuOptions = new List<string>() {
                     "Division",
+                    "Array out of bounds demo",
                     "Exit"
                 };
 
@@ -21,6 +22,9 @@ namespace ExceptionHandling.AppInteraction {
                         DivisionApplication.HandleDivision();
                         break;
                     case 2:
+                        ArrayApplication.HandleArrayOutOfBoundsDemo();
+                        break;
+                    case 3:
                         return;
                 }
             }
