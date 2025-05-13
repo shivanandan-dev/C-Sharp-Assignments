@@ -115,9 +115,9 @@
         /// </summary>
         public void DeleteContact() {
             var deleteMenuActions = new Dictionary<int, (string, Action)> {
-                { 1, ("Delete Contact by Name", () => DeleteContactBy(_consoleName)) },
-                { 2, ("Delete Contact by Phone Number", () => DeleteContactBy(_consolePhoneNumber)) },
-                { 3, ("Delete Contact by Email", () => DeleteContactBy(_consoleEmail)) },
+                { 1, ("Delete Contact by Name", () => DeleteContactByAttribute(_consoleName)) },
+                { 2, ("Delete Contact by Phone Number", () => DeleteContactByAttribute(_consolePhoneNumber)) },
+                { 3, ("Delete Contact by Email", () => DeleteContactByAttribute(_consoleEmail)) },
                 { 4, ("Main Menu", () => { }) }
             };
 
@@ -138,9 +138,9 @@
         /// </summary>
         public void EditContact() {
             var editMenuActions = new Dictionary<int, (string, Action)> {
-                { 1, ("Edit Contact by Name", () => EditContactBy(_consoleName))},
-                { 2, ("Edit Contact by Phone Number", () => EditContactBy(_consolePhoneNumber))},
-                { 3, ("Edit Contact by Email", () => EditContactBy(_consoleEmail))},
+                { 1, ("Edit Contact by Name", () => EditContactByAttribute(_consoleName))},
+                { 2, ("Edit Contact by Phone Number", () => EditContactByAttribute(_consolePhoneNumber))},
+                { 3, ("Edit Contact by Email", () => EditContactByAttribute(_consoleEmail))},
                 { 4, ("Main Menu", () => { })}
             };
 
@@ -388,8 +388,8 @@
         /// Edits a contact by allowing the user to search for it using a specified attribute and then perform field-specific edits.
         /// </summary>
         /// <param name="ContactBy">The attribute to search the contact by (e.g., "Name", "Phone Number", "Email").</param>
-        void EditContactBy(string ContactBy) {
-            ContactDetails contact = GetContactDetailByAttribute(ContactBy);
+        void EditContactByAttribute(string attribute) {
+            ContactDetails contact = GetContactDetailByAttribute(attribute);
             if (contact != null) {
                 EditBy(contact);
                 IsOperationSuccessful = true;
@@ -403,8 +403,8 @@
         /// Deletes a contact by allowing the user to search for it using a specified attribute and removing it from the contact list.
         /// </summary>
         /// <param name="ContactBy">The attribute to search the contact by (e.g., "Name", "Phone Number", "Email").</param>
-        void DeleteContactBy(string ContactBy) {
-            ContactDetails contact = GetContactDetailByAttribute(ContactBy);
+        void DeleteContactByAttribute(string attribute) {
+            ContactDetails contact = GetContactDetailByAttribute(attribute);
             if (contact != null) {
                 contacts.Remove(contact);
                 Console.WriteLine("[Success] Contact Deleted Successfully");
