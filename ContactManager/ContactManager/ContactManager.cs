@@ -378,7 +378,6 @@
                 { 5, ("Main Menu", () => { IsOperationSuccessful = true; })}
             };
 
-            bool isValidChoice = false;
             Console.Clear();
             DisplayDetails(ContactToEdit);
 
