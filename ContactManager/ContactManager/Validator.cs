@@ -17,16 +17,17 @@
 
         /// <summary>
         /// Validates a phone number to ensure it is either:
-        /// 1. Exactly 10 digits long.
-        /// 2. A valid international number with a country code prefixed by '+'.
+        /// 1. Exactly 10 digits long and does not start with '0'.
+        /// 2. A valid international number with a country code prefixed by '+' and a 10-digit phone number:
+        ///    - Country code can be 2, 3, or 4 digits long.
+        ///    - The 10-digit phone number cannot start with '0'.
         /// </summary>
         /// <param name="number">The phone number to validate.</param>
         /// <returns>
-        /// An empty string if the phone number is valid, otherwise an error message indicating 
-        /// that the phone number must meet the specified format.
+        /// True if the phone number is valid, otherwise false.
         /// </returns>
         public static bool IsNumberValid(string number) {
-            return System.Text.RegularExpressions.Regex.IsMatch(number, @"^(\d{10}|\+\d+)$");
+            return System.Text.RegularExpressions.Regex.IsMatch(number, @"^([1-9]\d{9}|\+\d{2,4}[1-9]\d{9})$");
         }
 
         /// <summary>
