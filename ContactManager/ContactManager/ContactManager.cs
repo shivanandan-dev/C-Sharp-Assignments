@@ -340,7 +340,7 @@
                 string input = Console.ReadLine();
                 bool isNumber = int.TryParse(input, out int choice);
 
-                if (isNumber && menuActions.ContainsKey(choice) && choice != 4) {
+                if (isNumber && menuActions.ContainsKey(choice) && choice != menuActions.Count) {
                     menuActions[choice].action.Invoke();
                 } else if (isNumber && choice == menuActions.Count) {
                     return;
