@@ -72,5 +72,13 @@ namespace ExceptionHandling.IOManager {
 
             return number;
         }
+
+        /// <summary>
+        /// Prompts the user to press any key to continue execution.
+        /// </summary>
+        public static void PromptForContinuation() {
+            Console.WriteLine("\nPress any key to continue...");
+            Console.ReadKey();
+        }
     }
 }

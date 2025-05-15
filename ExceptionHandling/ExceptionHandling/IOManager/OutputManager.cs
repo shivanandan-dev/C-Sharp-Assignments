@@ -13,14 +13,6 @@
         }
 
         /// <summary>
-        /// Prompts the user to press any key to continue execution.
-        /// </summary>
-        public static void PromptForContinuation() {
-            Console.WriteLine("\nPress any key to continue...");
-            Console.ReadKey();
-        }
-
-        /// <summary>
         /// Displays the elements of an integer array.
         /// </summary>
         /// <param name="numbers">The array of integers to display.</param>

@@ -21,7 +21,7 @@ namespace ExceptionHandling.AppInteraction {
             } catch (Exception e) {
                 Console.WriteLine($"[Error] An unexpected error occured: {e.Message}");
             } finally {
-                OutputManager.PromptForContinuation();
+                InputManager.PromptForContinuation();
             }
         }
 
