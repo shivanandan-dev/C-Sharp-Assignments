@@ -6,10 +6,9 @@
         /// <param name="menuTitle">The title of the menu to be displayed.</param>
         /// <param name="menuOptions">The list of menu options to be displayed.</param>
         public static void DisplayMenu(string menuTitle, List<string> menuOptions) {
-            int indexValue = 1;
             Console.WriteLine($"============= {menuTitle} =============\n");
-            foreach (string option in menuOptions) {
-                Console.WriteLine($"[{indexValue++}]: {option}");
+            for (int index = 0; index < menuOptions.Count; index++) {
+                Console.WriteLine($"[{index}]: {menuOptions[index]}");
             }
         }
 
