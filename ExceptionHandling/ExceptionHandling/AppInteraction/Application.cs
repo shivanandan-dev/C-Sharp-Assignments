@@ -11,6 +11,7 @@ namespace ExceptionHandling.AppInteraction {
                 List<string> mainMenuOptions = new List<string>() {
                     "Division",
                     "Array out of bounds demo",
+                    "Unhandled Exception",
                     "Exit"
                 };
 
@@ -25,6 +26,9 @@ namespace ExceptionHandling.AppInteraction {
                         ArrayApplication.HandleArrayOutOfBoundsDemo();
                         break;
                     case 3:
+                        UnhandledExceptionApplication.HandleUnhandledExceptionDemo();
+                        break;
+                    case 4:
                         return;
                 }
             }
