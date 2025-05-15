@@ -8,7 +8,7 @@
         public static void DisplayMenu(string menuTitle, List<string> menuOptions) {
             Console.WriteLine($"============= {menuTitle} =============\n");
             for (int index = 0; index < menuOptions.Count; index++) {
-                Console.WriteLine($"[{index}]: {menuOptions[index]}");
+                Console.WriteLine($"[{index + 1}]: {menuOptions[index]}");
             }
         }
 
