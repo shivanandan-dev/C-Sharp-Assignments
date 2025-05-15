@@ -9,10 +9,10 @@ namespace ExceptionHandling.AppInteraction {
         public static void HandleDivision() {
             try {
                 Console.Write("Enter Dividend Value: ");
-                decimal dividend = InputManager.GetDecimal();
+                decimal dividend = InputManager.GetDecimalValue();
 
                 Console.Write("Enter Divisor Value: ");
-                decimal divisor = InputManager.GetDecimal();
+                decimal divisor = InputManager.GetDecimalValue();
 
                 Console.WriteLine($"{dividend} divided by {divisor} is {dividend / divisor}");
             } catch (DivideByZeroException) {

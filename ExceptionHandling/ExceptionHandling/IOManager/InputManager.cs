@@ -47,12 +47,12 @@ namespace ExceptionHandling.IOManager {
         /// </summary>
         /// <returns>The parsed decimal value.</returns>
         /// <exception cref="InvalidUserInputException">Thrown when the input is not a valid decimal.</exception>
-        public static decimal GetDecimal() {
+        public static decimal GetDecimalValue() {
             string input = Console.ReadLine();
             bool isDecimal = decimal.TryParse(input, out decimal number);
 
             if (!isDecimal)
-                throw new InvalidUserInputException("[Error] Invalid input. Please enter a valid integer.");
+                throw new InvalidUserInputException("[Error] Invalid input. Please enter a valid decimal.");
 
             return number;
         }
