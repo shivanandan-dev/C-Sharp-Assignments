@@ -44,7 +44,7 @@ namespace ExceptionHandling.IOManager {
         /// </summary>
         /// <returns>The parsed integer value.</returns>
         /// <exception cref="InvalidUserInputException">Thrown when the input is not a valid integer.</exception>
-        public static int GetNumber() {
+        public static int GetInteger() {
             string input = Console.ReadLine();
             bool isNumber = int.TryParse(input, out int number);
 

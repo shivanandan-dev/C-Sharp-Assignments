@@ -12,8 +12,8 @@ namespace ExceptionHandling.AppInteraction {
             try {
                 OutputManager.DisplayArray(numbers);
                 Console.Write("\nEnter index: ");
-                int index = InputManager.GetNumber();
-                ArrayElementAt(index);
+                int index = InputManager.GetInteger();
+                DisplayElementAtIndex(index);
             } catch (IndexOutOfRangeException e) {
                 Console.WriteLine(e.Message);
             } catch (InvalidUserInputException e) {
@@ -29,11 +29,12 @@ namespace ExceptionHandling.AppInteraction {
         /// <summary>
         /// Displays the element at the specified index of the array.
         /// </summary>
-        static void ArrayElementAt(int index) {
+        static void DisplayElementAtIndex(int position) {
             try {
-                Console.WriteLine($"Element at {index} is {numbers[index]}");
+                int index = position - 1;
+                Console.WriteLine($"Element at {position} is {numbers[index]}");
             } catch (IndexOutOfRangeException) {
-                throw new IndexOutOfRangeException($"[Error] Invalid index. The index value should be in the range (0 - {numbers.Length - 1})");
+                throw new IndexOutOfRangeException($"[Error] Invalid index. The index value should be in the range (1 - {numbers.Length})");
             }
         }
     }
