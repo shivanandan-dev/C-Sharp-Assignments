@@ -96,7 +96,7 @@
         /// Returns the entered double value if it is valid and non-negative; 
         /// returns -1 if the input is not a valid double or is negative.
         /// </returns>
-        static double GetLinearMeasurement(string dimension) {
+        private static double GetLinearMeasurement(string dimension) {
             Console.Write($"Enter {dimension}: ");
             string input = Console.ReadLine();
             bool isValid = double.TryParse(input, out double value);
