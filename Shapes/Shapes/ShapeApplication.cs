@@ -29,8 +29,8 @@
         /// Handles the process of creating a rectangle by taking user input and displaying details.
         /// </summary>
         public static void CreateRectangle() {
-            Console.Write("Enter the color of the rectangle: ");
-            string color = Console.ReadLine();
+            string color = GetColorValue();
+            if (color == default(string)) return;
 
             double length = GetLinearMeasurement("Enter length: ");
             if (length < 0) return;
@@ -47,8 +47,8 @@
         /// Handles the process of creating a circle by taking user input and displaying details.
         /// </summary>
         public static void CreateCircle() {
-            Console.Write("Enter the color of the Circle: ");
-            string color = Console.ReadLine();
+            string color = GetColorValue();
+            if (color == default(string)) return;
 
             double radius = GetLinearMeasurement("Enter radius: ");
             if (radius < 0) return;
@@ -56,6 +56,35 @@
             CircleShape circle = new CircleShape(color, radius);
             Console.Write("[Info] ");
             circle.PrintDetails();
+        }
+
+        /// <summary>
+        /// Prompts the user to enter a color for the Circle and validates the input.
+        /// </summary>
+        /// <returns>
+        /// Returns a valid color string if the input is valid; otherwise, returns default (null).
+        /// </returns>
+        public static string GetColorValue() {
+            List<string> validColors = new List<string>() { "Red", "Orange", "Yellow", "Green", "Blue", "Purple",
+            "Red-Orange", "Yellow-Orange", "Yellow-Green", "Blue-Green", "Blue-Purple", "Red-Purple" };
+
+            Console.Write("\nValid Colors: [");
+
+            for (int index = 0; index < validColors.Count; index++) {
+                string seperator = index == validColors.Count - 1 ? null : ", ";
+                Console.Write($"{validColors[index]}{seperator}");
+            }
+            Console.WriteLine("]");
+
+            Console.Write("Enter the color of the Circle: ");
+            string color = Console.ReadLine();
+            if (validColors.Contains(color))
+                return color;
+            else {
+                Console.WriteLine("[Error] Invalid input. Must be a valid color");
+                return default;
+            }
+
         }
 
         /// <summary>
