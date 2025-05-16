@@ -20,29 +20,6 @@ namespace ExceptionHandling.IOManager {
         }
 
         /// <summary>
-        /// Validates the user's menu input based on whether it is a valid number 
-        /// and whether it falls within the range of available menu options.
-        /// </summary>
-        /// <param name="choice">The user's menu choice input (as an integer).</param>
-        /// <param name="isNumber">Indicates whether the input is a valid number.</param>
-        /// <param name="menuOptions">The list of menu options to validate against.</param>
-        /// <returns>
-        /// Returns true if the input is a valid number and within the range of menu options; 
-        /// otherwise, returns false and displays an appropriate error message.
-        /// </returns>
-        static bool MenuInputValidator(int choice, bool isNumber, List<string> menuOptions) {
-            int menuSize = menuOptions.Count;
-            if (isNumber && choice >= 1 && choice <= menuSize) {
-                return true;
-            } else if (isNumber) {
-                Console.WriteLine($"[Error] Invalid input. Menu choice must be in the range (1 - {menuSize})");
-            } else {
-                Console.WriteLine("[Error] Invalid input. Menu choice must be number.");
-            }
-            return false;
-        }
-
-        /// <summary>
         /// Reads and parses a decimal input from the user.
         /// </summary>
         /// <returns>The parsed decimal value.</returns>
@@ -79,6 +56,29 @@ namespace ExceptionHandling.IOManager {
         public static void PromptForContinuation() {
             Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Validates the user's menu input based on whether it is a valid number 
+        /// and whether it falls within the range of available menu options.
+        /// </summary>
+        /// <param name="choice">The user's menu choice input (as an integer).</param>
+        /// <param name="isNumber">Indicates whether the input is a valid number.</param>
+        /// <param name="menuOptions">The list of menu options to validate against.</param>
+        /// <returns>
+        /// Returns true if the input is a valid number and within the range of menu options; 
+        /// otherwise, returns false and displays an appropriate error message.
+        /// </returns>
+        private static bool MenuInputValidator(int choice, bool isNumber, List<string> menuOptions) {
+            int menuSize = menuOptions.Count;
+            if (isNumber && choice >= 1 && choice <= menuSize) {
+                return true;
+            } else if (isNumber) {
+                Console.WriteLine($"[Error] Invalid input. Menu choice must be in the range (1 - {menuSize})");
+            } else {
+                Console.WriteLine("[Error] Invalid input. Menu choice must be number.");
+            }
+            return false;
         }
     }
 }

@@ -3,7 +3,7 @@ using ExceptionHandling.IOManager;
 
 namespace ExceptionHandling.AppInteraction {
     internal class ArrayApplication {
-        static int[] numbers = new int[] { 2, 3, 5, 7, 11, 13, 17, 19 };
+        private static readonly int[] numbers = [2, 3, 5, 7, 11, 13, 17, 19];
 
         /// <summary>
         /// Prompts the user for an array index and displays the element at that index.
@@ -28,7 +28,7 @@ namespace ExceptionHandling.AppInteraction {
         /// <summary>
         /// Displays the element at the specified index of the array.
         /// </summary>
-        static void DisplayElementAtIndex(int position) {
+        private static void DisplayElementAtIndex(int position) {
             try {
                 int index = position - 1;
                 Console.WriteLine($"Element at {position} is {numbers[index]}");
