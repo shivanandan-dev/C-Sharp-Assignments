@@ -32,10 +32,10 @@
             Console.Write("Enter the color of the rectangle: ");
             string color = Console.ReadLine();
 
-            double length = GetValidatedDoubleValue("Enter length: ");
+            double length = GetLinearMeasurement("Enter length: ");
             if (length < 0) return;
 
-            double width = GetValidatedDoubleValue("Enter width: ");
+            double width = GetLinearMeasurement("Enter width: ");
             if (width < 0) return;
 
             RectangleShape rectangle = new RectangleShape(color, length, width);
@@ -50,7 +50,7 @@
             Console.Write("Enter the color of the Circle: ");
             string color = Console.ReadLine();
 
-            double radius = GetValidatedDoubleValue("Enter radius: ");
+            double radius = GetLinearMeasurement("Enter radius: ");
             if (radius < 0) return;
 
             CircleShape circle = new CircleShape(color, radius);
@@ -59,17 +59,24 @@
         }
 
         /// <summary>
-        /// Prompts the user for a double input and validates it.
+        /// Prompts the user to enter a double value for a specified dimension,
+        /// validates the input, and returns the value if valid.
         /// </summary>
-        /// <param name="prompt">The prompt message to display.</param>
-        /// <returns>A valid double value or -1 if input is invalid.</returns>
-        static double GetValidatedDoubleValue(string prompt) {
-            Console.Write(prompt);
+        /// <param name="dimension">The name or description of the dimension to prompt for (e.g., "length", "width").</param>
+        /// <returns>
+        /// Returns the entered double value if it is valid and non-negative; 
+        /// returns -1 if the input is not a valid double or is negative.
+        /// </returns>
+        static double GetLinearMeasurement(string dimension) {
+            Console.Write($"Enter {dimension}: ");
             string input = Console.ReadLine();
             bool isValid = double.TryParse(input, out double value);
 
             if (!isValid) {
                 Console.WriteLine("[Error] Invalid input. Try again!");
+                return -1;
+            } else if (value < 0) {
+                Console.WriteLine($"[Error] Invalid input. Must be a positive double value.");
                 return -1;
             }
 
