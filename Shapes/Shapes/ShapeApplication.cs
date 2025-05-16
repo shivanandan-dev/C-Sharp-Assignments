@@ -32,10 +32,10 @@
             string color = GetColorValue();
             if (color == default(string)) return;
 
-            double length = GetLinearMeasurement("Enter length: ");
+            double length = GetLinearMeasurement(nameof(length));
             if (length < 0) return;
 
-            double width = GetLinearMeasurement("Enter width: ");
+            double width = GetLinearMeasurement(nameof(width));
             if (width < 0) return;
 
             RectangleShape rectangle = new RectangleShape(color, length, width);
@@ -50,7 +50,7 @@
             string color = GetColorValue();
             if (color == default(string)) return;
 
-            double radius = GetLinearMeasurement("Enter radius: ");
+            double radius = GetLinearMeasurement(nameof(radius));
             if (radius < 0) return;
 
             CircleShape circle = new CircleShape(color, radius);
