@@ -8,7 +8,7 @@ namespace LanguageIntegratedQuery.AppInteraction {
         /// Handles the execution of Task 2, which includes grouping products by category 
         /// and performing an inner join between products and suppliers.
         /// </summary>
-        public static void HandleTask2() {
+        public static void HandleTask() {
             Console.Clear();
             GroupByCategory();
             InnerJoinProductSupplier();

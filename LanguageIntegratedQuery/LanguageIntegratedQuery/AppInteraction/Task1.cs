@@ -7,7 +7,7 @@ namespace LanguageIntegratedQuery.AppInteraction {
         /// Handles the workflow for filtering, sorting, and displaying electronics products,
         /// and calculates the average price for the filtered products.
         /// </summary>
-        public static void HandleTask1() {
+        public static void HandleTask() {
             Console.Clear();
 
             //  Question:

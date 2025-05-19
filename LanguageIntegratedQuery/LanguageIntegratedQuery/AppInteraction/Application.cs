@@ -10,8 +10,8 @@ namespace LanguageIntegratedQuery.AppInteraction {
             while (true) {
                 Console.Clear();
                 var mainMenu = new List<Menu> {
-                    new Menu("Task 1", Task1.HandleTask1),
-                    new Menu("Task 2", Task2.HandleTask2),
+                    new Menu("Task 1", Task1.HandleTask),
+                    new Menu("Task 2", Task2.HandleTask),
                     new Menu("Task 3", Task3.HandleTask),
                     new Menu("Task 4", Task4.HandleTask),
                     new Menu("Task 5", Task5.HandleTask),
