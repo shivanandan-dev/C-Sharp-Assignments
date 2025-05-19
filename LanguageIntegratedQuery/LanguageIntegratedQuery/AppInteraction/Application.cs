@@ -14,6 +14,7 @@ namespace LanguageIntegratedQuery.AppInteraction {
                     new Menu("Task 2", Task2.HandleTask2),
                     new Menu("Task 3", Task3.HandleTask),
                     new Menu("Task 4", Task4.HandleTask),
+                    new Menu("Task 5", Task5.HandleTask),
                     new Menu("Exit", () => Environment.Exit(0))
                 };
 
