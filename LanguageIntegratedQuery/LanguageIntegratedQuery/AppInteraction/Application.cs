@@ -11,6 +11,7 @@ namespace LanguageIntegratedQuery.AppInteraction {
                 Console.Clear();
                 var mainMenu = new List<Menu> {
                     new Menu("Task 1", Task1.HandleTask1),
+                    new Menu("Task 2", Task2.HandleTask2),
                     new Menu("Exit", () => Environment.Exit(0))
                 };
 

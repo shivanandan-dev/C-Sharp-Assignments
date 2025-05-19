@@ -10,13 +10,19 @@ namespace LanguageIntegratedQuery.AppInteraction {
         public static void HandleTask1() {
             Console.Clear();
 
+            //  Question:
+            // Filter products under the category "Electronics" with a price greater than $500 and select only ProductName and Price. 
             var filteredProducts = ProductList.products
                 .Where(product => product.Category == Category.Electronics && product.Price > 500)
                 .Select(product => new { product.ProductName, product.Price });
 
+            // Question:
+            // Using the result of the previous query, sort these filtered products in descending order of price. 
             var sortedProducts = filteredProducts
                 .OrderByDescending(product => product.Price);
 
+            // Question:
+            // Find the average price of these filtered products. 
             var averagePrice = filteredProducts.Any()
                 ? filteredProducts.Average(product => product.Price)
                 : 0.0m;
