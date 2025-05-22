@@ -1,9 +1,142 @@
 ﻿namespace InventoryManager {
     internal class InventoryManager {
-        static List<Product> products = new List<Product>();
+        public static List<Product> Products = new List<Product>();
+        public bool IsEditSuccessful = true;
+        public bool IsDeleteSuccessful = true;
+
         Validator validator = new Validator();
-        bool IsEditSuccessful = true;
-        bool IsDeleteSuccessful = true;
+
+        /// <summary>
+        /// Prompts the user to add a new product with details like ID, name, price, and quantity.
+        /// Validates and stores the new product in the product list.
+        /// </summary>
+        public void AddNewProduct() {
+            Console.WriteLine("========== Add new Product ==========\n");
+            string id = GetInformation("Id", true);
+            string name = GetInformation("Name", true);
+            string price = GetInformation("Price", false);
+            string quantity = GetInformation("Quantity", false);
+
+            Products.Add(new Product(id, name, decimal.Parse(price), int.Parse(quantity)));
+            Console.WriteLine("[Success] New product is created successfully!");
+        }
+
+        /// <summary>
+        /// Displays the main menu with available options for managing products.
+        /// </summary>
+        public void MainMenu() {
+            Console.WriteLine("========== Product Manager ==========\n");
+            Console.WriteLine("1. Add a New Product");
+            Console.WriteLine("2. View Products");
+            Console.WriteLine("3. Search a Product");
+            Console.WriteLine("4. Edit a Product");
+            Console.WriteLine("5. Delete a Product");
+            Console.WriteLine("6. Exit");
+        }
+
+        /// <summary>
+        /// Exits the application gracefully with a farewell message.
+        /// </summary>
+        public void ExitEnvironment() {
+            Console.WriteLine("\nBye Bye...");
+            Console.ReadKey();
+            Environment.Exit(0);
+        }
+
+        /// <summary>
+        /// Provides a user interface for viewing and sorting a list of products.
+        /// </summary>
+        /// <param name="productList">A list of Product objects to be displayed and sorted.</param>
+        public void ViewProducts() {
+            while (true) {
+                Console.Clear();
+                if (Products.Count == 0) {
+                    Console.WriteLine("[Error] Product list is empty.");
+                    return;
+                }
+                Console.WriteLine("========== Products ==========\n");
+                DisplayProducts(Products);
+                Console.WriteLine("\nPress (1-4) to Sort, (5) to Exit:");
+                ConsoleKey input = Console.ReadKey().Key;
+
+                if (input == ConsoleKey.D5 || input == ConsoleKey.NumPad5) {
+                    return;
+                }
+
+                Products = SortProducts(Products, input);
+            }
+        }
+
+        /// <summary>
+        /// Facilitates the product search process by displaying a menu and handling user input.
+        /// </summary>
+        public void SearchProduct() {
+            var actions = new Dictionary<int, Action> {
+                { 1, () => SearchProductBy("Id")},
+                { 2, () => SearchProductBy("Name")},
+            };
+
+            do {
+                Console.Clear();
+                SearchProductMenu();
+                Console.Write("\n[Menu] Enter your choice: ");
+
+                string input = Console.ReadLine();
+                bool isNumber = int.TryParse(input, out int choice);
+
+                if (isNumber && actions.ContainsKey(choice)) {
+                    actions[choice].Invoke();
+                } else if (choice == 3) {
+                    return;
+                } else {
+                    Console.WriteLine("[Error] Invalid choice!");
+                }
+
+                PromptForContinuation();
+            } while (true);
+        }
+
+        /// <summary>
+        /// Facilitates the product editing process by displaying a menu and handling user input.
+        /// </summary>
+        public void EditProduct() {
+            var actions = new Dictionary<int, Action> {
+                { 1, () => EditProductBy("Id") },
+                { 2, () => EditProductBy("Name") },
+            };
+
+            HandleEditOrDeleteOperation(DisplayProductByMenu, actions, ref IsEditSuccessful);
+        }
+
+        /// <summary>
+        /// Displays the menu options for deleting a product.
+        /// </summary>
+        public void DeleteProductMenu() {
+            Console.WriteLine("\n========== Delete Product ==========\n");
+            Console.WriteLine("1. Delete Product by Id");
+            Console.WriteLine("2. Delete Product by Name");
+            Console.WriteLine("3. Main Menu");
+        }
+
+        /// <summary>
+        /// Facilitates the product deletion process by displaying a menu and handling user input.
+        /// </summary>
+        public void DeleteProduct() {
+            var actions = new Dictionary<int, Action> {
+                { 1, () => DeleteProductBy("Id") },
+                { 2, () => DeleteProductBy("Name") },
+            };
+
+            HandleEditOrDeleteOperation(DeleteProductMenu, actions, ref IsDeleteSuccessful);
+        }
+
+        /// <summary>
+        /// Prompts the user to press any key to continue.
+        /// </summary>
+        public void PromptForContinuation() {
+            Console.WriteLine("\nPress any key to continue...");
+            Console.ReadKey();
+        }
 
         /// <summary>
         /// Checks if a product with the given name or ID already exists in the list.
@@ -11,7 +144,7 @@
         /// <param name="value">The name or ID of the product to check.</param>
         /// <returns>True if the product exists; otherwise, false.</returns>
         bool IsProductAlreadyExist(string value) {
-            foreach (Product productInfo in products) {
+            foreach (Product productInfo in Products) {
                 if (productInfo.Name == value || productInfo.Id == value) {
                     return true;
                 }
@@ -92,51 +225,6 @@
         }
 
         /// <summary>
-        /// Prompts the user to press any key to continue.
-        /// </summary>
-        void PromptForContinuation() {
-            Console.WriteLine("\nPress any key to continue...");
-            Console.ReadKey();
-        }
-
-        /// <summary>
-        /// Prompts the user to add a new product with details like ID, name, price, and quantity.
-        /// Validates and stores the new product in the product list.
-        /// </summary>
-        void AddNewProduct() {
-            Console.WriteLine("========== Add new Product ==========\n");
-            string id = GetInformation("Id", true);
-            string name = GetInformation("Name", true);
-            string price = GetInformation("Price", false);
-            string quantity = GetInformation("Quantity", false);
-
-            products.Add(new Product(id, name, decimal.Parse(price), int.Parse(quantity)));
-            Console.WriteLine("[Success] New product is created successfully!");
-        }
-
-        /// <summary>
-        /// Displays the main menu with available options for managing products.
-        /// </summary>
-        void MainMenu() {
-            Console.WriteLine("========== Product Manager ==========\n");
-            Console.WriteLine("1. Add a New Product");
-            Console.WriteLine("2. View Products");
-            Console.WriteLine("3. Search a Product");
-            Console.WriteLine("4. Edit a Product");
-            Console.WriteLine("5. Delete a Product");
-            Console.WriteLine("6. Exit");
-        }
-
-        /// <summary>
-        /// Exits the application gracefully with a farewell message.
-        /// </summary>
-        void ExitEnvironment() {
-            Console.WriteLine("\nBye Bye...");
-            Console.ReadKey();
-            Environment.Exit(0);
-        }
-
-        /// <summary>
         /// Displays a formatted list of products and provides sorting options to the user.
         /// </summary>
         /// <param name="productList">A list of Product objects to be displayed.</param>
@@ -189,37 +277,13 @@
         }
 
         /// <summary>
-        /// Provides a user interface for viewing and sorting a list of products.
-        /// </summary>
-        /// <param name="productList">A list of Product objects to be displayed and sorted.</param>
-        void ViewProducts(List<Product> productList) {
-            while (true) {
-                Console.Clear();
-                if (productList.Count == 0) {
-                    Console.WriteLine("[Error] Product list is empty.");
-                    return;
-                }
-                Console.WriteLine("========== Products ==========\n");
-                DisplayProducts(productList);
-                Console.WriteLine("\nPress (1-4) to Sort, (5) to Exit:");
-                ConsoleKey input = Console.ReadKey().Key;
-
-                if (input == ConsoleKey.D5 || input == ConsoleKey.NumPad5) {
-                    return;
-                }
-
-                productList = SortProducts(productList, input);
-            }
-        }
-
-        /// <summary>
         /// Finds a product by a specific attribute and value.
         /// </summary>
         /// <param name="attribute">The attribute to search by (e.g., "Id" or "Name").</param>
         /// <param name="value">The value of the attribute to match.</param>
         /// <returns>The Product object if found; otherwise, null.</returns>
         Product FindProductByAttribute(string attribute, string value) {
-            return products.Find(product =>
+            return Products.Find(product =>
                 (attribute.Equals("Id", StringComparison.OrdinalIgnoreCase) &&
                 product.Id.Equals(value, StringComparison.OrdinalIgnoreCase)) ||
                 (attribute.Equals("Name", StringComparison.OrdinalIgnoreCase) &&
@@ -261,35 +325,6 @@
             } else {
                 DisplayDetails(productInfo);
             }
-        }
-
-        /// <summary>
-        /// Facilitates the product search process by displaying a menu and handling user input.
-        /// </summary>
-        void SearchProduct() {
-            var actions = new Dictionary<int, Action> {
-                { 1, () => SearchProductBy("Id")},
-                { 2, () => SearchProductBy("Name")},
-            };
-
-            do {
-                Console.Clear();
-                SearchProductMenu();
-                Console.Write("\n[Menu] Enter your choice: ");
-
-                string input = Console.ReadLine();
-                bool isNumber = int.TryParse(input, out int choice);
-
-                if (isNumber && actions.ContainsKey(choice)) {
-                    actions[choice].Invoke();
-                } else if (choice == 3) {
-                    return;
-                } else {
-                    Console.WriteLine("[Error] Invalid choice!");
-                }
-
-                PromptForContinuation();
-            } while (true);
         }
 
         /// <summary>
@@ -421,33 +456,11 @@
         }
 
         /// <summary>
-        /// Facilitates the product editing process by displaying a menu and handling user input.
-        /// </summary>
-        void EditProduct() {
-            var actions = new Dictionary<int, Action> {
-                { 1, () => EditProductBy("Id") },
-                { 2, () => EditProductBy("Name") },
-            };
-
-            HandleEditOrDeleteOperation(DisplayProductByMenu, actions, ref IsEditSuccessful);
-        }
-
-        /// <summary>
-        /// Displays the menu options for deleting a product.
-        /// </summary>
-        void DeleteProductMenu() {
-            Console.WriteLine("\n========== Delete Product ==========\n");
-            Console.WriteLine("1. Delete Product by Id");
-            Console.WriteLine("2. Delete Product by Name");
-            Console.WriteLine("3. Main Menu");
-        }
-
-        /// <summary>
         /// Deletes a specific product from the product list.
         /// </summary>
         /// <param name="ProductToDelete">The product to delete.</param>
         void Delete(Product ProductToDelete) {
-            products.Remove(ProductToDelete);
+            Products.Remove(ProductToDelete);
             Console.WriteLine("[Success] Product Deleted Successfully");
             IsDeleteSuccessful = false;
         }
@@ -458,64 +471,6 @@
         /// <param name="ProductBy">The attribute to find the product by (e.g., "Id", "Name").</param>
         void DeleteProductBy(string ProductBy) {
             HandleEditOrDeleteProductBy(ProductBy, Delete, ref IsDeleteSuccessful);
-        }
-
-        /// <summary>
-        /// Facilitates the product deletion process by displaying a menu and handling user input.
-        /// </summary>
-        void DeleteProduct() {
-            var actions = new Dictionary<int, Action> {
-                { 1, () => DeleteProductBy("Id") },
-                { 2, () => DeleteProductBy("Name") },
-            };
-
-            HandleEditOrDeleteOperation(DeleteProductMenu, actions, ref IsDeleteSuccessful);
-        }
-
-        /// <summary>
-        /// The main entry point of the application. Handles menu navigation and user input for managing products.
-        /// </summary>
-        /// <param name="args">Command-line arguments (not used).</param>
-        public static void Main(string[] args) {
-            InventoryManager manager = new InventoryManager();
-
-            // NOTE: The following default data is added for testing and debugging purposes only.
-            // These entries should be removed or commented out before deploying the application to production.
-            products.Add(new Product("1", "Oreo Buiscuit", 20.03m, 3));
-            products.Add(new Product("2", "Dairy Milk", 30m, 5));
-            products.Add(new Product("3", "Kit Kat", 40.33m, 2));
-            products.Add(new Product("4", "Bourbon", 50m, 5));
-
-            var actions = new Dictionary<int, Action> {
-                { 1, () => manager.AddNewProduct() },
-                { 2, () => manager.ViewProducts(products) },
-                { 3, () => manager.SearchProduct() },
-                { 4, () => manager.EditProduct() },
-                { 5, () => manager.DeleteProduct() },
-                { 6, () => manager.ExitEnvironment()}
-            };
-
-            do {
-                Console.Clear();
-                manager.MainMenu();
-                Console.Write("\n[Menu] Enter your choice: ");
-
-                string input = Console.ReadLine();
-                bool isNumber = int.TryParse(input, out int choice);
-
-
-                if (isNumber && actions.ContainsKey(choice)) {
-                    Console.Clear();
-                    actions[choice].Invoke();
-                } else {
-                    Console.WriteLine("[Error] Invalid choice!");
-                }
-
-                manager.IsDeleteSuccessful = true;
-                manager.IsEditSuccessful = true;
-                manager.PromptForContinuation();
-                Console.Clear();
-            } while (true);
         }
     }
 }
