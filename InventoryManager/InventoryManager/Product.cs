@@ -1,14 +1,28 @@
 ﻿namespace InventoryManager {
     public class Product {
-        string _id;
-        string _name;
-        decimal _price;
-        int _quantity;
+        /// <summary>
+        /// Gets or sets the unique identifier for the object.
+        /// </summary>
+        /// <param name="Id">The unique identifier.</param>
+        public string Id { get; set; }
 
-        public string Id { get => _id; set => _id = value; }
-        public string Name { get => _name; set => _name = value; }
-        public decimal Price { get => _price; set => _price = value; }
-        public int Quantity { get => _quantity; set => _quantity = value; }
+        /// <summary>
+        /// Gets or sets the name of the object.
+        /// </summary>
+        /// <param name="Name">The name of the object.</param>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the price of the object.
+        /// </summary>
+        /// <param name="Price">The price value.</param>
+        public decimal Price { get; set; }
+
+        /// <summary>
+        /// Gets or sets the quantity of the object.
+        /// </summary>
+        /// <param name="Quantity">The quantity value.</param>
+        public int Quantity { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the Product class with the specified details.
@@ -18,10 +32,10 @@
         /// <param name="price">The price of the product.</param>
         /// <param name="quantity">The quantity of the product.</param>
         public Product(string id, string name, decimal price, int quantity) {
-            _id = id;
-            _name = name;
-            _price = price;
-            _quantity = quantity;
+            Id = id;
+            Name = name;
+            Price = price;
+            Quantity = quantity;
         }
     }
 }
