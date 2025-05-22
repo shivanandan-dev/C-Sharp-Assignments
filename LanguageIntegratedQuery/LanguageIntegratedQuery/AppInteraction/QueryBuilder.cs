@@ -1,7 +1,7 @@
 ﻿namespace LanguageIntegratedQuery.AppInteraction {
     public class QueryBuilder<T> {
         private IEnumerable<T> _data;
-        private Func<T, bool> _filter;
+        private Func<T, bool> _filterCondition;
         private Func<T, object> _sortSelector;
         private bool _sortDescending;
 
@@ -18,8 +18,8 @@
         /// </summary>
         /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns>The current <see cref="QueryBuilder{T}"/> instance.</returns>
-        public QueryBuilder<T> Filter(Func<T, bool> predicate) {
-            _filter = predicate;
+        public QueryBuilder<T> Filter(Func<T, bool> filterCondition) {
+            _filterCondition = filterCondition;
             return this;
         }
 
@@ -43,8 +43,8 @@
         public IEnumerable<T> Execute() {
             IEnumerable<T> result = _data;
 
-            if (_filter != null)
-                result = result.Where(_filter);
+            if (_filterCondition != null)
+                result = result.Where(_filterCondition);
 
             if (_sortSelector != null)
                 result = _sortDescending
@@ -70,7 +70,7 @@
             Func<T, TKey> thisKeySelector,
             Func<TOther, TKey> otherKeySelector,
             Func<T, TOther, TResult> resultSelector) {
-            var filtered = _filter != null ? _data.Where(_filter) : _data;
+            var filtered = _filterCondition != null ? _data.Where(_filterCondition) : _data;
 
             return filtered.Join(other, thisKeySelector, otherKeySelector, resultSelector);
         }
