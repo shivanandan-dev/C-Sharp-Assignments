@@ -1,8 +1,7 @@
 ﻿namespace InventoryManager {
     internal class InventoryManager {
         public static List<Product> Products = new List<Product>();
-        public bool IsEditSuccessful = true;
-        public bool IsDeleteSuccessful = true;
+        public bool IsOperationSuccessful = false;
 
         Validator validator = new Validator();
 
@@ -105,7 +104,7 @@
                 { 2, () => EditProductBy("Name") },
             };
 
-            HandleEditOrDeleteOperation(DisplayProductByMenu, actions, ref IsEditSuccessful);
+            HandleEditOrDeleteOperation(DisplayProductByMenu, actions);
         }
 
         /// <summary>
@@ -127,7 +126,7 @@
                 { 2, () => DeleteProductBy("Name") },
             };
 
-            HandleEditOrDeleteOperation(DeleteProductMenu, actions, ref IsDeleteSuccessful);
+            HandleEditOrDeleteOperation(DeleteProductMenu, actions);
         }
 
         /// <summary>
@@ -359,7 +358,7 @@
             string updatedValue = GetInformation(fieldName, checkForDuplicate);
             updateAction(updatedValue);
             Console.WriteLine($"[Success] {fieldName} updated successfully!");
-            IsEditSuccessful = false;
+            IsOperationSuccessful = true;
         }
 
         /// <summary>
@@ -368,7 +367,7 @@
         /// <param name="menuDisplayAction">The action to display the appropriate menu.</param>
         /// <param name="actions">A dictionary of actions corresponding to menu choices.</param>
         /// <param name="isOperationSuccessful">A reference to the flag indicating whether the operation was successful.</param>
-        void HandleEditOrDeleteOperation(Action menuDisplayAction, Dictionary<int, Action> actions, ref bool isOperationSuccessful) {
+        void HandleEditOrDeleteOperation(Action menuDisplayAction, Dictionary<int, Action> actions) {
             do {
                 Console.Clear();
                 menuDisplayAction(); // Display the menu
@@ -386,7 +385,7 @@
                     PromptForContinuation();
                 }
 
-            } while (isOperationSuccessful);
+            } while (!IsOperationSuccessful);
         }
 
         /// <summary>
@@ -395,7 +394,7 @@
         /// <param name="ProductBy">The attribute to find the product by (e.g., "Id", "Name").</param>
         /// <param name="action">The action to perform on the found product.</param>
         /// <param name="isOperationSuccessful">A reference to the flag indicating whether the operation was successful.</param>
-        void HandleEditOrDeleteProductBy(string ProductBy, Action<Product> action, ref bool isOperationSuccessful) {
+        void HandleEditOrDeleteProductBy(string ProductBy, Action<Product> action) {
             do {
                 string input = GetInformation(ProductBy);
                 Product product = FindProductByAttribute(ProductBy, input);
@@ -407,7 +406,7 @@
                 } else {
                     action(product);
                 }
-            } while (isOperationSuccessful);
+            } while (!IsOperationSuccessful);
         }
 
         /// <summary>
@@ -444,7 +443,7 @@
                 } else {
                     Console.WriteLine("[Error] Invalid choice. Please select a valid option.");
                 }
-            } while (IsEditSuccessful);
+            } while (!IsOperationSuccessful);
         }
 
         /// <summary>
@@ -452,7 +451,7 @@
         /// </summary>
         /// <param name="ProductBy">The attribute to find the product by (e.g., "Id", "Name").</param>
         void EditProductBy(string ProductBy) {
-            HandleEditOrDeleteProductBy(ProductBy, EditBy, ref IsEditSuccessful);
+            HandleEditOrDeleteProductBy(ProductBy, EditBy);
         }
 
         /// <summary>
@@ -462,7 +461,7 @@
         void Delete(Product ProductToDelete) {
             Products.Remove(ProductToDelete);
             Console.WriteLine("[Success] Product Deleted Successfully");
-            IsDeleteSuccessful = false;
+            IsOperationSuccessful = false;
         }
 
         /// <summary>
@@ -470,7 +469,7 @@
         /// </summary>
         /// <param name="ProductBy">The attribute to find the product by (e.g., "Id", "Name").</param>
         void DeleteProductBy(string ProductBy) {
-            HandleEditOrDeleteProductBy(ProductBy, Delete, ref IsDeleteSuccessful);
+            HandleEditOrDeleteProductBy(ProductBy, Delete);
         }
     }
 }

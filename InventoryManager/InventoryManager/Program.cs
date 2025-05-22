@@ -39,8 +39,7 @@
                     Console.WriteLine("[Error] Invalid choice!");
                 }
 
-                manager.IsDeleteSuccessful = true;
-                manager.IsEditSuccessful = true;
+                manager.IsOperationSuccessful = true;
                 manager.PromptForContinuation();
                 Console.Clear();
             } while (true);
