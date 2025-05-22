@@ -4,7 +4,7 @@
         /// The main entry point of the application. Handles menu navigation and user input for managing products.
         /// </summary>
         public static void Main() {
-            InventoryManager manager = new InventoryManager();
+            InventoryManager inventoryManager = new InventoryManager();
 
             // NOTE: The following default data is added for testing and debugging purposes only.
             // These entries should be removed or commented out before deploying the application to production.
@@ -14,17 +14,17 @@
             InventoryManager.Products.Add(new ProductDetails("4", "Bourbon", 50m, 5));
 
             var actions = new Dictionary<int, Action> {
-                { 1, () => manager.AddNewProduct() },
-                { 2, () => manager.ViewProducts() },
-                { 3, () => manager.SearchProduct() },
-                { 4, () => manager.EditProduct() },
-                { 5, () => manager.DeleteProduct() },
-                { 6, () => manager.ExitEnvironment()}
+                { 1, () => inventoryManager.AddNewProduct() },
+                { 2, () => inventoryManager.ViewProducts() },
+                { 3, () => inventoryManager.SearchProduct() },
+                { 4, () => inventoryManager.EditProduct() },
+                { 5, () => inventoryManager.DeleteProduct() },
+                { 6, () => inventoryManager.ExitEnvironment()}
             };
 
             do {
                 Console.Clear();
-                manager.MainMenu();
+                inventoryManager.MainMenu();
                 Console.Write("\n[Menu] Enter your choice: ");
 
                 string input = Console.ReadLine();
@@ -38,8 +38,8 @@
                     Console.WriteLine("[Error] Invalid choice!");
                 }
 
-                manager.IsOperationSuccessful = true;
-                manager.PromptForContinuation();
+                inventoryManager.IsOperationSuccessful = true;
+                inventoryManager.PromptForContinuation();
                 Console.Clear();
             } while (true);
         }
