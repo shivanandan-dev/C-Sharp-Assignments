@@ -1,6 +1,6 @@
 ﻿namespace InventoryManager {
     internal class InventoryManager {
-        public static List<Product> Products = new List<Product>();
+        public static List<ProductDetails> Products = new List<ProductDetails>();
         public bool IsOperationSuccessful = false;
 
         /// <summary>
@@ -14,7 +14,7 @@
             string price = GetInformation("Price", false);
             string quantity = GetInformation("Quantity", false);
 
-            Products.Add(new Product(id, name, decimal.Parse(price), int.Parse(quantity)));
+            Products.Add(new ProductDetails(id, name, decimal.Parse(price), int.Parse(quantity)));
             Console.WriteLine("[Success] New product is created successfully!");
         }
 
@@ -141,7 +141,7 @@
         /// <param name="value">The name or ID of the product to check.</param>
         /// <returns>True if the product exists; otherwise, false.</returns>
         bool IsProductAlreadyExist(string value) {
-            foreach (Product productInfo in Products) {
+            foreach (ProductDetails productInfo in Products) {
                 if (productInfo.Name == value || productInfo.Id == value) {
                     return true;
                 }
@@ -225,11 +225,11 @@
         /// Displays a formatted list of products and provides sorting options to the user.
         /// </summary>
         /// <param name="productList">A list of Product objects to be displayed.</param>
-        void DisplayProducts(List<Product> productList) {
+        void DisplayProducts(List<ProductDetails> productList) {
             Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}", "Id", "Name", "Price", "Quantity");
             Console.WriteLine(new string('-', 100));
 
-            foreach (Product productInfo in productList) {
+            foreach (ProductDetails productInfo in productList) {
                 Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}",
                     productInfo.Id,
                     productInfo.Name,
@@ -252,9 +252,9 @@
         /// <param name="productList">A list of Product objects to be sorted.</param>
         /// <param name="input">The user's console key input indicating the sorting criterion.</param>
         /// <returns>A sorted list of Product objects.</returns>
-        List<Product> SortProducts(List<Product> productList, ConsoleKey input) {
+        List<ProductDetails> SortProducts(List<ProductDetails> productList, ConsoleKey input) {
             // Dictionary of sorting actions
-            var sortingActions = new Dictionary<ConsoleKey, Func<List<Product>, List<Product>>>
+            var sortingActions = new Dictionary<ConsoleKey, Func<List<ProductDetails>, List<ProductDetails>>>
             {
                 { ConsoleKey.D1, products => products.OrderBy(product => product.Id).ToList() },
                 { ConsoleKey.NumPad1, products => products.OrderBy(product => product.Id).ToList() },
@@ -279,7 +279,7 @@
         /// <param name="attribute">The attribute to search by (e.g., "Id" or "Name").</param>
         /// <param name="value">The value of the attribute to match.</param>
         /// <returns>The Product object if found; otherwise, null.</returns>
-        Product FindProductByAttribute(string attribute, string value) {
+        ProductDetails FindProductByAttribute(string attribute, string value) {
             return Products.Find(product =>
                 (attribute.Equals("Id", StringComparison.OrdinalIgnoreCase) &&
                 product.Id.Equals(value, StringComparison.OrdinalIgnoreCase)) ||
@@ -302,7 +302,7 @@
         /// Displays the details of a product in a formatted manner.
         /// </summary>
         /// <param name="productInfo">The Product object containing the details to display.</param>
-        void DisplayDetails(Product productInfo) {
+        void DisplayDetails(ProductDetails productInfo) {
             Console.WriteLine("\n========== Details ==========\n");
             Console.WriteLine("{0,-9}: {1}", "Id", productInfo.Id);
             Console.WriteLine("{0,-9}: {1}", "Name", productInfo.Name);
@@ -316,7 +316,7 @@
         /// <param name="informationType">The type of information to search by (e.g., "Id" or "Name").</param>
         void SearchProductBy(string informationType) {
             string input = GetInformation(informationType);
-            Product productInfo = FindProductByAttribute(informationType, input);
+            ProductDetails productInfo = FindProductByAttribute(informationType, input);
             if (productInfo == null) {
                 Console.WriteLine("[Error] No Product Found");
             } else {
@@ -392,10 +392,10 @@
         /// <param name="ProductBy">The attribute to find the product by (e.g., "Id", "Name").</param>
         /// <param name="action">The action to perform on the found product.</param>
         /// <param name="isOperationSuccessful">A reference to the flag indicating whether the operation was successful.</param>
-        void HandleEditOrDeleteProductBy(string ProductBy, Action<Product> action) {
+        void HandleEditOrDeleteProductBy(string ProductBy, Action<ProductDetails> action) {
             do {
                 string input = GetInformation(ProductBy);
-                Product product = FindProductByAttribute(ProductBy, input);
+                ProductDetails product = FindProductByAttribute(ProductBy, input);
 
                 if (product == null) {
                     Console.WriteLine("[Error] No Product Found");
@@ -411,7 +411,7 @@
         /// Edits a specific product by allowing the user to update its fields.
         /// </summary>
         /// <param name="ProductToEdit">The product to edit.</param>
-        void EditBy(Product ProductToEdit) {
+        void EditBy(ProductDetails ProductToEdit) {
             var actions = new Dictionary<int, Action> {
                 { 1, () => UpdateProductField("Id", true, value => ProductToEdit.Id = value)},
                 { 2, () => UpdateProductField("Name", true, value => ProductToEdit.Name = value)},
@@ -456,7 +456,7 @@
         /// Deletes a specific product from the product list.
         /// </summary>
         /// <param name="ProductToDelete">The product to delete.</param>
-        void Delete(Product ProductToDelete) {
+        void Delete(ProductDetails ProductToDelete) {
             Products.Remove(ProductToDelete);
             Console.WriteLine("[Success] Product Deleted Successfully");
             IsOperationSuccessful = true;

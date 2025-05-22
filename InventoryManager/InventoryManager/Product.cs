@@ -1,5 +1,5 @@
 ﻿namespace InventoryManager {
-    public class Product {
+    public class ProductDetails {
         /// <summary>
         /// Gets or sets the unique identifier for the object.
         /// </summary>
@@ -31,7 +31,7 @@
         /// <param name="name">The name of the product.</param>
         /// <param name="price">The price of the product.</param>
         /// <param name="quantity">The quantity of the product.</param>
-        public Product(string id, string name, decimal price, int quantity) {
+        public ProductDetails(string id, string name, decimal price, int quantity) {
             Id = id;
             Name = name;
             Price = price;
