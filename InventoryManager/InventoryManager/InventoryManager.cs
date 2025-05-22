@@ -68,7 +68,7 @@
         /// Facilitates the product search process by displaying a menu and handling user input.
         /// </summary>
         public void SearchProduct() {
-            var actions = new Dictionary<int, Action> {
+            var searchMenuActions = new Dictionary<int, Action> {
                 { 1, () => SearchProductBy("Id")},
                 { 2, () => SearchProductBy("Name")},
             };
@@ -81,8 +81,8 @@
                 string input = Console.ReadLine();
                 bool isNumber = int.TryParse(input, out int choice);
 
-                if (isNumber && actions.ContainsKey(choice)) {
-                    actions[choice].Invoke();
+                if (isNumber && searchMenuActions.ContainsKey(choice)) {
+                    searchMenuActions[choice].Invoke();
                 } else if (choice == 3) {
                     return;
                 } else {
@@ -97,12 +97,12 @@
         /// Facilitates the product editing process by displaying a menu and handling user input.
         /// </summary>
         public void EditProduct() {
-            var actions = new Dictionary<int, Action> {
+            var editMenuActions = new Dictionary<int, Action> {
                 { 1, () => EditProductBy("Id") },
                 { 2, () => EditProductBy("Name") },
             };
 
-            HandleEditOrDeleteOperation(DisplayProductByMenu, actions);
+            HandleEditOrDeleteOperation(DisplayProductByMenu, editMenuActions);
         }
 
         /// <summary>
@@ -119,12 +119,12 @@
         /// Facilitates the product deletion process by displaying a menu and handling user input.
         /// </summary>
         public void DeleteProduct() {
-            var actions = new Dictionary<int, Action> {
+            var deleteMenuActions = new Dictionary<int, Action> {
                 { 1, () => DeleteProductBy("Id") },
                 { 2, () => DeleteProductBy("Name") },
             };
 
-            HandleEditOrDeleteOperation(DeleteProductMenu, actions);
+            HandleEditOrDeleteOperation(DeleteProductMenu, deleteMenuActions);
         }
 
         /// <summary>
@@ -363,9 +363,9 @@
         /// Handles the edit or delete operation by displaying a menu and executing the selected action.
         /// </summary>
         /// <param name="menuDisplayAction">The action to display the appropriate menu.</param>
-        /// <param name="actions">A dictionary of actions corresponding to menu choices.</param>
+        /// <param name="menuActions">A dictionary of actions corresponding to menu choices.</param>
         /// <param name="isOperationSuccessful">A reference to the flag indicating whether the operation was successful.</param>
-        void HandleEditOrDeleteOperation(Action menuDisplayAction, Dictionary<int, Action> actions) {
+        void HandleEditOrDeleteOperation(Action menuDisplayAction, Dictionary<int, Action> menuActions) {
             do {
                 Console.Clear();
                 menuDisplayAction(); // Display the menu
@@ -374,8 +374,8 @@
                 string input = Console.ReadLine();
                 bool isNumber = int.TryParse(input, out int choice);
 
-                if (isNumber && actions.ContainsKey(choice)) {
-                    actions[choice].Invoke(); // Execute the selected action
+                if (isNumber && menuActions.ContainsKey(choice)) {
+                    menuActions[choice].Invoke(); // Execute the selected action
                 } else if (isNumber && choice == 3) { // Exit option
                     return;
                 } else {
@@ -412,7 +412,7 @@
         /// </summary>
         /// <param name="ProductToEdit">The product to edit.</param>
         void EditBy(ProductDetails ProductToEdit) {
-            var actions = new Dictionary<int, Action> {
+            var EditByMenuActions = new Dictionary<int, Action> {
                 { 1, () => UpdateProductField("Id", true, value => ProductToEdit.Id = value)},
                 { 2, () => UpdateProductField("Name", true, value => ProductToEdit.Name = value)},
                 { 3, () => UpdateProductField("Price", false, value => ProductToEdit.Price = decimal.Parse(value))},
@@ -434,8 +434,8 @@
                     continue;
                 }
 
-                if (isValidChoice && actions.ContainsKey(choice)) {
-                    actions[choice].Invoke();
+                if (isValidChoice && EditByMenuActions.ContainsKey(choice)) {
+                    EditByMenuActions[choice].Invoke();
                 } else if (isValidChoice && choice == 5) {
                     return;
                 } else {

@@ -13,7 +13,7 @@
             InventoryManager.Products.Add(new ProductDetails("3", "Kit Kat", 40.33m, 2));
             InventoryManager.Products.Add(new ProductDetails("4", "Bourbon", 50m, 5));
 
-            var actions = new Dictionary<int, Action> {
+            var menuActions = new Dictionary<int, Action> {
                 { 1, () => inventoryManager.AddNewProduct() },
                 { 2, () => inventoryManager.ViewProducts() },
                 { 3, () => inventoryManager.SearchProduct() },
@@ -31,9 +31,9 @@
                 bool isNumber = int.TryParse(input, out int choice);
 
 
-                if (isNumber && actions.ContainsKey(choice)) {
+                if (isNumber && menuActions.ContainsKey(choice)) {
                     Console.Clear();
-                    actions[choice].Invoke();
+                    menuActions[choice].Invoke();
                 } else {
                     Console.WriteLine("[Error] Invalid choice!");
                 }
