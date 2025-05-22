@@ -3,8 +3,7 @@
         /// <summary>
         /// The main entry point of the application. Handles menu navigation and user input for managing products.
         /// </summary>
-        /// <param name="args">Command-line arguments (not used).</param>
-        public static void Main(string[] args) {
+        public static void Main() {
             InventoryManager manager = new InventoryManager();
 
             // NOTE: The following default data is added for testing and debugging purposes only.
