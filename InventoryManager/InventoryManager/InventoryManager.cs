@@ -3,8 +3,6 @@
         public static List<Product> Products = new List<Product>();
         public bool IsOperationSuccessful = false;
 
-        Validator validator = new Validator();
-
         /// <summary>
         /// Prompts the user to add a new product with details like ID, name, price, and quantity.
         /// Validates and stores the new product in the product list.
@@ -183,13 +181,13 @@
         /// <returns>An error message if validation fails; otherwise, an empty string.</returns>
         string ValidateInput(string informationType, string input) {
             return informationType switch {
-                "Name" => validator.IsNameValid(input)
+                "Name" => Validator.IsNameValid(input)
                     ? string.Empty
                     : "Name must contain only letters and spaces.",
-                "Price" => validator.IsDecimal(input)
+                "Price" => Validator.IsDecimal(input)
                     ? string.Empty
                     : "Price must be a positive decimal.",
-                "Quantity" => validator.IsPositiveInteger(input)
+                "Quantity" => Validator.IsPositiveInteger(input)
                     ? string.Empty
                     : "Quanity must be a positive number.",
                 _ => string.Empty
@@ -461,7 +459,7 @@
         void Delete(Product ProductToDelete) {
             Products.Remove(ProductToDelete);
             Console.WriteLine("[Success] Product Deleted Successfully");
-            IsOperationSuccessful = false;
+            IsOperationSuccessful = true;
         }
 
         /// <summary>
