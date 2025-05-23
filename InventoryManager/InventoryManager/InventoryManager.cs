@@ -155,7 +155,7 @@
         /// <param name="informationType">The property type (Id or Name).</param>
         /// <param name="isProductAlreadyExist">Out parameter indicating if the value already exists.</param>
         /// <returns>The unique input value.</returns>
-        string GetProductUntilNotExist(string informationType, out bool isProductAlreadyExist) {
+        string GetUniqueProductInput(string informationType, out bool isProductAlreadyExist) {
             string input;
             do {
                 isProductAlreadyExist = false;
@@ -202,7 +202,7 @@
             string input;
             do {
                 if (checkForDuplicate)
-                    input = GetProductUntilNotExist(informationType, out bool _);
+                    input = GetUniqueProductInput(informationType, out bool _);
                 else {
                     Console.Write($"Enter {informationType}: ");
                     input = Console.ReadLine();
