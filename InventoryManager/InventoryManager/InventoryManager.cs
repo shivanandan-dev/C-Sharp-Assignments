@@ -45,10 +45,10 @@
         /// </summary>
         public void AddNewProduct() {
             Console.WriteLine("========== Add new Product ==========\n");
-            string id = GetInformation("Id", true);
-            string name = GetInformation("Name", true);
-            string price = GetInformation("Price", false);
-            string quantity = GetInformation("Quantity", false);
+            string id = GetProductInformation("Id", true);
+            string name = GetProductInformation("Name", true);
+            string price = GetProductInformation("Price", false);
+            string quantity = GetProductInformation("Quantity", false);
 
             Products.Add(new ProductDetails(id, name, decimal.Parse(price), int.Parse(quantity)));
             Console.WriteLine("[Success] New product is created successfully!");
@@ -198,7 +198,7 @@
         /// <param name="informationType">The property to request.</param>
         /// <param name="checkForDuplicate">Whether to check for duplicates.</param>
         /// <returns>The validated input value.</returns>
-        string GetInformation(string informationType, bool checkForDuplicate = false) {
+        string GetProductInformation(string informationType, bool checkForDuplicate = false) {
             string input;
             do {
                 if (checkForDuplicate)
@@ -296,7 +296,7 @@
         /// </summary>
         /// <param name="informationType">The attribute to search by.</param>
         void SearchProductBy(string informationType) {
-            string input = GetInformation(informationType);
+            string input = GetProductInformation(informationType);
             ProductDetails productInfo = FindProductByAttribute(informationType, input);
             if (productInfo == null)
                 Console.WriteLine("[Error] No Product Found");
@@ -309,7 +309,7 @@
         /// </summary>
         /// <param name="ProductBy">The attribute to find the product by.</param>
         void EditProductBy(string ProductBy) {
-            string input = GetInformation(ProductBy);
+            string input = GetProductInformation(ProductBy);
             ProductDetails product = FindProductByAttribute(ProductBy, input);
 
             if (product == null) {
@@ -361,7 +361,7 @@
         /// <param name="checkForDuplicate">Whether to check for duplicates.</param>
         /// <param name="updateAction">The update action to apply.</param>
         void UpdateProductField(string fieldName, bool checkForDuplicate, Action<string> updateAction) {
-            string updatedValue = GetInformation(fieldName, checkForDuplicate);
+            string updatedValue = GetProductInformation(fieldName, checkForDuplicate);
             updateAction(updatedValue);
             Console.WriteLine($"[Success] {fieldName} updated successfully!");
             IsOperationSuccessful = true;
@@ -372,7 +372,7 @@
         /// </summary>
         /// <param name="ProductBy">The attribute to find the product by.</param>
         void DeleteProductBy(string ProductBy) {
-            string input = GetInformation(ProductBy);
+            string input = GetProductInformation(ProductBy);
             ProductDetails product = FindProductByAttribute(ProductBy, input);
 
             if (product == null) {
