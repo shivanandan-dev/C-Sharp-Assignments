@@ -13,27 +13,27 @@
             InventoryManager.Products.Add(new ProductDetails("3", "Kit Kat", 40.33m, 2));
             InventoryManager.Products.Add(new ProductDetails("4", "Bourbon", 50m, 5));
 
-            var menuActions = new Dictionary<int, Action> {
-                { 1, () => inventoryManager.AddNewProduct() },
-                { 2, () => inventoryManager.ViewProducts() },
-                { 3, () => inventoryManager.SearchProduct() },
-                { 4, () => inventoryManager.EditProduct() },
-                { 5, () => inventoryManager.DeleteProduct() },
-                { 6, () => inventoryManager.ExitEnvironment()}
+            var mainMenuActions = new List<Menu> {
+                new Menu ( "Add New Product", inventoryManager.AddNewProduct ),
+                new Menu ( "View Products", inventoryManager.ViewProducts ),
+                new Menu ( "Search Product",  inventoryManager.SearchProduct ),
+                new Menu ( "Edit Product",  inventoryManager.EditProduct ),
+                new Menu ( "Delete Product", inventoryManager.DeleteProduct ),
+                new Menu ( "Exit", () => inventoryManager.ExitEnvironment())
             };
 
             do {
                 Console.Clear();
-                inventoryManager.MainMenu();
+                inventoryManager.DisplayMenuOptions(mainMenuActions, "Main Menu");
                 Console.Write("\n[Menu] Enter your choice: ");
 
                 string input = Console.ReadLine();
                 bool isNumber = int.TryParse(input, out int choice);
 
 
-                if (isNumber && menuActions.ContainsKey(choice)) {
+                if (isNumber && choice <= mainMenuActions.Count && choice > 0) {
                     Console.Clear();
-                    menuActions[choice].Invoke();
+                    mainMenuActions[choice - 1].Handler.Invoke();
                 } else {
                     Console.WriteLine("[Error] Invalid choice!");
                 }
