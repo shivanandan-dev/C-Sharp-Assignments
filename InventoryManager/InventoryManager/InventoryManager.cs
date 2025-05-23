@@ -153,10 +153,10 @@
         /// Prompts for input until a unique value is entered for a product property.
         /// </summary>
         /// <param name="informationType">The property type (Id or Name).</param>
-        /// <param name="isProductAlreadyExist">Out parameter indicating if the value already exists.</param>
         /// <returns>The unique input value.</returns>
-        string GetUniqueProductInput(string informationType, out bool isProductAlreadyExist) {
+        string GetUniqueProductInput(string informationType) {
             string input;
+            bool isProductAlreadyExist;
             do {
                 isProductAlreadyExist = false;
                 Console.Write($"Enter {informationType}: ");
@@ -202,7 +202,7 @@
             string input;
             do {
                 if (checkForDuplicate)
-                    input = GetUniqueProductInput(informationType, out bool _);
+                    input = GetUniqueProductInput(informationType);
                 else {
                     Console.Write($"Enter {informationType}: ");
                     input = Console.ReadLine();
