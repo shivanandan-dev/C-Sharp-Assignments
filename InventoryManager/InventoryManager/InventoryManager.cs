@@ -156,17 +156,17 @@
         /// <returns>The unique input value.</returns>
         string GetUniqueProductInput(string informationType) {
             string input;
-            bool isProductAlreadyExist;
+
             do {
-                isProductAlreadyExist = false;
                 Console.Write($"Enter {informationType}: ");
                 input = Console.ReadLine();
-                isProductAlreadyExist = IsProductAlreadyExist(input);
-                if (input == "")
+                if (string.IsNullOrEmpty(input))
                     Console.WriteLine($"[Error] {informationType} cannot be empty!");
-                else if (isProductAlreadyExist)
+                else if (IsProductAlreadyExist(input))
                     Console.WriteLine($"[Error] A product with this {informationType} already exists.");
-            } while (input == "" || isProductAlreadyExist);
+                else
+                    break;
+            } while (true);
 
             return input;
         }
