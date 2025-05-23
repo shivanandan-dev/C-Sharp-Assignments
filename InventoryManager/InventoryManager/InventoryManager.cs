@@ -3,6 +3,11 @@
         public static List<ProductDetails> Products = new List<ProductDetails>();
         public bool IsOperationSuccessful = false;
 
+        readonly string _consoleId = StringFormatter.AddSpaces(nameof(ProductDetails.Id));
+        readonly string _consoleName = StringFormatter.AddSpaces(nameof(ProductDetails.Name));
+        readonly string _consolePrice = StringFormatter.AddSpaces(nameof(ProductDetails.Price));
+        readonly string _consoleQuantity = StringFormatter.AddSpaces(nameof(ProductDetails.Quantity));
+
         /// <summary>
         /// Handles display and user selection for a menu, invoking the selected action.
         /// </summary>
@@ -45,10 +50,10 @@
         /// </summary>
         public void AddNewProduct() {
             Console.WriteLine("========== Add new Product ==========\n");
-            string id = GetProductInformation("Id", true);
-            string name = GetProductInformation("Name", true);
-            string price = GetProductInformation("Price", false);
-            string quantity = GetProductInformation("Quantity", false);
+            string id = GetProductInformation(_consoleId, true);
+            string name = GetProductInformation(_consoleName, true);
+            string price = GetProductInformation(_consolePrice, false);
+            string quantity = GetProductInformation(_consoleQuantity, false);
 
             Products.Add(new ProductDetails(id, name, decimal.Parse(price), int.Parse(quantity)));
             Console.WriteLine("[Success] New product is created successfully!");
@@ -91,8 +96,8 @@
         public void SearchProduct() {
             var searchMenuActions = new List<Menu>
             {
-                new Menu("Search Product by Id", () => SearchProductBy("Id")),
-                new Menu("Search Product by Name", () => SearchProductBy("Name")),
+                new Menu("Search Product by Id", () => SearchProductBy(_consoleId)),
+                new Menu("Search Product by Name", () => SearchProductBy(_consoleName)),
                 new Menu("Main Menu", () => { })
             };
 
@@ -105,8 +110,8 @@
         public void EditProduct() {
             var editMenuActions = new List<Menu>
             {
-                new Menu("Edit Product by Id", () => EditProductBy("Id")),
-                new Menu("Edit Product by Name", () => EditProductBy("Name")),
+                new Menu("Edit Product by Id", () => EditProductBy(_consoleId)),
+                new Menu("Edit Product by Name", () => EditProductBy(_consoleName)),
                 new Menu("Main Menu", () => { })
             };
 
@@ -119,8 +124,8 @@
         public void DeleteProduct() {
             var deleteMenuActions = new List<Menu>
             {
-                new Menu("Delete Product by Id", () => DeleteProductBy("Id")),
-                new Menu("Delete Product by Name", () => DeleteProductBy("Name")),
+                new Menu("Delete Product by Id", () => DeleteProductBy(_consoleId)),
+                new Menu("Delete Product by Name", () => DeleteProductBy(_consoleName)),
                 new Menu("Main Menu", () => { })
             };
 
@@ -223,7 +228,7 @@
         /// </summary>
         /// <param name="productList">The list of products to display.</param>
         void DisplayProducts(List<ProductDetails> productList) {
-            Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}", "Id", "Name", "Price", "Quantity");
+            Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}", _consoleId, _consoleName, _consolePrice, _consoleQuantity);
             Console.WriteLine(new string('-', 100));
 
             foreach (ProductDetails productInfo in productList) {
@@ -272,9 +277,9 @@
         /// <returns>The matching ProductDetails, or null if not found.</returns>
         ProductDetails FindProductByAttribute(string attribute, string value) {
             return Products.Find(product =>
-                (attribute.Equals("Id", StringComparison.OrdinalIgnoreCase) &&
+                (attribute.Equals(_consoleId, StringComparison.OrdinalIgnoreCase) &&
                 product.Id.Equals(value, StringComparison.OrdinalIgnoreCase)) ||
-                (attribute.Equals("Name", StringComparison.OrdinalIgnoreCase) &&
+                (attribute.Equals(_consoleName, StringComparison.OrdinalIgnoreCase) &&
                 product.Name.Equals(value, StringComparison.OrdinalIgnoreCase))
             );
         }
@@ -285,10 +290,10 @@
         /// <param name="productInfo">The product to display.</param>
         void DisplayDetails(ProductDetails productInfo) {
             Console.WriteLine("\n========== Details ==========\n");
-            Console.WriteLine("{0,-9}: {1}", "Id", productInfo.Id);
-            Console.WriteLine("{0,-9}: {1}", "Name", productInfo.Name);
-            Console.WriteLine("{0,-9}: {1}", "Price", productInfo.Price);
-            Console.WriteLine("{0,-9}: {1}", "Quantity", productInfo.Quantity);
+            Console.WriteLine("{0,-9}: {1}", _consoleId, productInfo.Id);
+            Console.WriteLine("{0,-9}: {1}", _consoleName, productInfo.Name);
+            Console.WriteLine("{0,-9}: {1}", _consolePrice, productInfo.Price);
+            Console.WriteLine("{0,-9}: {1}", _consoleQuantity, productInfo.Quantity);
         }
 
         /// <summary>
@@ -327,10 +332,10 @@
         void EditBy(ProductDetails ProductToEdit) {
             var EditByMenuActions = new List<Menu>
             {
-                new Menu("Edit Id", () => UpdateProductField("Id", true, value => ProductToEdit.Id = value)),
-                new Menu("Edit Name", () => UpdateProductField("Name", true, value => ProductToEdit.Name = value)),
-                new Menu("Edit Price", () => UpdateProductField("Price", false, value => ProductToEdit.Price = decimal.Parse(value))),
-                new Menu("Edit Quantity", () => UpdateProductField("Quantity", false, value => ProductToEdit.Quantity = int.Parse(value))),
+                new Menu("Edit Id", () => UpdateProductField(_consoleId, true, value => ProductToEdit.Id = value)),
+                new Menu("Edit Name", () => UpdateProductField(_consoleName, true, value => ProductToEdit.Name = value)),
+                new Menu("Edit Price", () => UpdateProductField(_consolePrice, false, value => ProductToEdit.Price = decimal.Parse(value))),
+                new Menu("Edit Quantity", () => UpdateProductField(_consoleQuantity, false, value => ProductToEdit.Quantity = int.Parse(value))),
                 new Menu("Edit Menu", () => { })
             };
 
