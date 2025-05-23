@@ -79,7 +79,7 @@
                     return;
                 }
                 Console.WriteLine("========== Products ==========\n");
-                DisplayProducts(Products);
+                DisplayProducts();
                 Console.WriteLine("\nPress (1-4) to Sort, (5) to Exit:");
                 ConsoleKey input = Console.ReadKey().Key;
 
@@ -227,11 +227,11 @@
         /// Displays a formatted table of products.
         /// </summary>
         /// <param name="productList">The list of products to display.</param>
-        void DisplayProducts(List<ProductDetails> productList) {
+        void DisplayProducts() {
             Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}", _consoleId, _consoleName, _consolePrice, _consoleQuantity);
             Console.WriteLine(new string('-', 100));
 
-            foreach (ProductDetails productInfo in productList) {
+            foreach (ProductDetails productInfo in Products) {
                 Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}",
                     productInfo.Id, productInfo.Name, productInfo.Price, productInfo.Quantity);
             }
