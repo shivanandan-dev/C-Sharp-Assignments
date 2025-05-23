@@ -140,7 +140,7 @@
         /// </summary>
         /// <param name="value">The value to check (Id or Name).</param>
         /// <returns>True if a product with the value exists, otherwise false.</returns>
-        bool IsProductAlreadyExist(string value) {
+        bool IsProductDuplicate(string value) {
             foreach (ProductDetails productInfo in Products) {
                 if (productInfo.Name == value || productInfo.Id == value) {
                     return true;
@@ -162,7 +162,7 @@
                 input = Console.ReadLine();
                 if (string.IsNullOrEmpty(input))
                     Console.WriteLine($"[Error] {informationType} cannot be empty!");
-                else if (IsProductAlreadyExist(input))
+                else if (IsProductDuplicate(input))
                     Console.WriteLine($"[Error] A product with this {informationType} already exists.");
                 else
                     break;
