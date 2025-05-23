@@ -96,8 +96,8 @@
         public void SearchProduct() {
             var searchMenuActions = new List<Menu>
             {
-                new Menu("Search Product by Id", () => SearchProductBy(_consoleId)),
-                new Menu("Search Product by Name", () => SearchProductBy(_consoleName)),
+                new Menu("Search Product by Id", () => SearchProductByAttribute(_consoleId)),
+                new Menu("Search Product by Name", () => SearchProductByAttribute(_consoleName)),
                 new Menu("Main Menu", () => { })
             };
 
@@ -110,8 +110,8 @@
         public void EditProduct() {
             var editMenuActions = new List<Menu>
             {
-                new Menu("Edit Product by Id", () => EditProductBy(_consoleId)),
-                new Menu("Edit Product by Name", () => EditProductBy(_consoleName)),
+                new Menu("Edit Product by Id", () => FindAndEditProductByAttribute(_consoleId)),
+                new Menu("Edit Product by Name", () => FindAndEditProductByAttribute(_consoleName)),
                 new Menu("Main Menu", () => { })
             };
 
@@ -124,8 +124,8 @@
         public void DeleteProduct() {
             var deleteMenuActions = new List<Menu>
             {
-                new Menu("Delete Product by Id", () => DeleteProductBy(_consoleId)),
-                new Menu("Delete Product by Name", () => DeleteProductBy(_consoleName)),
+                new Menu("Delete Product by Id", () => DeleteProductByAttribute(_consoleId)),
+                new Menu("Delete Product by Name", () => DeleteProductByAttribute(_consoleName)),
                 new Menu("Main Menu", () => { })
             };
 
@@ -299,10 +299,10 @@
         /// <summary>
         /// Prompts for an attribute value, searches for a product, and displays details if found.
         /// </summary>
-        /// <param name="informationType">The attribute to search by.</param>
-        void SearchProductBy(string informationType) {
-            string input = GetProductInformation(informationType);
-            ProductDetails productInfo = FindProductByAttribute(informationType, input);
+        /// <param name="attribute">The attribute to search by.</param>
+        void SearchProductByAttribute(string attribute) {
+            string input = GetProductInformation(attribute);
+            ProductDetails productInfo = FindProductByAttribute(attribute, input);
             if (productInfo == null)
                 Console.WriteLine("[Error] No Product Found");
             else
@@ -312,47 +312,47 @@
         /// <summary>
         /// Finds a product by attribute and allows editing its properties.
         /// </summary>
-        /// <param name="ProductBy">The attribute to find the product by.</param>
-        void EditProductBy(string ProductBy) {
-            string input = GetProductInformation(ProductBy);
-            ProductDetails product = FindProductByAttribute(ProductBy, input);
+        /// <param name="attribute">The attribute to find the product by.</param>
+        void FindAndEditProductByAttribute(string attribute) {
+            string input = GetProductInformation(attribute);
+            ProductDetails product = FindProductByAttribute(attribute, input);
 
             if (product == null) {
                 Console.WriteLine("[Error] No Product Found");
                 PromptForContinuation();
                 return;
             }
-            EditBy(product);
+            EditProductByAttribute(product);
         }
 
         /// <summary>
         /// Displays edit options for a product and updates the selected property.
         /// </summary>
-        /// <param name="ProductToEdit">The product to edit.</param>
-        void EditBy(ProductDetails ProductToEdit) {
-            var EditByMenuActions = new List<Menu>
+        /// <param name="productToEdit">The product to edit.</param>
+        void EditProductByAttribute(ProductDetails productToEdit) {
+            var EditProductByAttributeMenuActions = new List<Menu>
             {
-                new Menu("Edit Id", () => UpdateProductField(_consoleId, true, value => ProductToEdit.Id = value)),
-                new Menu("Edit Name", () => UpdateProductField(_consoleName, true, value => ProductToEdit.Name = value)),
-                new Menu("Edit Price", () => UpdateProductField(_consolePrice, false, value => ProductToEdit.Price = decimal.Parse(value))),
-                new Menu("Edit Quantity", () => UpdateProductField(_consoleQuantity, false, value => ProductToEdit.Quantity = int.Parse(value))),
+                new Menu("Edit Id", () => UpdateProductField(_consoleId, true, value => productToEdit.Id = value)),
+                new Menu("Edit Name", () => UpdateProductField(_consoleName, true, value => productToEdit.Name = value)),
+                new Menu("Edit Price", () => UpdateProductField(_consolePrice, false, value => productToEdit.Price = decimal.Parse(value))),
+                new Menu("Edit Quantity", () => UpdateProductField(_consoleQuantity, false, value => productToEdit.Quantity = int.Parse(value))),
                 new Menu("Edit Menu", () => { })
             };
 
             IsOperationSuccessful = false;
             do {
                 Console.Clear();
-                DisplayDetails(ProductToEdit);
-                DisplayMenuOptions(EditByMenuActions, "Edit");
+                DisplayDetails(productToEdit);
+                DisplayMenuOptions(EditProductByAttributeMenuActions, "Edit");
 
                 Console.Write("\n[Menu] Enter your choice: ");
                 string input = Console.ReadLine();
                 bool isValidChoice = int.TryParse(input, out int choice);
 
-                if (isValidChoice && choice > 0 && choice <= EditByMenuActions.Count) {
-                    if (choice == EditByMenuActions.Count)
+                if (isValidChoice && choice > 0 && choice <= EditProductByAttributeMenuActions.Count) {
+                    if (choice == EditProductByAttributeMenuActions.Count)
                         return;
-                    EditByMenuActions[choice - 1].Handler.Invoke();
+                    EditProductByAttributeMenuActions[choice - 1].Handler.Invoke();
                 } else {
                     Console.WriteLine("[Error] Invalid choice. Please select a valid option.");
                 }
@@ -375,10 +375,10 @@
         /// <summary>
         /// Finds a product by attribute and deletes it from the list.
         /// </summary>
-        /// <param name="ProductBy">The attribute to find the product by.</param>
-        void DeleteProductBy(string ProductBy) {
-            string input = GetProductInformation(ProductBy);
-            ProductDetails product = FindProductByAttribute(ProductBy, input);
+        /// <param name="attribute">The attribute to find the product by.</param>
+        void DeleteProductByAttribute(string attribute) {
+            string input = GetProductInformation(attribute);
+            ProductDetails product = FindProductByAttribute(attribute, input);
 
             if (product == null) {
                 Console.WriteLine("[Error] No Product Found");
@@ -391,9 +391,9 @@
         /// <summary>
         /// Removes a product from the product list.
         /// </summary>
-        /// <param name="ProductToDelete">The product to delete.</param>
-        void Delete(ProductDetails ProductToDelete) {
-            Products.Remove(ProductToDelete);
+        /// <param name="productToDelete">The product to delete.</param>
+        void Delete(ProductDetails productToDelete) {
+            Products.Remove(productToDelete);
             Console.WriteLine("[Success] Product Deleted Successfully");
             IsOperationSuccessful = true;
         }
