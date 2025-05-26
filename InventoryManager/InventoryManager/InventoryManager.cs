@@ -193,6 +193,9 @@
         /// <returns>An error message if validation fails, otherwise empty string.</returns>
         string ValidateInput(string informationType, string input) {
             return informationType switch {
+                "Id" => Validator.IsPositiveInteger(input)
+                        ? string.Empty
+                    : "Id must be a positive number.",
                 "Name" => Validator.IsNameValid(input)
                     ? string.Empty
                     : "Name must contain only letters and spaces.",
