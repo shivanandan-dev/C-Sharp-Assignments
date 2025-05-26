@@ -1,7 +1,5 @@
 ﻿namespace EmployeeBonusApplication {
     public class Developer : Employee {
-        public Developer(string name, decimal salary) : base(name, salary) { }
-
         /// <summary>
         /// Calculates and returns the developer's bonus (10% of salary).
         /// </summary>

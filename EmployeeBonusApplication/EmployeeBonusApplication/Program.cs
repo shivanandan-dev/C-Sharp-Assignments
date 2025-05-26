@@ -4,10 +4,13 @@
         /// Main entry point of the application. Handles user input and menu navigation.
         /// </summary>
         static void Main() {
+            Employee manager = new Manager();
+            Employee developer = new Developer();
+
             Dictionary<int, (string, Action action)> mainMenuAction = new Dictionary<int, (string, Action)>() {
-                { 1, ("Add Manager", () => EmployeeManager.CreateEmployee("Manager")) },
-                { 2, ("Add Developer", () => EmployeeManager.CreateEmployee("Developer")) },
-                { 3, ("Display all Employees", EmployeeManager.DisplayEmployee) },
+                { 1, ("Add Manager", () => manager.CreateEmployee()) },
+                { 2, ("Add Developer", () => developer.CreateEmployee()) },
+                { 3, ("Display all Employees", Employee.DisplayEmployee) },
                 { 4, ("Exit", () => Environment.Exit(0)) }
             };
 

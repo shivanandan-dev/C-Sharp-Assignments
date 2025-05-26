@@ -23,43 +23,5 @@
             Console.Write("\nPress any key to continue...");
             Console.ReadKey();
         }
-
-        /// <summary>
-        /// Creates a new employee object based on the given type and adds it to the list.
-        /// </summary>
-        /// <param name="type">The type of employee to create (Manager/Developer).</param>
-        public static void CreateEmployee(string type) {
-            Console.Write("Enter Name: ");
-            string name = Console.ReadLine();
-
-            Console.Write("Enter Salary: ");
-            decimal salary;
-            while (!decimal.TryParse(Console.ReadLine(), out salary) || salary < 0) {
-                Console.Write("[Error] Invalid salary. \nEnter again: ");
-            }
-
-            if (type == "Manager")
-                employees.Add(new Manager(name, salary));
-            else
-                employees.Add(new Developer(name, salary));
-
-            Console.WriteLine("[Success] Employee added.");
-        }
-
-        /// <summary>
-        /// Displays all employee details from the list.
-        /// </summary>
-        public static void DisplayEmployee() {
-            Console.Clear();
-            if (employees.Count == 0) {
-                Console.WriteLine("\n[Error] No employee data.");
-                return;
-            }
-
-            Console.WriteLine("===== Employee Details =====");
-            foreach (Employee employee in employees) {
-                employee.PrintDetails();
-            }
-        }
     }
 }

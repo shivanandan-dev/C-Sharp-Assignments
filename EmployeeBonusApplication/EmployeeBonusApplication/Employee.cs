@@ -1,5 +1,7 @@
 ﻿namespace EmployeeBonusApplication {
     public abstract class Employee {
+        public static List<Employee> Employees = new List<Employee>();
+
         /// <summary>
         /// Gets or sets the name of the employee.
         /// </summary>
@@ -10,14 +12,38 @@
         /// </summary>
         public decimal Salary { get; set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Employee"/> class.
-        /// </summary>
-        /// <param name="name">The name of the employee.</param>
-        /// <param name="salary">The salary of the employee.</param>
-        public Employee(string name, decimal salary) {
+        public void CreateEmployee() {
+            Console.Write("Enter Name: ");
+            string name = Console.ReadLine();
+
+            Console.Write("Enter Salary: ");
+            decimal salary;
+            while (!decimal.TryParse(Console.ReadLine(), out salary) || salary < 0) {
+                Console.Write("[Error] Invalid salary. \nEnter again: ");
+            }
+
             Name = name;
             Salary = salary;
+
+            Employees.Add(this);
+
+            Console.WriteLine("[Success] Employee added.");
+        }
+
+        /// <summary>
+        /// Displays all employee details from the list.
+        /// </summary>
+        public static void DisplayEmployee() {
+            Console.Clear();
+            if (Employees.Count == 0) {
+                Console.WriteLine("\n[Error] No employee data.");
+                return;
+            }
+
+            Console.WriteLine("===== Employee Details =====");
+            foreach (Employee employee in Employees) {
+                employee.PrintDetails();
+            }
         }
 
         /// <summary>
