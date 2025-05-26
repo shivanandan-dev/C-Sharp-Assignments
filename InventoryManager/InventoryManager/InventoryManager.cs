@@ -12,9 +12,11 @@
         /// Handles display and user selection for a menu, invoking the selected action.
         /// </summary>
         /// <param name="menuActions">A list of menu actions to present to the user.</param>
-        public void HandleMenuActions(List<Menu> menuActions) {
+        public void HandleMenuActions(List<Menu> menuActions, bool isDisplayProduct = false) {
             do {
                 Console.Clear();
+                if (isDisplayProduct)
+                    DisplayProducts();
                 DisplayMenuOptions(menuActions);
                 Console.Write("\n[Menu] Enter your choice: ");
 
@@ -49,6 +51,7 @@
         /// Prompts the user for product details and adds a new product to the list.
         /// </summary>
         public void AddNewProduct() {
+            DisplayProducts();
             Console.WriteLine("========== Add new Product ==========\n");
             string id = GetProductInformation(_consoleId, true);
             string name = GetProductInformation(_consoleName, true);
@@ -78,8 +81,13 @@
                     Console.WriteLine("[Error] Product list is empty.");
                     return;
                 }
-                Console.WriteLine("========== Products ==========\n");
                 DisplayProducts();
+                Console.WriteLine("========== Sort By ==========\n");
+                Console.WriteLine("1. Id");
+                Console.WriteLine("2. Name");
+                Console.WriteLine("3. Price");
+                Console.WriteLine("4. Quantity");
+                Console.WriteLine("5. Exit");
                 Console.WriteLine("\nPress (1-4) to Sort, (5) to Exit:");
                 ConsoleKey input = Console.ReadKey().Key;
 
@@ -108,6 +116,7 @@
         /// Displays the product edit menu and handles user selection.
         /// </summary>
         public void EditProduct() {
+            DisplayProducts();
             var editMenuActions = new List<Menu>
             {
                 new Menu("Edit Product by Id", () => FindAndEditProductByAttribute(_consoleId)),
@@ -115,7 +124,7 @@
                 new Menu("Main Menu", () => { })
             };
 
-            HandleMenuActions(editMenuActions);
+            HandleMenuActions(editMenuActions, true);
         }
 
         /// <summary>
@@ -129,7 +138,7 @@
                 new Menu("Main Menu", () => { })
             };
 
-            HandleMenuActions(deleteMenuActions);
+            HandleMenuActions(deleteMenuActions, true);
         }
 
         /// <summary>
@@ -228,6 +237,7 @@
         /// </summary>
         /// <param name="productList">The list of products to display.</param>
         void DisplayProducts() {
+            Console.WriteLine("========== Products ==========\n");
             Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}", _consoleId, _consoleName, _consolePrice, _consoleQuantity);
             Console.WriteLine(new string('-', 100));
 
@@ -235,13 +245,7 @@
                 Console.WriteLine("{0, -20} | {1, -15} | {2, -30} | {3, -25}",
                     productInfo.Id, productInfo.Name, productInfo.Price, productInfo.Quantity);
             }
-
-            Console.WriteLine("\n\n========== Sort By ==========\n");
-            Console.WriteLine("1. Id");
-            Console.WriteLine("2. Name");
-            Console.WriteLine("3. Price");
-            Console.WriteLine("4. Quantity");
-            Console.WriteLine("5. Exit");
+            Console.WriteLine("\n");
         }
 
         /// <summary>
@@ -294,6 +298,7 @@
             Console.WriteLine("{0,-9}: {1}", _consoleName, productInfo.Name);
             Console.WriteLine("{0,-9}: {1}", _consolePrice, productInfo.Price);
             Console.WriteLine("{0,-9}: {1}", _consoleQuantity, productInfo.Quantity);
+            Console.WriteLine("\n");
         }
 
         /// <summary>
