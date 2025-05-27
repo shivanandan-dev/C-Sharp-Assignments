@@ -9,14 +9,20 @@
         readonly string _consoleQuantity = StringFormatter.AddSpaces(nameof(ProductDetails.Quantity));
 
         /// <summary>
-        /// Handles display and user selection for a menu, invoking the selected action.
+        /// Displays a menu, processes user selection, and invokes the corresponding action.
         /// </summary>
-        /// <param name="menuActions">A list of menu actions to present to the user.</param>
-        public void HandleMenuActions(List<Menu> menuActions, bool isDisplayProduct = false) {
+        /// <param name="menuActions">List of menu options with associated actions.</param>
+        /// <param name="displayAllProducts">If true, displays all products.</param>
+        /// <param name="product">If true, displays specific product details.</param>
+        public void HandleMenuActions(List<Menu> menuActions, bool displayAllProducts = false, ProductDetails product = null) {
             do {
                 Console.Clear();
-                if (isDisplayProduct)
+
+                if (displayAllProducts)
                     DisplayProducts();
+                else if (product != null)
+                    DisplayDetails(product);
+
                 DisplayMenuOptions(menuActions);
                 Console.Write("\n[Menu] Enter your choice: ");
 
@@ -36,7 +42,7 @@
         }
 
         /// <summary>
-        /// Displays the given menu options with an optional title.
+        /// Displays the given menu options with a title.
         /// </summary>
         /// <param name="menuActions">The menu actions to display.</param>
         /// <param name="menuTitle">The title of the menu.</param>
@@ -348,23 +354,8 @@
             };
 
             IsOperationSuccessful = false;
-            do {
-                Console.Clear();
-                DisplayDetails(productToEdit);
-                DisplayMenuOptions(EditProductByAttributeMenuActions, "Edit");
 
-                Console.Write("\n[Menu] Enter your choice: ");
-                string input = Console.ReadLine();
-                bool isValidChoice = int.TryParse(input, out int choice);
-
-                if (isValidChoice && choice > 0 && choice <= EditProductByAttributeMenuActions.Count) {
-                    if (choice == EditProductByAttributeMenuActions.Count)
-                        return;
-                    EditProductByAttributeMenuActions[choice - 1].Handler.Invoke();
-                } else {
-                    Console.WriteLine("[Error] Invalid choice. Please select a valid option.");
-                }
-            } while (!IsOperationSuccessful);
+            HandleMenuActions(EditProductByAttributeMenuActions, false, productToEdit);
         }
 
         /// <summary>
