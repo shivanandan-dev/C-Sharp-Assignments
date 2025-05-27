@@ -389,7 +389,6 @@
 
             if (product == null) {
                 Console.WriteLine("[Error] No Product Found");
-                PromptForContinuation();
                 return;
             }
             Products.Remove(product);
