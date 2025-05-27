@@ -139,8 +139,8 @@
         public void DeleteProduct() {
             var deleteMenuActions = new List<Menu>
             {
-                new Menu("Delete Product by Id", () => DeleteProductByAttribute(_consoleId)),
-                new Menu("Delete Product by Name", () => DeleteProductByAttribute(_consoleName)),
+                new Menu("Delete Product by Id", () => Delete(_consoleId)),
+                new Menu("Delete Product by Name", () => Delete(_consoleName)),
                 new Menu("Main Menu", () => { })
             };
 
@@ -375,7 +375,7 @@
         /// Finds a product by attribute and deletes it from the list.
         /// </summary>
         /// <param name="attribute">The attribute to find the product by.</param>
-        void DeleteProductByAttribute(string attribute) {
+        void Delete(string attribute) {
             string input = GetProductInformation(attribute);
             ProductDetails product = FindProductByAttribute(attribute, input);
 
@@ -384,15 +384,7 @@
                 PromptForContinuation();
                 return;
             }
-            Delete(product);
-        }
-
-        /// <summary>
-        /// Removes a product from the product list.
-        /// </summary>
-        /// <param name="productToDelete">The product to delete.</param>
-        void Delete(ProductDetails productToDelete) {
-            Products.Remove(productToDelete);
+            Products.Remove(product);
             Console.WriteLine("[Success] Product Deleted Successfully");
             IsOperationSuccessful = true;
         }
