@@ -14,10 +14,14 @@
         /// <param name="menuActions">List of menu options with associated actions.</param>
         /// <param name="displayAllProducts">If true, displays all products.</param>
         /// <param name="product">If true, displays specific product details.</param>
-        public void HandleMenuActions(List<Menu> menuActions, bool displayAllProducts = false, ProductDetails product = null) {
+        public void HandleMenuActions(
+            List<Menu> menuActions,
+            bool displayAllProducts = false,
+            ProductDetails product = null,
+            bool setOperationSuccessful = false
+        ) {
             do {
                 Console.Clear();
-
                 if (displayAllProducts)
                     DisplayProducts();
                 else if (product != null)
@@ -36,6 +40,9 @@
                 } else {
                     Console.WriteLine("[Error] Invalid choice!");
                 }
+
+                if (setOperationSuccessful)
+                    IsOperationSuccessful = true;
 
                 PromptForContinuation();
             } while (true);
@@ -57,6 +64,7 @@
         /// Prompts the user for product details and adds a new product to the list.
         /// </summary>
         public void AddNewProduct() {
+            Console.Clear();
             DisplayProducts();
             Console.WriteLine("========== Add new Product ==========\n");
             string id = GetProductInformation(_consoleId, true);

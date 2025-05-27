@@ -22,26 +22,7 @@
                 new Menu ( "Exit", () => inventoryManager.ExitEnvironment())
             };
 
-            do {
-                Console.Clear();
-                inventoryManager.DisplayMenuOptions(mainMenuActions, "Main Menu");
-                Console.Write("\n[Menu] Enter your choice: ");
-
-                string input = Console.ReadLine();
-                bool isNumber = int.TryParse(input, out int choice);
-
-
-                if (isNumber && choice <= mainMenuActions.Count && choice > 0) {
-                    Console.Clear();
-                    mainMenuActions[choice - 1].Handler.Invoke();
-                } else {
-                    Console.WriteLine("[Error] Invalid choice!");
-                }
-
-                inventoryManager.IsOperationSuccessful = true;
-                inventoryManager.PromptForContinuation();
-                Console.Clear();
-            } while (true);
+            inventoryManager.HandleMenuActions(mainMenuActions, false, null, true);
         }
     }
 }
