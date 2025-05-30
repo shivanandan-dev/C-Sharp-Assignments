@@ -6,14 +6,14 @@
         /// <param name="args">Command-line arguments.</param>
         static void Main(string[] args) {
             Dictionary<int, (string, Action action)> mainMenuAction = new Dictionary<int, (string, Action)>() {
-                { 1, ("Create Rectangle", ShapeApplication.CreateRectangle) },
-                { 2, ("Create Circle", ShapeApplication.CreateCircle) },
+                { 1, ("Create Rectangle", RectangleShape.CreateRectangle) },
+                { 2, ("Create Circle", CircleShape.CreateCircle) },
                 { 3, ("Exit", () => Environment.Exit(0)) }
             };
 
             while (true) {
                 Console.Clear();
-                ShapeApplication.DisplayMenu("Shape Calculator", mainMenuAction);
+                OutputManager.DisplayMenu("Shape Calculator", mainMenuAction);
                 string input = Console.ReadLine();
                 bool isNumber = int.TryParse(input, out int choice);
 
@@ -22,7 +22,7 @@
                 } else {
                     Console.WriteLine("[Error] Invalid input!");
                 }
-                ShapeApplication.PromptForContinuation();
+                InputManager.PromptForContinuation();
             }
         }
     }

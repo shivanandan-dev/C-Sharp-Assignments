@@ -34,5 +34,23 @@
             Console.Write("Shape: Rectangle, ");
             base.PrintDetails();
         }
+
+        /// <summary>
+        /// Handles the process of creating a rectangle by taking user input and displaying details.
+        /// </summary>
+        public static void CreateRectangle() {
+            string color = InputManager.GetColorValue();
+            if (color == default(string)) return;
+
+            double length = InputManager.GetLinearMeasurement(nameof(length));
+            if (length < 0) return;
+
+            double width = InputManager.GetLinearMeasurement(nameof(width));
+            if (width < 0) return;
+
+            RectangleShape rectangle = new RectangleShape(color, length, width);
+            Console.Write("[Info] ");
+            rectangle.PrintDetails();
+        }
     }
 }

@@ -28,5 +28,20 @@
             Console.Write("Shape: Circle, ");
             base.PrintDetails();
         }
+
+        /// <summary>
+        /// Handles the process of creating a circle by taking user input and displaying details.
+        /// </summary>
+        public static void CreateCircle() {
+            string color = InputManager.GetColorValue();
+            if (color == default(string)) return;
+
+            double radius = InputManager.GetLinearMeasurement(nameof(radius));
+            if (radius < 0) return;
+
+            CircleShape circle = new CircleShape(color, radius);
+            Console.Write("[Info] ");
+            circle.PrintDetails();
+        }
     }
 }
