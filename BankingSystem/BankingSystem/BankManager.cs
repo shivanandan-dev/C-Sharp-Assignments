@@ -87,7 +87,7 @@
         /// <summary>
         /// Prompts the user to press any key to continue.
         /// </summary>
-        static void PromptForContinuation() {
+        public static void PromptForContinuation() {
             Console.Write("\nPress any key to continue...");
             Console.ReadKey();
         }
@@ -119,7 +119,7 @@
         /// and the value is a tuple containing a description (string) of the menu option
         /// and an action (Action) to be performed when the option is selected.
         /// </param>
-        static void DisplayMainMenu(string menutitle, Dictionary<int, (string description, Action)> menuActions) {
+        public static void DisplayMainMenu(string menutitle, Dictionary<int, (string description, Action)> menuActions) {
             Console.WriteLine($"===== {menutitle} =====\n");
             foreach (var menuAction in menuActions) {
                 Console.WriteLine($"{menuAction.Key}. {menuAction.Value.description}");

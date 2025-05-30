@@ -13,7 +13,17 @@
                 { 3, ("Exit", () => Environment.Exit(0)) }
             };
 
-            BankManager.HandleMenuAction(accountTypeMenuActions);
+            while (account == null) {
+                Console.Clear();
+                BankManager.DisplayMainMenu("Select Account Type", accountTypeMenuActions);
+                var input = Console.ReadLine();
+                if (int.TryParse(input, out var choice) && accountTypeMenuActions.ContainsKey(choice)) {
+                    accountTypeMenuActions[choice].action.Invoke();
+                } else {
+                    Console.WriteLine("[Error] Invalid choice.");
+                    BankManager.PromptForContinuation();
+                }
+            }
 
             if (account != null) {
                 BankManager.HandleAccountOperations(account);
