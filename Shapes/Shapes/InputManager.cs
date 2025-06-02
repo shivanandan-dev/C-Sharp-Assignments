@@ -4,7 +4,7 @@
         /// Prompts the user to enter a color for the Circle and validates the input.
         /// </summary>
         /// <returns>
-        /// Returns a valid color string if the input is valid; otherwise, returns default (null).
+        /// Returns a valid color string if the input is valid; otherwise, returns null.
         /// </returns>
         public static string GetColorValue() {
             List<string> validColors = new List<string>() { "Red", "Orange", "Yellow", "Green", "Blue", "Purple",
@@ -19,7 +19,7 @@
                 return color;
             else {
                 Console.WriteLine("[Error] Invalid input. Must be a valid color");
-                return default;
+                return null;
             }
 
         }

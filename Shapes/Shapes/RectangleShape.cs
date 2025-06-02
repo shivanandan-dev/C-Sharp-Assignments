@@ -40,7 +40,7 @@
         /// </summary>
         public static void CreateRectangle() {
             string color = InputManager.GetColorValue();
-            if (color == default(string)) return;
+            if (color is null) return;
 
             double length = InputManager.GetLinearMeasurement(nameof(length));
             if (length < 0) return;
