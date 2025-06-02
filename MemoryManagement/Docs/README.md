@@ -9,8 +9,6 @@ This shows the difference between value types and reference types:
 - **Value types** like `int` are copied when passed to methods, so changes inside the method don't affect the original variable.
 - **Reference types** like `Person` pass a reference to the actual object, so changes inside the method are reflected outside as well.
 
----
-
 ### Task 2: Stack and Heap Memory
 
 I added two methods: `AllocateLargeArray` and `ManyLocalVariablesCalculation`.
@@ -33,5 +31,3 @@ When running the program, memory usage jumps when creating many objects. After c
 
 In the `IDisposableDemo` project, I made a `FileWriter` class (inherited from `IDisposable`) that writes to a file and ensures the file is closed when it's disposed.  
 In `Main`, I used a `using` block to create a `FileWriter`, wrote some text, and let the block automatically clean up the file. After the `using` block, I opened the file for reading. Since the file was properly released, I could open and read it without any errors.
-
----

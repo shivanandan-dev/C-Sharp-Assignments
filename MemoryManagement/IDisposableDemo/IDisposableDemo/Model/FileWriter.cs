@@ -27,6 +27,7 @@
         /// </summary>
         public void Dispose() {
             if (!_disposed) {
+                _writer.Close();
                 _writer.Dispose();
                 _disposed = true;
             }
