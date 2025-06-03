@@ -6,23 +6,18 @@
         static void Main() {
             BankAccount account = null;
 
+            Func<string, decimal, BankAccount> savingsFactory = (number, balance) => new SavingsAccount(number, balance);
+            Func<string, decimal, BankAccount> checkingFactory = (number, balance) => new CheckingAccount(number, balance);
+
             Dictionary<int, (string description, Action action)> accountTypeMenuActions = new Dictionary<int, (string, Action)>()
             {
-                { 1, ("Savings Account", () => BankManager.InitializeAccount(ref account, typeof(SavingsAccount))) },
-                { 2, ("Checking Account", () => BankManager.InitializeAccount(ref account, typeof(CheckingAccount))) },
-                { 3, ("Exit", () => Environment.Exit(0)) }
+                { 1, ("Savings Account",    () => { account = BankManager.InitializeAccount(savingsFactory);   }) },
+                { 2, ("Checking Account",   () => { account = BankManager.InitializeAccount(checkingFactory);  }) },
+                { 3, ("Exit",               () => Environment.Exit(0)) }
             };
 
             while (account == null) {
-                Console.Clear();
-                BankManager.DisplayMainMenu("Select Account Type", accountTypeMenuActions);
-                var input = Console.ReadLine();
-                if (int.TryParse(input, out var choice) && accountTypeMenuActions.ContainsKey(choice)) {
-                    accountTypeMenuActions[choice].action.Invoke();
-                } else {
-                    Console.WriteLine("[Error] Invalid choice.");
-                    BankManager.PromptForContinuation();
-                }
+                BankManager.HandleMenuAction(accountTypeMenuActions, false);
             }
 
             if (account != null) {

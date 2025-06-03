@@ -7,7 +7,7 @@
         /// A dictionary where the key is an integer representing the menu option, 
         /// and the value is a tuple containing a description (string) and an action (Action) to execute.
         /// </param>
-        public static void HandleMenuAction(Dictionary<int, (string, Action action)> menuActions) {
+        public static void HandleMenuAction(Dictionary<int, (string, Action action)> menuActions, bool isInfinite = true) {
             do {
                 Console.Clear();
                 DisplayMainMenu("Account Operations", menuActions);
@@ -21,7 +21,7 @@
                 }
 
                 PromptForContinuation();
-            } while (true);
+            } while (isInfinite);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@
         /// </summary>
         /// <param name="account">The bank account to initialize.</param>
         /// <param name="accountType">The type of account to initialize (SavingsAccount or CheckingAccount).</param>
-        public static void InitializeAccount(ref BankAccount account, Type accountType) {
+        public static BankAccount InitializeAccount(Func<string, decimal, BankAccount> accountFactory) {
             Console.Clear();
             Console.WriteLine("===== Account Details =====\n");
 
@@ -57,13 +57,9 @@
 
             if (balance < 0 || !isNumber) {
                 Console.WriteLine("[Error] Invalid balance. Please restart the application.");
-                return;
-            }
-
-            if (accountType == typeof(SavingsAccount)) {
-                account = new SavingsAccount(accountNumber, balance);
-            } else if (accountType == typeof(CheckingAccount)) {
-                account = new CheckingAccount(accountNumber, balance);
+                return null;
+            } else {
+                return accountFactory(accountNumber, balance);
             }
         }
 
