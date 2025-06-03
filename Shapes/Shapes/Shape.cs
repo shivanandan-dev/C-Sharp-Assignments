@@ -5,6 +5,8 @@
         /// </summary>
         public string Color { get; set; }
 
+        public virtual string Name { get; protected set; }
+
         /// <summary>
         /// Initializes a new instance of the Shape class with a color.
         /// </summary>
@@ -23,7 +25,7 @@
         /// Prints the color and area of the shape.
         /// </summary>
         public virtual void PrintDetails() {
-            Console.WriteLine($"Color: {Color}, Area: {CalculateArea()}");
+            Console.WriteLine($"Shape: {Name}, Color: {Color}, Area: {CalculateArea()}");
         }
     }
 }

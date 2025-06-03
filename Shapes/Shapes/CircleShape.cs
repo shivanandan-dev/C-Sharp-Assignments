@@ -7,6 +7,11 @@
         public double Radius { get; }
 
         /// <summary>
+        /// Overrides the base Name to “Circle”.
+        /// </summary>
+        public override string Name => "Circle";
+
+        /// <summary>
         /// Initializes a new instance of the CircleShape class with a specified color and radius.
         /// </summary>
         /// <param name="color">The color of the circle.</param>
@@ -20,14 +25,6 @@
         /// </summary>
         /// <returns>The area of the circle.</returns>
         public override double CalculateArea() => Math.PI * Math.Pow(Radius, 2);
-
-        /// <summary>
-        /// Prints the shape type, color, and area of the circle.
-        /// </summary>
-        public override void PrintDetails() {
-            Console.Write("Shape: Circle, ");
-            base.PrintDetails();
-        }
 
         /// <summary>
         /// Handles the process of creating a circle by taking user input and displaying details.

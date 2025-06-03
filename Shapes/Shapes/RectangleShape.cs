@@ -11,6 +11,12 @@
         public double Width { get; set; }
 
         /// <summary>
+        /// Overrides the base Name to “Rectangle”.
+        /// </summary>
+        public override string Name => "Rectangle";
+
+
+        /// <summary>
         /// Initializes a new instance of the RectangleShape class with color, length, and width.
         /// </summary>
         /// <param name="color">The color of the rectangle.</param>
@@ -26,14 +32,6 @@
         /// </summary>
         /// <returns>The area of the rectangle.</returns>
         public override double CalculateArea() => Length * Width;
-
-        /// <summary>
-        /// Prints the shape type, color, and area of the rectangle.
-        /// </summary>
-        public override void PrintDetails() {
-            Console.Write("Shape: Rectangle, ");
-            base.PrintDetails();
-        }
 
         /// <summary>
         /// Handles the process of creating a rectangle by taking user input and displaying details.
