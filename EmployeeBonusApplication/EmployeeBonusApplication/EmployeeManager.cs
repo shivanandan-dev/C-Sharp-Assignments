@@ -1,7 +1,5 @@
 ﻿namespace EmployeeBonusApplication {
     internal class EmployeeManager {
-        static List<Employee> employees = new List<Employee>();
-
         /// <summary>
         /// Displays a menu with the specified title and a list of available options.
         /// </summary>
