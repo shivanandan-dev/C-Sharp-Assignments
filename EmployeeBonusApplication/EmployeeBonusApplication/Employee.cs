@@ -12,6 +12,11 @@
         /// </summary>
         public decimal Salary { get; set; }
 
+        /// <summary>
+        /// Gets the role or position of the employee.
+        /// </summary>
+        public abstract string Designation { get; }
+
         public void CreateEmployee() {
             Console.Write("Enter Name: ");
             string name = Console.ReadLine();
@@ -53,8 +58,14 @@
         public abstract decimal CalculateBonus();
 
         /// <summary>
-        /// Prints the details of the employee.
+        /// Prints Name, Designation, Salary, and Bonus for this employee.
         /// </summary>
-        public abstract void PrintDetails();
+        public void PrintDetails() {
+            Console.WriteLine($"\nName: {Name}");
+            Console.WriteLine($"Position: {Designation}");
+            Console.WriteLine($"Salary: {Salary}");
+            Console.WriteLine($"Bonus: {CalculateBonus()}");
+            Console.WriteLine(new string('-', 30));
+        }
     }
 }
