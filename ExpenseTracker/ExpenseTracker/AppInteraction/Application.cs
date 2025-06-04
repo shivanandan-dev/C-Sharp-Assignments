@@ -19,7 +19,7 @@ namespace ExpenseTracker.AppInteraction {
             bool clearConsole = true,
             bool repeat = true,
             bool promptForContinuation = true
-            ) {
+        ) {
             do {
                 Console.WriteLine();
                 if (clearConsole)
