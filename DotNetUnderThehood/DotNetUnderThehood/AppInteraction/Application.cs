@@ -11,9 +11,10 @@ namespace DotNetUnderThehood.AppInteraction {
         public static void HandleApplication() {
             try {
                 Console.Write("Enter first number: ");
-                decimal firstNumber = InputManager.GetDecimalValue();
+                int firstNumber = InputManager.GetIntegerValue();
                 Console.Write("Enter second number: ");
-                decimal secondNumber = InputManager.GetDecimalValue();
+                int secondNumber = InputManager.GetIntegerValue();
+
                 Console.WriteLine($"Addition of {firstNumber} and {secondNumber} is {MathUtils.Add(firstNumber, secondNumber)}");
                 Console.WriteLine($"Subtraction of {firstNumber} and {secondNumber} is {MathUtils.Sub(firstNumber, secondNumber)}");
                 Console.WriteLine($"Multiplication of {firstNumber} and {secondNumber} is {MathUtils.Mul(firstNumber, secondNumber)}");
@@ -21,6 +22,8 @@ namespace DotNetUnderThehood.AppInteraction {
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
             }
+
+            Console.ReadKey();
         }
     }
 }

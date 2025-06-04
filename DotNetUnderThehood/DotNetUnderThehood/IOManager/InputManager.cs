@@ -5,11 +5,11 @@
         /// </summary>
         /// <returns>The parsed decimal value.</returns>
         /// <exception cref="InvalidUserInputException">Thrown when the input is not a valid decimal.</exception>
-        public static decimal GetDecimalValue() {
+        public static int GetIntegerValue() {
             string input = Console.ReadLine();
-            bool isDecimal = decimal.TryParse(input, out decimal number);
+            bool isInteger = int.TryParse(input, out int number);
 
-            if (!isDecimal) {
+            if (!isInteger) {
                 throw new Exception("[Error] Invalid input. Please enter a valid decimal.");
             }
 
