@@ -12,7 +12,14 @@ namespace ExpenseTracker.AppInteraction {
         /// <param name="clearConsole">Whether to clear the console before displaying the menu.</param>
         /// <param name="repeat">Whether to repeat the menu after an action is performed.</param>
         /// <param name="promptForContinuation">Whether to prompt for continuation after each action.</param>
-        public static void DisplayMenuWithActions(string title, Dictionary<int, (string, Action action)> menuActions, int exitOption = 0, bool clearConsole = true, bool repeat = true, bool promptForContinuation = true) {
+        public static void DisplayMenuWithActions(
+            string title,
+            Dictionary<int, (string, Action action)> menuActions,
+            int exitOption = 0,
+            bool clearConsole = true,
+            bool repeat = true,
+            bool promptForContinuation = true
+            ) {
             do {
                 Console.WriteLine();
                 if (clearConsole)

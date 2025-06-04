@@ -27,21 +27,7 @@ namespace ExpenseTracker.AppInteraction {
             };
 
             Application.DisplayMenuWithActions("Add Transaction", menuActions, 3);
-        }
-
-        /// <summary>
-        /// Prompts the user to add a new expense and adds it to the ExpenseDetails list.
-        /// </summary>
-        static void AddExpense() {
-            Console.Clear();
-            Console.WriteLine("===== New Expense =====\n");
-            decimal amount = InputManager.GetAmount();
-            DateTime date = InputManager.GetDate();
-            string category = InputManager.GetCategoryOrSource("Category");
-
-            ExpenseDetails.Add(new ExpenseDetail(amount, date, category));
-            OutputManager.DisplaySuccessMessage("New expense added.");
-        }
+        }  
 
         /// <summary>
         /// Displays a menu to view transactions (expenses or incomes) and performs the selected action.
@@ -54,21 +40,7 @@ namespace ExpenseTracker.AppInteraction {
             };
 
             Application.DisplayMenuWithActions("View Transactions", menuActions, 3);
-        }
-
-        /// <summary>
-        /// Displays all expenses from the ExpenseDetails list.
-        /// </summary>
-        static void ViewExpenses() {
-            Console.Clear();
-            Console.WriteLine("===== Expenses =====\n");
-            if (ExpenseDetails.Count == 0) {
-                Console.WriteLine("[Error] Empty list.");
-                return;
-            } else {
-                OutputManager.DisplayExpenses(ExpenseDetails);
-            }
-        }
+        } 
 
         /// <summary>
         /// Displays a menu to delete a transaction (expense or income) and performs the selected action.
@@ -81,24 +53,7 @@ namespace ExpenseTracker.AppInteraction {
             };
 
             Application.DisplayMenuWithActions("Delete Transaction", menuActions, 3);
-        }
-
-        /// <summary>
-        /// Deletes a specific expense from the ExpenseDetails list.
-        /// </summary>
-        static void DeleteExpense() {
-            Console.Clear();
-            ViewExpenses();
-            if (ExpenseDetails.Count == 0)
-                return;
-
-            Console.WriteLine("\n===== Delete =====\n");
-            int expenseId = InputManager.GetExpenseId(ExpenseDetails);
-            if (expenseId > 0) {
-                ExpenseDetails.RemoveAt(expenseId - 1);
-                OutputManager.DisplaySuccessMessage("Expense deleted");
-            }
-        }
+        }    
 
         /// <summary>
         /// Displays a menu to edit a transaction (expense or income) and performs the selected action.
@@ -114,9 +69,54 @@ namespace ExpenseTracker.AppInteraction {
         }
 
         /// <summary>
+        /// Prompts the user to add a new expense and adds it to the ExpenseDetails list.
+        /// </summary>
+        private static void AddExpense() {
+            Console.Clear();
+            Console.WriteLine("===== New Expense =====\n");
+            decimal amount = InputManager.GetAmount();
+            DateTime date = InputManager.GetDate();
+            string category = InputManager.GetCategoryOrSource("Category");
+
+            ExpenseDetails.Add(new ExpenseDetail(amount, date, category));
+            OutputManager.DisplaySuccessMessage("New expense added.");
+        }
+
+        /// <summary>
+        /// Displays all expenses from the ExpenseDetails list.
+        /// </summary>
+        private static void ViewExpenses() {
+            Console.Clear();
+            Console.WriteLine("===== Expenses =====\n");
+            if (ExpenseDetails.Count == 0) {
+                Console.WriteLine("[Error] Empty list.");
+                return;
+            } else {
+                OutputManager.DisplayExpenses(ExpenseDetails);
+            }
+        }
+
+        /// <summary>
+        /// Deletes a specific expense from the ExpenseDetails list.
+        /// </summary>
+        private static void DeleteExpense() {
+            Console.Clear();
+            ViewExpenses();
+            if (ExpenseDetails.Count == 0)
+                return;
+
+            Console.WriteLine("\n===== Delete =====\n");
+            int expenseId = InputManager.GetExpenseId(ExpenseDetails);
+            if (expenseId > 0) {
+                ExpenseDetails.RemoveAt(expenseId - 1);
+                OutputManager.DisplaySuccessMessage("Expense deleted");
+            }
+        }
+
+        /// <summary>
         /// Allows the user to edit a specific expense from the ExpenseDetails list.
         /// </summary>
-        static void EditExpense() {
+        private static void EditExpense() {
             Console.Clear();
             ViewExpenses();
             if (ExpenseDetails.Count == 0)
@@ -128,12 +128,13 @@ namespace ExpenseTracker.AppInteraction {
             }
         }
 
+
         /// <summary>
         /// Updates the amount of a specific expense.
         /// </summary>
         /// <param name="expenseId">The ID of the expense to update.</param>
         /// <param name="action">A function to retrieve the updated amount.</param>
-        static void UpdateExpenseAmount(int expenseId, Func<decimal> action) {
+        private static void UpdateExpenseAmount(int expenseId, Func<decimal> action) {
             decimal updatedValue = action.Invoke();
             ExpenseDetails[expenseId].Amount = updatedValue;
             OutputManager.DisplaySuccessMessage("Amount updated.");
@@ -144,7 +145,7 @@ namespace ExpenseTracker.AppInteraction {
         /// </summary>
         /// <param name="expenseId">The ID of the expense to update.</param>
         /// <param name="action">A function to retrieve the updated date.</param>
-        static void UpdateExpenseDate(int expenseId, Func<DateTime> action) {
+        private static void UpdateExpenseDate(int expenseId, Func<DateTime> action) {
             DateTime updatedValue = action.Invoke();
             ExpenseDetails[expenseId].Date = updatedValue;
             OutputManager.DisplaySuccessMessage("Date updated.");
@@ -155,7 +156,7 @@ namespace ExpenseTracker.AppInteraction {
         /// </summary>
         /// <param name="expenseId">The ID of the expense to update.</param>
         /// <param name="action">A function to retrieve the updated category.</param>
-        static void UpdateExpenseCategory(int expenseId, Func<string, string> action) {
+        private static void UpdateExpenseCategory(int expenseId, Func<string, string> action) {
             string updatedValue = action.Invoke("Category");
             ExpenseDetails[expenseId].Category = updatedValue;
             OutputManager.DisplaySuccessMessage("Category updated.");
@@ -165,7 +166,7 @@ namespace ExpenseTracker.AppInteraction {
         /// Displays a menu to edit specific attributes of an expense (amount, date, or category).
         /// </summary>
         /// <param name="expenseId">The ID of the expense to edit.</param>
-        static void EditExpenseAt(int expenseId) {
+        private static void EditExpenseAt(int expenseId) {
             Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>(){
                 { 1, ("Edit Amount", () => UpdateExpenseAmount(expenseId, InputManager.GetAmount)) },
                 { 2, ("Edit Date", () => UpdateExpenseDate(expenseId, InputManager.GetDate)) },
