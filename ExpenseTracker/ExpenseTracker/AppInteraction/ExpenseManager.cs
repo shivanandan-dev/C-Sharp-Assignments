@@ -27,7 +27,7 @@ namespace ExpenseTracker.AppInteraction {
             };
 
             Application.DisplayMenuWithActions("Add Transaction", menuActions, 3);
-        }  
+        }
 
         /// <summary>
         /// Displays a menu to view transactions (expenses or incomes) and performs the selected action.
@@ -40,7 +40,7 @@ namespace ExpenseTracker.AppInteraction {
             };
 
             Application.DisplayMenuWithActions("View Transactions", menuActions, 3);
-        } 
+        }
 
         /// <summary>
         /// Displays a menu to delete a transaction (expense or income) and performs the selected action.
@@ -53,7 +53,7 @@ namespace ExpenseTracker.AppInteraction {
             };
 
             Application.DisplayMenuWithActions("Delete Transaction", menuActions, 3);
-        }    
+        }
 
         /// <summary>
         /// Displays a menu to edit a transaction (expense or income) and performs the selected action.
@@ -124,7 +124,14 @@ namespace ExpenseTracker.AppInteraction {
             int expenseId = InputManager.GetExpenseId(ExpenseDetails);
 
             if (expenseId > 0) {
-                EditExpenseAt(expenseId - 1);
+                Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>(){
+                    { 1, ("Edit Amount", () => UpdateExpenseAmount(expenseId, InputManager.GetAmount)) },
+                    { 2, ("Edit Date", () => UpdateExpenseDate(expenseId, InputManager.GetDate)) },
+                    { 3, ("Edit Category", () => UpdateExpenseCategory(expenseId, InputManager.GetCategoryOrSource)) },
+                    { 4, ("Menu", () => { }) }
+                };
+
+                Application.DisplayMenuWithActions("Edit Expense", menuActions, 4, false, false, false);
             }
         }
 
@@ -160,21 +167,6 @@ namespace ExpenseTracker.AppInteraction {
             string updatedValue = action.Invoke("Category");
             ExpenseDetails[expenseId].Category = updatedValue;
             OutputManager.DisplaySuccessMessage("Category updated.");
-        }
-
-        /// <summary>
-        /// Displays a menu to edit specific attributes of an expense (amount, date, or category).
-        /// </summary>
-        /// <param name="expenseId">The ID of the expense to edit.</param>
-        private static void EditExpenseAt(int expenseId) {
-            Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>(){
-                { 1, ("Edit Amount", () => UpdateExpenseAmount(expenseId, InputManager.GetAmount)) },
-                { 2, ("Edit Date", () => UpdateExpenseDate(expenseId, InputManager.GetDate)) },
-                { 3, ("Edit Category", () => UpdateExpenseCategory(expenseId, InputManager.GetCategoryOrSource)) },
-                { 4, ("Menu", () => { }) }
-            };
-
-            Application.DisplayMenuWithActions("Edit Expense", menuActions, 4, false, false, false);
         }
     }
 }
