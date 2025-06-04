@@ -4,10 +4,13 @@
         /// Handles the execution of menu actions based on user input.
         /// </summary>
         /// <param name="menuActions">
-        /// A dictionary where the key is an integer representing the menu option, 
+        /// A dictionary where the key is an integer representing the menu option,
         /// and the value is a tuple containing a description (string) and an action (Action) to execute.
         /// </param>
-        public static void HandleMenuAction(Dictionary<int, (string, Action action)> menuActions, bool isInfinite = true) {
+        /// <param name="isInfinite">Whether to loop infinitely or exit after one iteration.</param>
+        public static void HandleMenuAction(
+            Dictionary<int, (string description, Action action)> menuActions,
+            bool isInfinite = true) {
             do {
                 Console.Clear();
                 DisplayMainMenu("Account Operations", menuActions);
@@ -42,8 +45,10 @@
         /// <summary>
         /// Initializes the account based on user input.
         /// </summary>
-        /// <param name="account">The bank account to initialize.</param>
-        /// <param name="accountType">The type of account to initialize (SavingsAccount or CheckingAccount).</param>
+        /// <param name="accountFactory">
+        /// A factory function that takes (string accountNumber, decimal initialBalance)
+        /// and returns a new BankAccount instance (e.g., new SavingsAccount(...) or new CheckingAccount(...)).
+        /// </param>
         public static BankAccount InitializeAccount(Func<string, decimal, BankAccount> accountFactory) {
             Console.Clear();
             Console.WriteLine("===== Account Details =====\n");
@@ -55,29 +60,12 @@
             string input = Console.ReadLine();
             bool isNumber = decimal.TryParse(input, out decimal balance);
 
-            if (balance < 0 || !isNumber) {
+            if (!isNumber || balance < 0) {
                 Console.WriteLine("[Error] Invalid balance. Please restart the application.");
                 return null;
-            } else {
-                return accountFactory(accountNumber, balance);
             }
-        }
 
-        /// <summary>
-        /// Handles a generic transaction (e.g., deposit or withdrawal) by validating user input and performing the transaction.
-        /// </summary>
-        /// <param name="account">The bank account on which the transaction is performed.</param>
-        /// <param name="transactionAction">The action to perform (deposit or withdraw).</param>
-        /// <param name="transactionType">The type of transaction (e.g., "deposit" or "withdraw").</param>
-        public static void HandleTransaction(BankAccount account, Action<BankAccount, decimal> transactionAction, string transactionType) {
-            Console.Write($"Enter amount to {transactionType}: ");
-            string input = Console.ReadLine();
-
-            if (decimal.TryParse(input, out decimal amount) && amount > 0) {
-                transactionAction(account, amount);
-            } else {
-                Console.WriteLine("[Error] Invalid input. Please enter a positive number.");
-            }
+            return accountFactory(accountNumber, balance);
         }
 
         /// <summary>
@@ -89,38 +77,60 @@
         }
 
         /// <summary>
-        /// Handles the deposit operation for the given account.
-        /// </summary>
-        /// <param name="account">The bank account to deposit into.</param>
-        static void DepositAmount(BankAccount account) {
-            HandleTransaction(account, (acc, amount) => acc.Deposit(amount), "deposit");
-        }
-
-        /// <summary>
-        /// Handles the withdrawal operation for the given account.
-        /// </summary>
-        /// <param name="account">The bank account to withdraw from.</param>
-        static void Withdraw(BankAccount account) {
-            HandleTransaction(account, (acc, amount) => acc.Withdraw(amount), "withdraw");
-        }
-
-        /// <summary>
         /// Displays the account operations menu to the user.
         /// </summary>
-        /// <param name="menutitle">
+        /// <param name="menuTitle">
         /// The title of the menu to be displayed. This is shown as a header above the menu options.
         /// </param>
         /// <param name="menuActions">
-        /// A dictionary where the key is an integer representing the menu option, 
+        /// A dictionary where the key is an integer representing the menu option,
         /// and the value is a tuple containing a description (string) of the menu option
         /// and an action (Action) to be performed when the option is selected.
         /// </param>
-        public static void DisplayMainMenu(string menutitle, Dictionary<int, (string description, Action)> menuActions) {
-            Console.WriteLine($"===== {menutitle} =====\n");
-            foreach (var menuAction in menuActions) {
-                Console.WriteLine($"{menuAction.Key}. {menuAction.Value.description}");
+        public static void DisplayMainMenu(
+            string menuTitle,
+            Dictionary<int, (string description, Action)> menuActions) {
+            Console.WriteLine($"===== {menuTitle} =====\n");
+            foreach (var entry in menuActions) {
+                Console.WriteLine($"{entry.Key}. {entry.Value.description}");
             }
             Console.Write("\n[Menu] Enter your choice: ");
+        }
+
+        /// <summary>
+        /// Prompts the user to enter a positive decimal amount. Repeats until valid.
+        /// </summary>
+        /// <param name="prompt">The message to display when asking for input (e.g., "Enter amount to deposit: ").</param>
+        /// <returns>A valid, positive decimal value.</returns>
+        private static decimal GetDecimal(string prompt) {
+            while (true) {
+                Console.Write(prompt);
+                string input = Console.ReadLine();
+
+                if (decimal.TryParse(input, out decimal amount) && amount > 0) {
+                    return amount;
+                }
+
+                Console.WriteLine("[Error] Invalid input. Please enter a positive number.\n");
+            }
+        }
+
+        /// <summary>
+        /// Handles the deposit operation for the given account by asking for a valid decimal amount.
+        /// </summary>
+        /// <param name="account">The bank account to deposit into.</param>
+        private static void DepositAmount(BankAccount account) {
+            decimal amount = GetDecimal("Enter amount to deposit: ");
+            account.Deposit(amount);
+        }
+
+        /// <summary>
+        /// Handles the withdrawal operation for the given account by asking for a valid decimal amount.
+        /// </summary>
+        /// <param name="account">The bank account to withdraw from.</param>
+        private static void Withdraw(BankAccount account) {
+            decimal amount = GetDecimal("Enter amount to withdraw: ");
+            account.Withdraw(amount);
         }
     }
 }
