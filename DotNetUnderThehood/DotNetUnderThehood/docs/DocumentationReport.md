@@ -1,55 +1,73 @@
-# Documentation Report
-
 ## Project Overview
 
-This project is a simple console application designed to perform basic arithmetic operations (addition, subtraction, multiplication, and division) on two user-supplied numbers. It demonstrates the use of generic programming in C# with the `INumber<T>` interface, modular design, and exception handling.
+This project is a simple console application designed to perform basic arithmetic operations (addition, subtraction, multiplication, and division) on two user-supplied integers. It demonstrates modular design, clear exception handling, and straightforward console I/O.
 
 ## Approach
 
-1. **Modularity**  
-   - The project separates concerns using different namespaces and static classes:
-     - `DotNetUnderThehood.Model`: Contains `MathUtils` with generic arithmetic methods.
-     - `DotNetUnderThehood.IOManager`: (Assumed) Handles input/output operations.
-     - `DotNetUnderThehood.AppInteraction`: Contains `Application` class that helps with user interaction and calculation logic.
+1. **Modularity**
 
-2. **Generics and Modern C#**  
-   - Used generic methods with constraints (`where T : INumber<T>`) to allow arithmetic operations on multiple numeric types, not just `decimal` or `int`.
-   - This approach leverages .NET 7+ features for more flexible and reusable code.
+   * Responsibilities are separated using different namespaces and static classes:
 
-3. **Exception Handling**  
-   - Implemented try-catch blocks to gracefully handle invalid user input and arithmetic errors (like division by zero).
+     * `DotNetUnderThehood.Model`: Contains `MathUtils` with int-based arithmetic methods.
+     * `DotNetUnderThehood.IOManager`: (Assumed) Handles input/output operations.
+     * `DotNetUnderThehood.AppInteraction`: Contains `Application` class that manages user interaction and calculation logic.
 
-4. **User Experience**  
-   - Clear prompts guide the user through input.
-   - Results are displayed with contextual messages.
+2. **Concrete Types**
+
+   * All arithmetic methods operate on only `int`. This aligns directly with the requirement to work with integers and simplifies the implementation.
+
+3. **Exception Handling**
+
+   * Division by zero is explicitly checked: if the divisor is zero, a `DivideByZeroException` is thrown with a clear message.
+   * Input validation (e.g., ensuring the user enters valid integers) is presumed to be handled by `InputManager.GetIntValue()`. If invalid input occurs, the application prompts the user again.
+
+4. **User Experience**
+
+   * Clear console prompts guide the user through entering two integers and selecting an operation.
+   * Results are displayed with contextual messages, and errors (such as “cannot divide by zero”) are shown directly.
 
 ## Concepts Applied
 
-- **Generics (`INumber<T>`)**: Allows arithmetic operations on any numeric type, making the code extensible and reusable.
-- **Namespaces & Static Classes**: Promotes organization and modularity.
-- **Exception Handling**: Provides robust error handling for both input and computation.
-- **Console I/O**: Demonstrates user interaction in a console environment.
+* **Static Classes & Methods**:
+  Promotes organization by grouping related utility methods (e.g., `MathUtils`) in one place.
+
+* **Concrete Type Usage**:
+  By using `int` for all operations, the code is simpler and there is no overhead from unnecessary generic constraints.
+
+* **Exception Handling**:
+
+  * Explicit check for zero divisor in `MathUtils.Div(int a, int b)` to throw `DivideByZeroException`.
+  * Catches invalid input and reprompts via the input manager.
+
+* **Console I/O**:
+  Demonstrates reading from and writing to the console, including loops for retrying invalid entries.
 
 ## Challenges and Resolutions
 
-- **Division by Zero**
-  - *Description*: Needed to handle division by zero for different numeric types.
-  - *Resolution*: Caught `DivideByZeroException` in `MathUtils.Div<T>` and rethrew as a generic exception with a message. This keeps the error handling generic and consistent for all numeric types.
+* **Division by Zero**
 
-- **User Input Validation**
-  - *Description*: Ensuring the user enters valid numbers.
-  - *Resolution*: Presumed that `InputManager.GetDecimalValue()` includes logic for input validation. Otherwise, would recommend implementing loops to reprompt on invalid input.
+  * *Description*: Preventing the application from crashing when the user attempts to divide by zero.
+  * *Resolution*: In `MathUtils.Div(int a, int b)`, perform a check `if (b == 0)` and throw `new DivideByZeroException("Cannot divide by zero.")`. This ensures callers receive a clear, specific exception and can display an appropriate error message.
 
-- **Applying Generics to Arithmetic**
-  - *Description*: Arithmetic operators (`+`, `-`, `*`, `/`) are not directly supported for generics in older C# versions.
-  - *Resolution*: Used the `INumber<T>` interface, a .NET 7+ feature, which enables operator overloading for generic types.
+* **User Input Validation**
+
+  * *Description*: Ensuring that the user enters valid integers.
+  * *Resolution*: Presumed that `InputManager.GetIntValue()` handles parsing and reprompts until the user enters a valid integer. If not already implemented, one would wrap `int.TryParse` in a loop to re-ask when parsing fails.
+
+* **Removing Unnecessary Generics**
+
+  * *Description*: The original generic implementation (`INumber<T>`) was more complex than needed since only integers are required.
+  * *Resolution*: Simplified all methods to accept and return `int`. This reduces code complexity and avoids the need for .NET 7+ generic constraints.
 
 ## File List
 
-- `Program.cs` - Entry point for the application.
-- `MathUtils.cs` - Contains generic arithmetic utility methods.
-- `Application.cs` - Handles user interaction and ties together I/O and computation.
-- `ExplorationQuestions.md` - Answers to exploration questions.
-- `DocumentationReport.md` - This documentation report.
+* `Program.cs` - Entry point for the application; invokes the `Application` class to orchestrate console interaction.
 
+* `MathUtils.cs` - Contains int-based arithmetic utility methods (`Add`, `Sub`, `Mul`, `Div`).
+
+* `Application.cs` - Handles user interaction (prompts, reading two integers, selecting the operation) and invokes `MathUtils` methods.
+
+* `ExplorationQuestions.md` - Answers to exploration questions related to the project (if still relevant).
+
+* `DocumentationReport.md` - This documentation report.
 
