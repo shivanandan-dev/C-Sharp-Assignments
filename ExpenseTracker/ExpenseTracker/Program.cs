@@ -6,7 +6,7 @@ namespace ExpenseTracker {
         /// Entry point of the application
         /// </summary>
         public static void Main() {
-            ExpenseManager.AddDefaultData();
+            TransactionManager.AddDefaultData();
             Application.HandleMainMenu();
             Console.ReadKey();
         }

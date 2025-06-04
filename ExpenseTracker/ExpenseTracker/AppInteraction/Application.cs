@@ -41,10 +41,10 @@ namespace ExpenseTracker.AppInteraction {
         /// </summary>
         public static void HandleMainMenu() {
             Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>() {
-                    { 1, ("Add Transaction", ExpenseManager.AddTransaction )},
-                    { 2, ("View Transactions", ExpenseManager.ViewTransactions )},
-                    { 3, ("Edit Transactions", ExpenseManager.EditTransaction )},
-                    { 4, ("Delete Transactions", ExpenseManager.DeleteTransaction )},
+                    { 1, ("Add Transaction", TransactionManager.AddTransaction )},
+                    { 2, ("View Transactions", TransactionManager.ViewTransactions )},
+                    { 3, ("Edit Transactions", TransactionManager.EditTransaction )},
+                    { 4, ("Delete Transactions", TransactionManager.DeleteTransaction )},
                     { 5, ("Financial Summary", () => { })},
                     { 6, ("Exit", () => { Environment.Exit(0); })}
                 };
