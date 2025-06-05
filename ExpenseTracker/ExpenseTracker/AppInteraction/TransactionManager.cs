@@ -143,7 +143,7 @@ namespace ExpenseTracker.AppInteraction {
         /// <param name="action">A function to retrieve the updated amount.</param>
         private static void UpdateExpenseAmount(int expenseId, Func<decimal> action) {
             decimal updatedValue = action.Invoke();
-            ExpenseDetails[expenseId].Amount = updatedValue;
+            ExpenseDetails[expenseId - 1].Amount = updatedValue;
             OutputManager.DisplaySuccessMessage("Amount updated.");
         }
 
@@ -154,7 +154,7 @@ namespace ExpenseTracker.AppInteraction {
         /// <param name="action">A function to retrieve the updated date.</param>
         private static void UpdateExpenseDate(int expenseId, Func<DateTime> action) {
             DateTime updatedValue = action.Invoke();
-            ExpenseDetails[expenseId].Date = updatedValue;
+            ExpenseDetails[expenseId - 1].Date = updatedValue;
             OutputManager.DisplaySuccessMessage("Date updated.");
         }
 
@@ -165,7 +165,7 @@ namespace ExpenseTracker.AppInteraction {
         /// <param name="action">A function to retrieve the updated category.</param>
         private static void UpdateExpenseCategory(int expenseId, Func<string, string> action) {
             string updatedValue = action.Invoke("Category");
-            ExpenseDetails[expenseId].Category = updatedValue;
+            ExpenseDetails[expenseId - 1].Category = updatedValue;
             OutputManager.DisplaySuccessMessage("Category updated.");
         }
     }
