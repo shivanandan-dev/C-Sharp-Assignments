@@ -14,18 +14,13 @@ namespace ExpenseTracker.IOManager {
         }
 
         /// <summary>
-        /// Displays an error message for invalid input with a custom error description.
+        /// Writes an error message to the console, prefixed with “[Error]”.
         /// </summary>
-        /// <param name="errorMessage">The custom error message to display.</param>
-        public static void DisplayInvalidInputError(string errorMessage) {
+        /// <param name="errorMessage">
+        /// The specific error description to display. Defaults to “Invalid input” if none is provided.
+        /// </param>
+        public static void DisplayInvalidInputError(string errorMessage = "Invalid input") {
             Console.WriteLine($"[Error] {errorMessage}.");
-        }
-
-        /// <summary>
-        /// Displays a generic error message for invalid input without additional details.
-        /// </summary>
-        public static void DisplayInvalidInputError() {
-            Console.WriteLine("[Error] Invalid input.");
         }
 
         /// <summary>
