@@ -20,8 +20,12 @@
         /// </summary>
         /// <param name="amount">The amount of the transaction.</param>
         /// <param name="date">The date of the transaction.</param>
-        /// <param name="category">The category of the transaction.</param>
-        public TransactionDetail(decimal amount, DateTime date, string additionalInformation) {
+        /// <param name="additionalInformation">The additional information of the transaction.</param>
+        public TransactionDetail(
+            decimal amount,
+            DateTime date,
+            string additionalInformation
+        ) {
             Amount = amount;
             Date = date;
             AdditionalInformation = additionalInformation;

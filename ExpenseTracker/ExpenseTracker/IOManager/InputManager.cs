@@ -25,7 +25,7 @@ namespace ExpenseTracker.IOManager {
                 if (isNumber && menuActions.ContainsKey(choice)) {
                     return choice;
                 } else if (isNumber) {
-                    OutputManager.DisplayInvalidInputError($"Choice should be between (1 - {menuActions.Count + 1})");
+                    OutputManager.DisplayInvalidInputError($"Choice should be between (1 - {menuActions.Count})");
                 } else {
                     OutputManager.DisplayInvalidInputError("Invalid Input");
                 }
