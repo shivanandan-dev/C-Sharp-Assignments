@@ -67,6 +67,8 @@ namespace ExpenseTracker.IOManager {
             decimal totalExpenses,
             decimal totalIncomes
         ) {
+            Console.Clear();
+            Console.WriteLine("===== Financial Summary =====");
             Console.WriteLine("\n{0, -11} : {1, -10}", "Income", totalIncomes);
             Console.WriteLine("{0, -11} : {1, -10}", "Expences", totalExpenses);
             Console.WriteLine("{0, -11} : {1, -10}", "Net balance", totalIncomes - totalExpenses);
