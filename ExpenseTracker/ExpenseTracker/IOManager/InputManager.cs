@@ -73,17 +73,17 @@ namespace ExpenseTracker.IOManager {
         /// <summary>
         /// Prompts the user to enter an expense ID and validates the input.
         /// </summary>
-        /// <param name="expenseDetails">A list of expense details to validate the entered ID against.</param>
+        /// <param name="transactionDetails">A list of transaction details to validate the entered ID against.</param>
         /// <returns>The valid expense ID entered by the user, or -1 if the input is invalid.</returns>
-        public static int GetExpenseId(List<TransactionDetail> expenseDetails) {
+        public static int GetTransactionId(List<TransactionDetail> transactionDetails) {
             Console.Write("\nEnter Id: ");
             string input = Console.ReadLine();
             bool isNumber = int.TryParse(input, out int id);
 
-            if (isNumber && id < expenseDetails.Count + 1 && id > 0) {
+            if (isNumber && id < transactionDetails.Count + 1 && id > 0) {
                 return id;
             } else if (isNumber) {
-                OutputManager.DisplayInvalidInputError($"ID should be between (1 - {expenseDetails.Count + 1})");
+                OutputManager.DisplayInvalidInputError($"ID should be between (1 - {transactionDetails.Count})");
             } else {
                 OutputManager.DisplayInvalidInputError();
             }

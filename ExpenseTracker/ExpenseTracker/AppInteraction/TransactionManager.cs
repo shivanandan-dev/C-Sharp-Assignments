@@ -6,6 +6,11 @@ namespace ExpenseTracker.AppInteraction {
         static List<TransactionDetail> ExpenseDetails = new List<TransactionDetail>();
         static List<TransactionDetail> IncomeDetails = new List<TransactionDetail>();
 
+        const string CategoryLabel = "Category";
+        const string SourceLabel = "Source";
+        const string ExpenseLabel = "Expense";
+        const string IncomeLabel = "Income";
+
         /// <summary>
         /// Adds default expense and income data to their respective lists.
         /// </summary>
@@ -27,8 +32,8 @@ namespace ExpenseTracker.AppInteraction {
         /// </summary>
         public static void AddTransaction() {
             Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>() {
-                { 1, ("Add Expense", AddExpense) },
-                { 2, ("Add Income", AddIncome) },
+                { 1, ("Add Expense", () => HandleAddTransaction(ExpenseDetails, ExpenseLabel, CategoryLabel)) },
+                { 2, ("Add Income", () => HandleAddTransaction(IncomeDetails, IncomeLabel, SourceLabel)) },
                 { 3, ("Main Menu", () => { }) }
             };
 
@@ -40,8 +45,8 @@ namespace ExpenseTracker.AppInteraction {
         /// </summary>
         public static void ViewTransactions() {
             Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>() {
-                { 1, ("View Expenses", ViewExpenses) },
-                { 2, ("View Incomes", ViewIncomes) },
+                { 1, ("View Expenses", () => HandleViewTransaction(ExpenseDetails, ExpenseLabel, CategoryLabel)) },
+                { 2, ("View Incomes", () => HandleViewTransaction(IncomeDetails, IncomeLabel, SourceLabel)) },
                 { 3, ("Main Menu", () => { }) }
             };
 
@@ -53,8 +58,8 @@ namespace ExpenseTracker.AppInteraction {
         /// </summary>
         public static void DeleteTransaction() {
             Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>() {
-                { 1, ("Delete Expense", DeleteExpense) },
-                { 2, ("Delete Income", DeleteIncome) },
+                { 1, ("Delete Expense", () => HandleDeleteTransaction(ExpenseDetails, ExpenseLabel)) },
+                { 2, ("Delete Income", () => HandleDeleteTransaction(IncomeDetails, IncomeLabel)) },
                 { 3, ("Main Menu", () => { }) }
             };
 
@@ -66,8 +71,8 @@ namespace ExpenseTracker.AppInteraction {
         /// </summary>
         public static void EditTransaction() {
             Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>() {
-                { 1, ("Edit Expense", EditExpense) },
-                { 2, ("Edit Income", EditIncome) },
+                { 1, ("Edit Expense", () => HandleEditTransaction(ExpenseDetails, ExpenseLabel)) },
+                { 2, ("Edit Income", () => HandleEditTransaction(IncomeDetails, IncomeLabel))},
                 { 3, ("Main Menu", () => { }) }
              };
 
@@ -93,126 +98,103 @@ namespace ExpenseTracker.AppInteraction {
 
 
         /// <summary>
-        /// Prompts the user to add a new expense and adds it to the <see cref="ExpenseDetails"/> list.
+        /// Prompts the user to add a new transaction (expense or income) and adds it to the specified details list.
         /// </summary>
-        private static void AddExpense() {
+        /// <param name="details">The list of <see cref="TransactionDetail"/> to which the new transaction will be added.</param>
+        /// <param name="header">The title displayed in the prompt, e.g. "Expense" or "Income".</param>
+        /// <param name="fieldName">The label for the additional information field, e.g. "Category" or "Source".</param>
+        private static void HandleAddTransaction(
+            List<TransactionDetail> details,
+            string header,
+            string fieldName
+        ) {
             Console.Clear();
-            Console.WriteLine("===== New Expense =====\n");
+            Console.WriteLine($"===== New {header} =====\n");
             decimal amount = InputManager.GetAmount();
             DateTime date = InputManager.GetDate();
-            string additionalInformation = InputManager.GetCategoryOrSource("Category");
+            string additionalInformation = InputManager.GetCategoryOrSource(fieldName);
 
-            ExpenseDetails.Add(new TransactionDetail(amount, date, additionalInformation));
-            OutputManager.DisplaySuccessMessage("New expense added.");
+            details.Add(new TransactionDetail(amount, date, additionalInformation));
+            OutputManager.DisplaySuccessMessage($"New {header.ToLower()} added.");
         }
 
         /// <summary>
-        /// Prompts the user to add a new income and adds it to the <see cref="IncomeDetails"/> list.
+        /// Displays all transactions (expenses or incomes) from the specified list.
         /// </summary>
-        private static void AddIncome() {
+        /// <param name="transactionDetails">The list of <see cref="TransactionDetail"/> to display.</param>
+        /// <param name="header">The title displayed in the header, e.g. "Expense" or "Income".</param>
+        /// <param name="fieldName">The label for the additional information field, e.g. "Category" or "Source".</param>
+        private static void HandleViewTransaction(
+            List<TransactionDetail> transactionDetails,
+            string header,
+            string fieldName
+        ) {
             Console.Clear();
-            Console.WriteLine("===== New Income =====\n");
-            decimal amount = InputManager.GetAmount();
-            DateTime date = InputManager.GetDate();
-            string source = InputManager.GetCategoryOrSource("Source");
+            Console.WriteLine($"===== {header}s =====\n");
 
-            IncomeDetails.Add(new TransactionDetail(amount, date, source));
-            OutputManager.DisplaySuccessMessage("New income added.");
-        }
-
-        /// <summary>
-        /// Displays all expenses from the <see cref="ExpenseDetails"/> list.
-        /// </summary>
-        private static void ViewExpenses() {
-            Console.Clear();
-            Console.WriteLine("===== Expenses =====\n");
-            if (ExpenseDetails.Count == 0) {
+            if (transactionDetails.Count == 0) {
                 Console.WriteLine("[Error] Empty list.");
                 return;
             }
 
-            OutputManager.DisplayTransaction(ExpenseDetails, "Category");
+            OutputManager.DisplayTransaction(transactionDetails, fieldName);
         }
 
         /// <summary>
-        /// Displays all incomes from the <see cref="IncomeDetails"/> list.
+        /// Deletes a specific transaction (expense or income) from the specified list.
         /// </summary>
-        private static void ViewIncomes() {
+        /// <param name="transactionDetails">The list of <see cref="TransactionDetail"/> from which to delete.</param>
+        /// <param name="header">The title displayed in the header, e.g. "Expense" or "Income".</param>
+        private static void HandleDeleteTransaction(
+            List<TransactionDetail> transactionDetails,
+            string header
+        ) {
             Console.Clear();
-            Console.WriteLine("===== Incomes =====\n");
-            if (IncomeDetails.Count == 0) {
-                Console.WriteLine("[Error] Empty list.");
-                return;
-            }
 
-            OutputManager.DisplayTransaction(IncomeDetails, "Source");
-        }
+            // Display current transactions for selection
+            if (header == ExpenseLabel)
+                HandleViewTransaction(ExpenseDetails, ExpenseLabel, CategoryLabel);
+            else
+                HandleViewTransaction(IncomeDetails, IncomeLabel, SourceLabel);
 
-
-        /// <summary>
-        /// Deletes a specific expense from the <see cref="ExpenseDetails"/> list.
-        /// </summary>
-        private static void DeleteExpense() {
-            Console.Clear();
-            ViewExpenses();
-            if (ExpenseDetails.Count == 0)
+            if (transactionDetails.Count == 0)
                 return;
 
             Console.WriteLine("\n===== Delete =====\n");
-            int expenseId = InputManager.GetExpenseId(ExpenseDetails);
-            if (expenseId > 0) {
-                ExpenseDetails.RemoveAt(expenseId - 1);
-                OutputManager.DisplaySuccessMessage("Expense deleted.");
+            int transactionId = InputManager.GetTransactionId(transactionDetails);
+            if (transactionId > 0 && transactionId <= transactionDetails.Count) {
+                transactionDetails.RemoveAt(transactionId - 1);
+                OutputManager.DisplaySuccessMessage($"{header} deleted.");
             }
         }
 
         /// <summary>
-        /// Deletes a specific income from the <see cref="IncomeDetails"/> list.
+        /// Allows the user to edit a specific transaction (expense or income) in the specified list.
         /// </summary>
-        private static void DeleteIncome() {
+        /// <param name="transactionDetails">The list of <see cref="TransactionDetail"/> containing the transaction to edit.</param>
+        /// <param name="header">The title displayed in the header, e.g. "Expense" or "Income".</param>
+        private static void HandleEditTransaction(
+            List<TransactionDetail> transactionDetails,
+            string header
+        ) {
             Console.Clear();
-            ViewIncomes();
-            if (IncomeDetails.Count == 0)
+
+            // Display current transactions for selection
+            if (header == ExpenseLabel)
+                HandleViewTransaction(ExpenseDetails, ExpenseLabel, CategoryLabel);
+            else
+                HandleViewTransaction(IncomeDetails, IncomeLabel, SourceLabel);
+
+            if (transactionDetails.Count == 0)
                 return;
 
-            Console.WriteLine("\n===== Delete =====\n");
-            int incomeId = InputManager.GetExpenseId(IncomeDetails);
-            if (incomeId > 0) {
-                IncomeDetails.RemoveAt(incomeId - 1);
-                OutputManager.DisplaySuccessMessage("Income deleted.");
+            Console.WriteLine("\n===== Edit =====\n");
+            int transactionId = InputManager.GetTransactionId(transactionDetails);
+            if (transactionId > 0 && transactionId <= transactionDetails.Count) {
+                EditTransactionAt(transactionId - 1, transactionDetails);
             }
         }
 
-        /// <summary>
-        /// Allows the user to edit a specific expense from the <see cref="ExpenseDetails"/> list.
-        /// </summary>
-        private static void EditExpense() {
-            Console.Clear();
-            ViewExpenses();
-            if (ExpenseDetails.Count == 0)
-                return;
-
-            Console.WriteLine("\n===== Delete =====\n");
-            int expenseId = InputManager.GetExpenseId(ExpenseDetails);
-            if (expenseId > 0) {
-                EditTransactionAt(expenseId - 1, ExpenseDetails);
-            }
-        }
-
-        /// <summary>
-        /// Allows the user to edit a specific income from the <see cref="IncomeDetails"/> list.
-        /// </summary>
-        private static void EditIncome() {
-            Console.Clear();
-            ViewIncomes();
-            if (IncomeDetails.Count == 0)
-                return;
-
-            int incomeId = InputManager.GetExpenseId(IncomeDetails);
-            if (incomeId > 0) {
-                EditTransactionAt(incomeId - 1, IncomeDetails);
-            }
-        }
 
         /// <summary>
         /// Displays a menu to edit specific attributes of a transaction (amount, date, or category/source).
@@ -230,7 +212,7 @@ namespace ExpenseTracker.AppInteraction {
                 { 4, ("Menu", () => { }) }
             };
 
-            Application.DisplayMenuWithActions("Edit Transaction", menuActions, 4, false, false, false);
+            Application.DisplayMenuWithActions("Edit Transaction", menuActions, menuActions.Count, false, false, false);
         }
 
 
