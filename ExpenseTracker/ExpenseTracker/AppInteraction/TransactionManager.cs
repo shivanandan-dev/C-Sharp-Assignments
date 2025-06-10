@@ -93,7 +93,7 @@ namespace ExpenseTracker.AppInteraction {
 
 
         /// <summary>
-        /// Prompts the user to add a new expense and adds it to the ExpenseDetails list.
+        /// Prompts the user to add a new expense and adds it to the <see cref="ExpenseDetails"/> list.
         /// </summary>
         private static void AddExpense() {
             Console.Clear();
@@ -107,7 +107,7 @@ namespace ExpenseTracker.AppInteraction {
         }
 
         /// <summary>
-        /// Prompts the user to add a new income and adds it to the IncomeDetails list.
+        /// Prompts the user to add a new income and adds it to the <see cref="IncomeDetails"/> list.
         /// </summary>
         private static void AddIncome() {
             Console.Clear();
@@ -121,7 +121,7 @@ namespace ExpenseTracker.AppInteraction {
         }
 
         /// <summary>
-        /// Displays all expenses from the ExpenseDetails list.
+        /// Displays all expenses from the <see cref="ExpenseDetails"/> list.
         /// </summary>
         private static void ViewExpenses() {
             Console.Clear();
@@ -135,7 +135,7 @@ namespace ExpenseTracker.AppInteraction {
         }
 
         /// <summary>
-        /// Displays all incomes from the IncomeDetails list.
+        /// Displays all incomes from the <see cref="IncomeDetails"/> list.
         /// </summary>
         private static void ViewIncomes() {
             Console.Clear();
@@ -150,7 +150,7 @@ namespace ExpenseTracker.AppInteraction {
 
 
         /// <summary>
-        /// Deletes a specific expense from the ExpenseDetails list.
+        /// Deletes a specific expense from the <see cref="ExpenseDetails"/> list.
         /// </summary>
         private static void DeleteExpense() {
             Console.Clear();
@@ -167,7 +167,7 @@ namespace ExpenseTracker.AppInteraction {
         }
 
         /// <summary>
-        /// Deletes a specific income from the IncomeDetails list.
+        /// Deletes a specific income from the <see cref="IncomeDetails"/> list.
         /// </summary>
         private static void DeleteIncome() {
             Console.Clear();
@@ -184,7 +184,7 @@ namespace ExpenseTracker.AppInteraction {
         }
 
         /// <summary>
-        /// Allows the user to edit a specific expense from the ExpenseDetails list.
+        /// Allows the user to edit a specific expense from the <see cref="ExpenseDetails"/> list.
         /// </summary>
         private static void EditExpense() {
             Console.Clear();
@@ -200,7 +200,7 @@ namespace ExpenseTracker.AppInteraction {
         }
 
         /// <summary>
-        /// Allows the user to edit a specific income from the IncomeDetails list.
+        /// Allows the user to edit a specific income from the <see cref="IncomeDetails"/> list.
         /// </summary>
         private static void EditIncome() {
             Console.Clear();
