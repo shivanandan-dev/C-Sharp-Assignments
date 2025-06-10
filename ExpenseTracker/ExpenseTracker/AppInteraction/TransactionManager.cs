@@ -27,8 +27,8 @@ namespace ExpenseTracker.AppInteraction {
         /// </summary>
         public static void AddTransaction() {
             Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>() {
-                { 1, ("Add Expense", TransactionManager.AddExpense) },
-                { 2, ("Add Income", TransactionManager.AddIncome) },
+                { 1, ("Add Expense", AddExpense) },
+                { 2, ("Add Income", AddIncome) },
                 { 3, ("Main Menu", () => { }) }
             };
 
@@ -40,8 +40,8 @@ namespace ExpenseTracker.AppInteraction {
         /// </summary>
         public static void ViewTransactions() {
             Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>() {
-                { 1, ("View Expenses", TransactionManager.ViewExpenses) },
-                { 2, ("View Incomes", TransactionManager.ViewIncomes) },
+                { 1, ("View Expenses", ViewExpenses) },
+                { 2, ("View Incomes", ViewIncomes) },
                 { 3, ("Main Menu", () => { }) }
             };
 
@@ -53,8 +53,8 @@ namespace ExpenseTracker.AppInteraction {
         /// </summary>
         public static void DeleteTransaction() {
             Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>() {
-                { 1, ("Delete Expense", TransactionManager.DeleteExpense) },
-                { 2, ("Delete Income", TransactionManager.DeleteIncome) },
+                { 1, ("Delete Expense", DeleteExpense) },
+                { 2, ("Delete Income", DeleteIncome) },
                 { 3, ("Main Menu", () => { }) }
             };
 
@@ -66,8 +66,8 @@ namespace ExpenseTracker.AppInteraction {
         /// </summary>
         public static void EditTransaction() {
             Dictionary<int, (string, Action action)> menuActions = new Dictionary<int, (string, Action)>() {
-                { 1, ("Edit Expense", TransactionManager.EditExpense) },
-                { 2, ("Edit Income", TransactionManager.EditIncome) },
+                { 1, ("Edit Expense", EditExpense) },
+                { 2, ("Edit Income", EditIncome) },
                 { 3, ("Main Menu", () => { }) }
              };
 
