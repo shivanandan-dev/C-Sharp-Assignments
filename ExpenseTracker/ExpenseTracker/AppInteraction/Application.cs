@@ -2,7 +2,6 @@
 
 namespace ExpenseTracker.AppInteraction {
     internal class Application {
-
         /// <summary>
         /// Displays a menu and performs the action based on the user's selection.
         /// </summary>

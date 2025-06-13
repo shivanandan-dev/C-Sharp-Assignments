@@ -79,7 +79,6 @@ namespace ExpenseTracker.AppInteraction {
             Application.DisplayMenuWithActions("Edit Transaction", menuActions, menuActions.Count);
         }
 
-
         /// <summary>
         /// Calculates and displays a financial summary including total expenses, total incomes, and net balance.
         /// </summary>
@@ -95,7 +94,6 @@ namespace ExpenseTracker.AppInteraction {
 
             OutputManager.DisplayFinancialSummary(totalExpense, totalIncome);
         }
-
 
         /// <summary>
         /// Prompts the user to add a new transaction (expense or income) and adds it to the specified details list.
@@ -195,7 +193,6 @@ namespace ExpenseTracker.AppInteraction {
             }
         }
 
-
         /// <summary>
         /// Displays a menu to edit specific attributes of a transaction (amount, date, or category/source).
         /// </summary>
@@ -214,7 +211,6 @@ namespace ExpenseTracker.AppInteraction {
 
             Application.DisplayMenuWithActions("Edit Transaction", menuActions, menuActions.Count, false, false, false);
         }
-
 
         /// <summary>
         /// Updates the amount of a specific transaction.

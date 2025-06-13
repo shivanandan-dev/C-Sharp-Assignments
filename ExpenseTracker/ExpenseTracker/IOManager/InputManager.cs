@@ -73,7 +73,7 @@ namespace ExpenseTracker.IOManager {
         /// <summary>
         /// Prompts the user to enter an expense ID and validates the input.
         /// </summary>
-        /// <param name="transactionDetails">A list of transaction details to validate the entered ID against.</param>
+        /// <param name="transactionDetails">List of transaction details to validate the entered ID against.</param>
         /// <returns>The valid expense ID entered by the user, or -1 if the input is invalid.</returns>
         public static int GetTransactionId(List<TransactionDetail> transactionDetails) {
             Console.Write("\nEnter Id: ");
