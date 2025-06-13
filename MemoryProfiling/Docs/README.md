@@ -109,25 +109,37 @@ namespace Task1 {
 ```csharp
 namespace Task2 {
     class Program {
+        private const int BufferSize = 1000;
+        private const int MaxBuffers = 100;
+
         static void Main(string[] args) {
-            Console.Write("Enter the size of each array (e.g. 1000): ");
-            int bufferSize = int.Parse(Console.ReadLine()!);
-
-            Console.Write("Enter how many arrays to keep in memory (e.g. 100): ");
-            int maxBuffers = int.Parse(Console.ReadLine()!);
-
             var memAlloc = new List<int[]>();
 
-            Console.WriteLine("\nPress any key to start allocating...");
-            Console.ReadKey();
+            try {
+                Console.WriteLine("Buffer Size: " + BufferSize);
+                Console.WriteLine("Max Buffer: " + MaxBuffers);
+                Console.WriteLine("\nStarted Allocating (Press \"ESC\" to exit..)");
+                while (true) {
+                    if (Console.KeyAvailable) {
+                        var key = Console.ReadKey(intercept: true);
+                        if (key.Key == ConsoleKey.Escape) {
+                            Console.WriteLine("Escape pressed; exiting loop...");
+                            break;
+                        }
+                    }
 
-            while (true) {
-                memAlloc.Add(new int[bufferSize]);
+                    memAlloc.Add(new int[BufferSize]);
 
-                if (memAlloc.Count > maxBuffers) {
-                    memAlloc.RemoveAt(0);
+                    if (memAlloc.Count > MaxBuffers) {
+                        memAlloc.RemoveAt(0);
+                    }
+                    Thread.Sleep(10);
                 }
-                Thread.Sleep(10);
+            } finally {
+                memAlloc.Clear();
+                Console.WriteLine("All buffers cleared. Exiting.");
+                Console.WriteLine("\nPress any key to continue...");
+                Console.ReadKey();
             }
         }
     }
