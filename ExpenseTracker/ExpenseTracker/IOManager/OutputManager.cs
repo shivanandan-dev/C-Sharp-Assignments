@@ -7,7 +7,10 @@ namespace ExpenseTracker.IOManager {
         /// </summary>
         /// <param name="menuTitle">The title of the menu to display.</param>
         /// <param name="menuActions">A dictionary of menu options, where each key represents the menu option number and the value contains a description and an associated action.</param>
-        public static void DisplayMenu(string menuTitle, Dictionary<int, (string description, Action)> menuActions) {
+        public static void DisplayMenu(
+            string menuTitle,
+            Dictionary<int, (string description, Action)> menuActions
+        ) {
             Console.WriteLine($"===== {menuTitle} =====\n");
             foreach (var menuAction in menuActions)
                 Console.WriteLine($"{menuAction.Key}. {menuAction.Value.description}");
@@ -32,23 +35,43 @@ namespace ExpenseTracker.IOManager {
         }
 
         /// <summary>
-        /// Displays a list of expense details in a tabular format with columns for ID, amount, date, and category.
+        /// Displays a list of transactions in a table with columns for ID, amount, date, and a custom type.
         /// </summary>
-        /// <param name="expenseDetails">A list of <see cref="ExpenseDetail"/> objects containing details about each expense.</param>
-        public static void DisplayExpenses(List<ExpenseDetail> expenseDetails) {
-            Console.WriteLine("{0, -5} | {1, -15} | {2, -10} | {3, -20}", "Id", "Amount", "Date", "Category");
+        /// <param name="expenseDetails">The collection of <see cref="TransactionDetail"/> items to render.</param>
+        /// <param name="type">The column header label for the AdditionalInformation field (e.g. "Category" or "Source").</param>
+        public static void DisplayTransaction(
+            List<TransactionDetail> expenseDetails,
+            string type
+        ) {
+            Console.WriteLine("{0, -5} | {1, -15} | {2, -10} | {3, -20}", "Id", "Amount", "Date", $"{type}");
             Console.WriteLine(new string('-', 60));
 
             int count = 1;
-            foreach (ExpenseDetail expenseDetail in expenseDetails) {
+            foreach (TransactionDetail expenseDetail in expenseDetails) {
                 Console.WriteLine(
-                    "{0,-5} | {1,-15} | {2,-10} | {3,-20:C}",
+                    "{0,-5} | {1,-15} | {2,-10} | {3,-20}",
                     count++,
                     expenseDetail.Amount,
                     expenseDetail.Date.ToString("dd/MM/yyyy"),
-                    expenseDetail.Category
+                    expenseDetail.AdditionalInformation
                 );
             }
+        }
+
+        /// <summary>
+        /// Displays a financial summary, including total incomes, total expenses, and the net balance.
+        /// </summary>
+        /// <param name="totalExpenses">The total amount of expenses.</param>
+        /// <param name="totalIncomes">The total amount of incomes.</param>
+        public static void DisplayFinancialSummary(
+            decimal totalExpenses,
+            decimal totalIncomes
+        ) {
+            Console.Clear();
+            Console.WriteLine("===== Financial Summary =====");
+            Console.WriteLine("\n{0, -11} : {1, -10}", "Income", totalIncomes);
+            Console.WriteLine("{0, -11} : {1, -10}", "Expences", totalExpenses);
+            Console.WriteLine("{0, -11} : {1, -10}", "Net balance", totalIncomes - totalExpenses);
         }
     }
 }
