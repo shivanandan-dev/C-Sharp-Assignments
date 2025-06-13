@@ -102,17 +102,17 @@ namespace ExpenseTracker.AppInteraction {
         /// </summary>
         /// <param name="details">The list of <see cref="TransactionDetail"/> to which the new transaction will be added.</param>
         /// <param name="header">The title displayed in the prompt, e.g. "Expense" or "Income".</param>
-        /// <param name="fieldName">The label for the additional information field, e.g. "Category" or "Source".</param>
+        /// <param name="label">The label for the additional information field, e.g. "Category" or "Source".</param>
         private static void HandleAddTransaction(
             List<TransactionDetail> details,
             string header,
-            string fieldName
+            string label
         ) {
             Console.Clear();
             Console.WriteLine($"===== New {header} =====\n");
             decimal amount = InputManager.GetAmount();
             DateTime date = InputManager.GetDate();
-            string additionalInformation = InputManager.GetCategoryOrSource(fieldName);
+            string additionalInformation = InputManager.GetCategoryOrSource(label);
 
             details.Add(new TransactionDetail(amount, date, additionalInformation));
             OutputManager.DisplaySuccessMessage($"New {header.ToLower()} added.");
@@ -123,11 +123,11 @@ namespace ExpenseTracker.AppInteraction {
         /// </summary>
         /// <param name="transactionDetails">The list of <see cref="TransactionDetail"/> to display.</param>
         /// <param name="header">The title displayed in the header, e.g. "Expense" or "Income".</param>
-        /// <param name="fieldName">The label for the additional information field, e.g. "Category" or "Source".</param>
+        /// <param name="label">The label for the additional information field, e.g. "Category" or "Source".</param>
         private static void HandleViewTransaction(
             List<TransactionDetail> transactionDetails,
             string header,
-            string fieldName
+            string label
         ) {
             Console.Clear();
             Console.WriteLine($"===== {header}s =====\n");
@@ -137,7 +137,7 @@ namespace ExpenseTracker.AppInteraction {
                 return;
             }
 
-            OutputManager.DisplayTransaction(transactionDetails, fieldName);
+            OutputManager.DisplayTransaction(transactionDetails, label);
         }
 
         /// <summary>
